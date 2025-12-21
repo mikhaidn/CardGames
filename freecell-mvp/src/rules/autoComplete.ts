@@ -1,5 +1,6 @@
-import { type GameState, type Card } from '../core/types';
-import { canPlaceOnFoundation } from './validation';
+import { type Card } from '../core/types';
+import { type GameState } from '../state/gameState';
+import { canStackOnFoundation } from './validation';
 
 interface AutoMoveCandidate {
   card: Card;
@@ -26,7 +27,7 @@ export function findSafeAutoMove(gameState: GameState): AutoMoveCandidate | null
   gameState.freeCells.forEach((card, index) => {
     if (card) {
       const foundationIndex = getFoundationIndexForSuit(card.suit);
-      if (canPlaceOnFoundation(card, gameState.foundations[foundationIndex])) {
+      if (canStackOnFoundation(card, gameState.foundations[foundationIndex])) {
         const rank = getRankValue(card.value);
         // Only auto-move if rank <= minRank + 2 (safety check)
         if (rank <= minRank + 2) {
@@ -45,7 +46,7 @@ export function findSafeAutoMove(gameState: GameState): AutoMoveCandidate | null
     if (column.length > 0) {
       const card = column[column.length - 1];
       const foundationIndex = getFoundationIndexForSuit(card.suit);
-      if (canPlaceOnFoundation(card, gameState.foundations[foundationIndex])) {
+      if (canStackOnFoundation(card, gameState.foundations[foundationIndex])) {
         const rank = getRankValue(card.value);
         // Only auto-move if rank <= minRank + 2 (safety check)
         if (rank <= minRank + 2) {

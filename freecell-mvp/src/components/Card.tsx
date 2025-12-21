@@ -64,13 +64,11 @@ export const Card: React.FC<CardProps> = ({
       title={`${card.value}${card.suit}`}
     >
       <div style={{ position: 'absolute', top: '4px', left: '6px', fontSize: '14px', lineHeight: '1' }}>
-        <div>{card.value}</div>
-        <div style={{ fontSize: '12px' }}>{card.suit}</div>
+        <div>{card.value}{card.suit}</div>
       </div>
       <div style={{ fontSize: '26px' }}>{card.suit}</div>
       <div style={{ position: 'absolute', bottom: '4px', right: '6px', fontSize: '14px', lineHeight: '1', transform: 'rotate(180deg)' }}>
-        <div>{card.value}</div>
-        <div style={{ fontSize: '12px' }}>{card.suit}</div>
+        <div>{card.value}{card.suit}</div>
       </div>
     </div>
   );
