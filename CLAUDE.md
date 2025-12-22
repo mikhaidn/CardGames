@@ -80,6 +80,156 @@ npm run lint         # ESLint check
 npm run preview      # Preview production build locally
 ```
 
+## Version Management
+
+### Current Approach (Manual)
+
+Version numbers follow **Semantic Versioning** (MAJOR.MINOR.PATCH):
+- **MAJOR** (1.0.0): Breaking changes, incompatible API changes
+- **MINOR** (0.2.0): New features, backwards-compatible
+- **PATCH** (0.2.1): Bug fixes, backwards-compatible
+
+**Current version**: `0.2.0` (displayed in bottom-right corner of game)
+
+### Updating Versions
+
+**Using npm (Recommended)**:
+```bash
+cd freecell-mvp
+
+# Bump patch version (0.2.0 → 0.2.1) - for bug fixes
+npm version patch
+
+# Bump minor version (0.2.0 → 0.3.0) - for new features
+npm version minor
+
+# Bump major version (0.2.0 → 1.0.0) - for breaking changes
+npm version major
+```
+
+**What npm version does:**
+1. Updates `package.json` and `package-lock.json`
+2. Creates a git commit with message "Bump version to X.Y.Z"
+3. Creates a git tag (e.g., `v0.2.0`)
+
+**After running npm version:**
+```bash
+# Push changes and tags
+git push && git push --tags
+```
+
+**Manual approach** (not recommended):
+- Edit `freecell-mvp/package.json` version field directly
+- Must manually commit and tag
+
+### Version Display
+
+The version is automatically displayed in the game footer:
+```typescript
+// freecell-mvp/src/components/GameBoard.tsx
+import { version } from '../../package.json';
+
+// Rendered in footer
+<div>v{version}</div>
+```
+
+### Version History
+
+- **v0.1.0** (Initial Release)
+  - Core FreeCell gameplay
+  - Click-to-select and drag-and-drop
+  - Hints system
+  - Seed-based games
+  - GitHub Pages deployment
+
+- **v0.2.0** (Responsive Layout)
+  - Viewport-based dynamic sizing
+  - Touch optimization
+  - Mobile/tablet/desktop support
+  - Responsive UI elements
+
+### Future: Automated Versioning
+
+**Option 1: GitHub Actions on Merge**
+
+Add version bump automation when PRs are merged to `main`:
+
+```yaml
+# .github/workflows/version-bump.yml
+name: Auto Version Bump
+on:
+  push:
+    branches: [main]
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Bump version
+        run: |
+          cd freecell-mvp
+          npm version patch -m "chore: bump version to %s [skip ci]"
+      - name: Push changes
+        run: |
+          git push
+          git push --tags
+```
+
+**Option 2: Semantic Release**
+
+Automatically determine version bumps from commit messages:
+
+```bash
+cd freecell-mvp
+npm install -D semantic-release @semantic-release/git @semantic-release/changelog
+
+# Configure with .releaserc.json
+```
+
+Commit message format:
+- `feat: ...` → Minor version bump (0.2.0 → 0.3.0)
+- `fix: ...` → Patch version bump (0.2.0 → 0.2.1)
+- `BREAKING CHANGE: ...` → Major version bump (0.2.0 → 1.0.0)
+
+**Option 3: Changesets**
+
+Manual changeset files + automated versioning:
+
+```bash
+npm install -D @changesets/cli
+npx changeset init
+
+# When making changes:
+npx changeset  # Interactive prompt for version bump type
+npx changeset version  # Updates versions
+```
+
+**Recommendation**: Start with **manual versioning** using `npm version` until version 1.0.0. Then consider semantic-release for automated versioning based on commit messages.
+
+### When to Bump Versions
+
+**PATCH** (0.2.0 → 0.2.1):
+- Bug fixes
+- Performance improvements
+- Documentation updates
+- Refactoring (no behavior change)
+
+**MINOR** (0.2.0 → 0.3.0):
+- New features (like responsive layout, undo/redo)
+- New game modes or options
+- Backwards-compatible enhancements
+
+**MAJOR** (0.2.0 → 1.0.0):
+- Breaking changes to saved games
+- Major architectural changes
+- Removal of features
+- API changes (if this becomes a library)
+
+**Beta releases** (pre-1.0.0): Current project status
+- Use 0.x.y versioning to indicate pre-release
+- Bump to 1.0.0 when ready for stable public release
+
 ## Deployment
 
 ### Current Status
