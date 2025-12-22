@@ -1,66 +1,78 @@
 /**
  * Accessibility settings for the FreeCell game.
- * These settings help with visibility and one-handed use.
+ * Uses preset modes for simplicity.
  */
 
-export type CardSize = 'small' | 'medium' | 'large' | 'extra-large';
-export type ButtonPosition = 'top' | 'bottom';
-export type TouchTargetSize = 'normal' | 'large';
+export type GameMode = 'standard' | 'easy-to-see' | 'one-handed-left' | 'one-handed-right';
 
 export interface AccessibilitySettings {
-  /** Enable high contrast mode for better visibility */
-  highContrastMode: boolean;
-
-  /** Card size preference */
-  cardSize: CardSize;
-
-  /** Font size multiplier (1.0 = normal, 2.0 = double) */
-  fontSizeMultiplier: number;
-
-  /** Position of control buttons */
-  buttonPosition: ButtonPosition;
-
-  /** Touch target size for buttons */
-  touchTargetSize: TouchTargetSize;
+  /** Game mode preset */
+  gameMode: GameMode;
 }
 
 /**
  * Default accessibility settings
  */
 export const DEFAULT_ACCESSIBILITY_SETTINGS: AccessibilitySettings = {
-  highContrastMode: false,
-  cardSize: 'small',
-  fontSizeMultiplier: 1.0,
-  buttonPosition: 'top',
-  touchTargetSize: 'normal',
+  gameMode: 'standard',
 };
 
 /**
- * Get maximum card width for each size setting
+ * Get derived settings from game mode
  */
-export function getMaxCardWidth(cardSize: CardSize): number {
-  switch (cardSize) {
-    case 'small':
-      return 60;
-    case 'medium':
-      return 75;
-    case 'large':
-      return 90;
-    case 'extra-large':
-      return 110;
+export function getSettingsFromMode(mode: GameMode) {
+  switch (mode) {
+    case 'standard':
+      return {
+        highContrastMode: false,
+        maxCardWidth: 60,
+        fontSizeMultiplier: 1.0,
+        buttonPosition: 'top' as const,
+        touchTargetSize: 'normal' as const,
+        gamePosition: 'center' as const,
+        sidePadding: 0,
+      };
+
+    case 'easy-to-see':
+      return {
+        highContrastMode: true,
+        maxCardWidth: 90, // 50% larger
+        fontSizeMultiplier: 1.5,
+        buttonPosition: 'top' as const,
+        touchTargetSize: 'large' as const,
+        gamePosition: 'center' as const,
+        sidePadding: 0,
+      };
+
+    case 'one-handed-left':
+      return {
+        highContrastMode: true,
+        maxCardWidth: 90,
+        fontSizeMultiplier: 1.5,
+        buttonPosition: 'bottom' as const,
+        touchTargetSize: 'large' as const,
+        gamePosition: 'bottom' as const,
+        sidePadding: 30, // 30% padding on RIGHT side (for left hand)
+      };
+
+    case 'one-handed-right':
+      return {
+        highContrastMode: true,
+        maxCardWidth: 90,
+        fontSizeMultiplier: 1.5,
+        buttonPosition: 'bottom' as const,
+        touchTargetSize: 'large' as const,
+        gamePosition: 'bottom' as const,
+        sidePadding: -30, // 30% padding on LEFT side (for right hand)
+      };
   }
 }
 
 /**
  * Get minimum button height for touch target size
  */
-export function getMinButtonHeight(touchTargetSize: TouchTargetSize): number {
-  switch (touchTargetSize) {
-    case 'normal':
-      return 32;
-    case 'large':
-      return 44; // WCAG AAA guideline
-  }
+export function getMinButtonHeight(touchTargetSize: 'normal' | 'large'): number {
+  return touchTargetSize === 'large' ? 44 : 32;
 }
 
 const STORAGE_KEY = 'freecell-accessibility-settings';
