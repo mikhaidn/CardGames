@@ -4,6 +4,8 @@ import {
   moveCardToFoundation,
   moveCardsToTableau,
   moveCardFromFreeCell,
+  moveCardFromFoundationToTableau,
+  moveCardFromFoundationToFreeCell,
 } from '../gameActions';
 import { initializeGame } from '../gameState';
 import { type Card } from '../../core/types';
@@ -225,5 +227,164 @@ describe('moveCardsToTableau', () => {
     const state = initializeGame(12345);
     const result = moveCardsToTableau(state, 0, 0, 1);
     expect(result).toBeNull();
+  });
+});
+
+describe('moveCardFromFoundationToTableau', () => {
+  test('moves card from foundation to tableau with valid stacking', () => {
+    const state = initializeGame(12345);
+    const ace: Card = { suit: '♠', value: 'A', rank: 1, id: 'A♠' };
+    const two: Card = { suit: '♠', value: '2', rank: 2, id: '2♠' };
+    const threeRed: Card = { suit: '♥', value: '3', rank: 3, id: '3♥' };
+
+    state.foundations[0] = [ace, two];
+    state.tableau[0] = [threeRed];
+
+    const newState = moveCardFromFoundationToTableau(state, 0, 0);
+
+    expect(newState).not.toBeNull();
+    expect(newState!.foundations[0]).toHaveLength(1);
+    expect(newState!.foundations[0][0]).toEqual(ace);
+    expect(newState!.tableau[0]).toHaveLength(2);
+    expect(newState!.tableau[0][1]).toEqual(two);
+    expect(newState!.moves).toBe(state.moves + 1);
+  });
+
+  test('moves card from foundation to empty tableau column', () => {
+    const state = initializeGame(12345);
+    const king: Card = { suit: '♦', value: 'K', rank: 13, id: 'K♦' };
+
+    state.foundations[0] = [king];
+    state.tableau[0] = [];
+
+    const newState = moveCardFromFoundationToTableau(state, 0, 0);
+
+    expect(newState).not.toBeNull();
+    expect(newState!.foundations[0]).toHaveLength(0);
+    expect(newState!.tableau[0]).toHaveLength(1);
+    expect(newState!.tableau[0][0]).toEqual(king);
+  });
+
+  test('returns null if foundation is empty', () => {
+    const state = initializeGame(12345);
+    state.foundations[0] = [];
+    state.tableau[0] = [{ suit: '♥', value: '5', rank: 5, id: '5♥' }];
+
+    const result = moveCardFromFoundationToTableau(state, 0, 0);
+    expect(result).toBeNull();
+  });
+
+  test('returns null if stacking rules are violated (same color)', () => {
+    const state = initializeGame(12345);
+    const blackTwo: Card = { suit: '♠', value: '2', rank: 2, id: '2♠' };
+    const blackThree: Card = { suit: '♣', value: '3', rank: 3, id: '3♣' };
+
+    state.foundations[0] = [blackTwo];
+    state.tableau[0] = [blackThree];
+
+    const result = moveCardFromFoundationToTableau(state, 0, 0);
+    expect(result).toBeNull();
+  });
+
+  test('returns null if stacking rules are violated (wrong rank)', () => {
+    const state = initializeGame(12345);
+    const five: Card = { suit: '♦', value: '5', rank: 5, id: '5♦' };
+    const three: Card = { suit: '♠', value: '3', rank: 3, id: '3♠' };
+
+    state.foundations[0] = [five];
+    state.tableau[0] = [three];
+
+    const result = moveCardFromFoundationToTableau(state, 0, 0);
+    expect(result).toBeNull();
+  });
+
+  test('does not mutate original state', () => {
+    const state = initializeGame(12345);
+    const two: Card = { suit: '♠', value: '2', rank: 2, id: '2♠' };
+    const three: Card = { suit: '♥', value: '3', rank: 3, id: '3♥' };
+
+    state.foundations[0] = [two];
+    state.tableau[0] = [three];
+
+    const originalFoundations = JSON.parse(JSON.stringify(state.foundations));
+    const originalTableau = JSON.parse(JSON.stringify(state.tableau));
+
+    moveCardFromFoundationToTableau(state, 0, 0);
+
+    expect(state.foundations).toEqual(originalFoundations);
+    expect(state.tableau).toEqual(originalTableau);
+  });
+});
+
+describe('moveCardFromFoundationToFreeCell', () => {
+  test('moves card from foundation to empty free cell', () => {
+    const state = initializeGame(12345);
+    const ace: Card = { suit: '♥', value: 'A', rank: 1, id: 'A♥' };
+    const two: Card = { suit: '♥', value: '2', rank: 2, id: '2♥' };
+
+    state.foundations[0] = [ace, two];
+    state.freeCells[0] = null;
+
+    const newState = moveCardFromFoundationToFreeCell(state, 0, 0);
+
+    expect(newState).not.toBeNull();
+    expect(newState!.foundations[0]).toHaveLength(1);
+    expect(newState!.foundations[0][0]).toEqual(ace);
+    expect(newState!.freeCells[0]).toEqual(two);
+    expect(newState!.moves).toBe(state.moves + 1);
+  });
+
+  test('returns null if free cell is occupied', () => {
+    const state = initializeGame(12345);
+    const ace: Card = { suit: '♠', value: 'A', rank: 1, id: 'A♠' };
+    const occupyingCard: Card = { suit: '♦', value: 'K', rank: 13, id: 'K♦' };
+
+    state.foundations[0] = [ace];
+    state.freeCells[0] = occupyingCard;
+
+    const result = moveCardFromFoundationToFreeCell(state, 0, 0);
+    expect(result).toBeNull();
+  });
+
+  test('returns null if foundation is empty', () => {
+    const state = initializeGame(12345);
+    state.foundations[0] = [];
+    state.freeCells[0] = null;
+
+    const result = moveCardFromFoundationToFreeCell(state, 0, 0);
+    expect(result).toBeNull();
+  });
+
+  test('can move to different free cell slots', () => {
+    const state = initializeGame(12345);
+    const ace: Card = { suit: '♣', value: 'A', rank: 1, id: 'A♣' };
+    const two: Card = { suit: '♣', value: '2', rank: 2, id: '2♣' };
+
+    state.foundations[0] = [ace, two];
+    state.freeCells = [null, null, null, null];
+
+    const newState1 = moveCardFromFoundationToFreeCell(state, 0, 2);
+    expect(newState1!.freeCells[2]).toEqual(two);
+    expect(newState1!.freeCells[0]).toBeNull();
+
+    const newState2 = moveCardFromFoundationToFreeCell(newState1!, 0, 3);
+    expect(newState2!.freeCells[3]).toEqual(ace);
+    expect(newState2!.freeCells[2]).toEqual(two);
+  });
+
+  test('does not mutate original state', () => {
+    const state = initializeGame(12345);
+    const ace: Card = { suit: '♦', value: 'A', rank: 1, id: 'A♦' };
+
+    state.foundations[0] = [ace];
+    state.freeCells[0] = null;
+
+    const originalFoundations = JSON.parse(JSON.stringify(state.foundations));
+    const originalFreeCells = [...state.freeCells];
+
+    moveCardFromFoundationToFreeCell(state, 0, 0);
+
+    expect(state.foundations).toEqual(originalFoundations);
+    expect(state.freeCells).toEqual(originalFreeCells);
   });
 });
