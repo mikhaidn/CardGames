@@ -13,8 +13,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "@cardgames/shared": "*"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
