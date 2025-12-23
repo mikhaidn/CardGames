@@ -1,7 +1,7 @@
 # RFC-003: Card Backs and Flip Animations
 
 **Author:** CardGames Team
-**Status:** Proposed
+**Status:** Approved
 **Created:** 2025-12-23
 **Target:** Klondike, Spider (immediate), All future games (reusable)
 
@@ -1117,7 +1117,8 @@ async function installCardPack(packId: string): Promise<void> {
 
 ## Decision
 
-**Status:** PROPOSED (awaiting review)
+**Status:** APPROVED
+**Date:** 2025-12-23
 
 **Rationale:**
 - Unblocks Klondike and Spider Solitaire development
@@ -1126,7 +1127,7 @@ async function installCardPack(packId: string): Promise<void> {
 - Extensible for future themes and animations
 
 **Next Steps:**
-1. Review feedback from team/stakeholders
+1. ✅ RFC approved
 2. Begin Phase 1 implementation (CardBack component)
 3. Validate with Klondike prototype
 4. Update STATUS.md when work begins

@@ -83,6 +83,8 @@ PROPOSED → IN REVIEW → APPROVED → IMPLEMENTING → IMPLEMENTED
 | Number | Title | Status | Author | Date |
 |--------|-------|--------|--------|------|
 | [001](./001-undo-redo-system.md) | Universal Undo/Redo System | Proposed | Team | 2025-12-22 |
+| [002](./002-game-sharing-replay.md) | Game Sharing & Replay System | Proposed | Team | 2025-12-22 |
+| [003](./003-card-backs-and-animations.md) | Card Backs and Flip Animations | Approved | Team | 2025-12-23 |
 
 ## Tips for Writing Good RFCs
 

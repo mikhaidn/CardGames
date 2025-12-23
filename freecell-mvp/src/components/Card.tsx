@@ -1,9 +1,12 @@
 import React from 'react';
 import { type Card as CardType } from '../core/types';
 import { getCardColors, getCardBoxShadow } from '../utils/highContrastStyles';
+import { CardBack } from './CardBack';
 
 interface CardProps {
   card: CardType;
+  faceUp?: boolean;  // NEW: Whether card is face-up (defaults to true for backwards compatibility)
+  cardBackTheme?: 'blue' | 'red' | 'custom';  // NEW: Theme for card back
   onClick?: () => void;
   isSelected?: boolean;
   isHighlighted?: boolean;
@@ -30,6 +33,8 @@ interface CardProps {
 
 export const Card: React.FC<CardProps> = ({
   card,
+  faceUp = true,  // Default to face-up (FreeCell behavior, backwards compatible)
+  cardBackTheme = 'blue',
   onClick,
   isSelected = false,
   isHighlighted = false,
@@ -47,6 +52,25 @@ export const Card: React.FC<CardProps> = ({
   fontSize = { large: 26, medium: 24, small: 14 },
   highContrastMode = false,
 }) => {
+  // If face-down, render CardBack component
+  if (!faceUp) {
+    return (
+      <CardBack
+        cardWidth={cardWidth}
+        cardHeight={cardHeight}
+        theme={cardBackTheme}
+        className={isDragging ? 'dragging' : ''}
+        onClick={onClick}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        draggable={draggable && onClick !== undefined}
+      />
+    );
+  }
+
+  // Face-up rendering (existing logic)
   const borderRadius = cardWidth * 0.1; // 10% of width
   const colors = getCardColors(card, highContrastMode, isSelected, isHighlighted);
   const boxShadow = getCardBoxShadow(isSelected, isHighlighted, highContrastMode);
