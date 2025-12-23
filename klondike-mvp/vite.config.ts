@@ -1,16 +1,16 @@
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import {defineConfig} from 'vite'
+import {defineConfig, type UserConfig} from 'vite'
 import {VitePWA} from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
   base: '/CardGames/klondike/',
   resolve: {
+    preserveSymlinks:
+        true,  // This tells Vite to follow the symlinks NPM created
     alias: {
       '@cardgames/shared': path.resolve(__dirname, '../shared/index.ts'),
-      'react': path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
   },
   plugins: [
@@ -59,4 +59,4 @@ export default defineConfig({
       }
     })
   ],
-})
+} as UserConfig)

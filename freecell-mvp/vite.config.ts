@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react'
-import {defineConfig} from 'vite'
+import {defineConfig, type UserConfig} from 'vite'
 import {VitePWA} from 'vite-plugin-pwa'
 import path from 'path'
 
@@ -7,11 +7,9 @@ import path from 'path'
 export default defineConfig({
   base: '/CardGames/freecell/',
   resolve: {
+    preserveSymlinks: true, // This tells Vite to follow the symlinks NPM created
     alias: {
       '@cardgames/shared': path.resolve(__dirname, '../shared/index.ts'),
-      // Force React to resolve to the app's node_modules
-      'react': path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
     // This is the key fix for the Hook error
     dedupe: ['react', 'react-dom'],
@@ -62,4 +60,4 @@ export default defineConfig({
       }
     })
   ],
-})
+} as UserConfig)
