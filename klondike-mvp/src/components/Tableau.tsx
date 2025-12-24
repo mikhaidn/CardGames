@@ -1,8 +1,6 @@
 import React from 'react';
-import { Card } from './Card';
-import { EmptyCell } from './EmptyCell';
+import { Card, EmptyCell, type LayoutSizes } from '@cardgames/shared';
 import { type TableauColumn, type KlondikeGameState, isCardFaceUp } from '../state/gameState';
-import type { LayoutSizes } from '../utils/responsiveLayout';
 
 interface TableauProps {
   tableau: TableauColumn[];

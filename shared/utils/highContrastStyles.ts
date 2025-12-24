@@ -2,8 +2,8 @@
  * High contrast styling utilities for better visibility
  */
 
-import { type Card } from '../core/types';
-import { isRed } from '../rules/klondikeRules';
+import { type Card } from '../types/Card';
+import { isRed } from '../rules/solitaireRules';
 
 export interface CardColors {
   text: string;

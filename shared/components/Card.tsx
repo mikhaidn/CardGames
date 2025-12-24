@@ -1,5 +1,5 @@
 import React from 'react';
-import { type Card as CardType } from '../core/types';
+import { type Card as CardType } from '../types/Card';
 import { getCardColors, getCardBoxShadow } from '../utils/highContrastStyles';
 import { CardBack } from './CardBack';
 
@@ -97,7 +97,7 @@ export const Card: React.FC<CardProps> = ({
     ...style,
   };
 
-  const handleClick = () => { 
+  const handleClick = () => {
     if (onClick) {
       onClick();
     }

@@ -1,9 +1,6 @@
 import React from 'react';
-import { Card } from './Card';
-import { CardBack } from './CardBack';
-import { EmptyCell } from './EmptyCell';
+import { Card, CardBack, EmptyCell, type LayoutSizes } from '@cardgames/shared';
 import type { Card as CardType } from '../core/types';
-import type { LayoutSizes } from '../utils/responsiveLayout';
 
 interface StockWasteProps {
   stock: CardType[];
