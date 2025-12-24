@@ -13,7 +13,7 @@ export const FEATURE_FLAGS = {
    * This flag enables easy rollback during the Phase 2 migration.
    * Will be removed in Phase 3 after validation period.
    */
-  USE_SHARED_INTERACTION_HOOK: false,
+  USE_SHARED_INTERACTION_HOOK: true,
 } as const;
 
 export type FeatureFlags = typeof FEATURE_FLAGS;
