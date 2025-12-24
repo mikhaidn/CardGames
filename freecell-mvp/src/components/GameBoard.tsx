@@ -23,7 +23,13 @@ import {
   getMinButtonHeight,
 } from '../config/accessibilitySettings';
 import { isRed } from '../rules/validation';
-import { useGameHistory } from '../hooks/useGameHistory';
+import {
+  useGameHistory,
+  useCardInteraction,
+  type GameLocation,
+} from '@cardgames/shared';
+import { validateMove } from '../rules/moveValidation';
+import { executeMove } from '../state/moveExecution';
 
 type SelectedCard =
   | { type: 'tableau'; column: number; cardIndex: number }
@@ -49,7 +55,25 @@ export const GameBoard: React.FC = () => {
     persistKey: 'freecell-game-history',
   });
 
-  const [selectedCard, setSelectedCard] = useState<SelectedCard>(null);
+  // RFC-004 Phase 2: Shared interaction hook (feature-flagged)
+  // Prepared for Phase 3 full integration (currently infrastructure only)
+  const sharedHookConfig = useMemo(() => ({
+    validateMove: (from: GameLocation, to: GameLocation) => {
+      return validateMove(gameState, from, to);
+    },
+    executeMove: (from: GameLocation, to: GameLocation) => {
+      const newState = executeMove(gameState, from, to);
+      if (newState) {
+        pushState(newState);
+      }
+    },
+  }), [gameState, pushState]);
+
+  const {
+    state: sharedInteractionState,
+    handlers: sharedHandlers
+  } = useCardInteraction<GameLocation>(sharedHookConfig);
+
   const [draggingCard, setDraggingCard] = useState<SelectedCard>(null);
   const [showHints, setShowHints] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -113,7 +137,7 @@ export const GameBoard: React.FC = () => {
 
   // Auto-move cards to foundations
   useEffect(() => {
-    if (draggingCard || selectedCard) return;
+    if (draggingCard || sharedInteractionState.selectedCard) return;
 
     const timer = setTimeout(() => {
       const autoMove = findSafeAutoMove(gameState);
@@ -143,7 +167,7 @@ export const GameBoard: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [gameState, draggingCard, selectedCard, pushState]);
+  }, [gameState, draggingCard, sharedInteractionState.selectedCard, pushState]);
 
   // Keyboard shortcuts for undo/redo
   useEffect(() => {
@@ -182,121 +206,89 @@ export const GameBoard: React.FC = () => {
   // Calculate highlighted cards for hints
   const highlightedCardIds = showHints ? getLowestPlayableCards(gameState) : [];
 
-  const handleTableauClick = useCallback((columnIndex: number, cardIndex: number) => {
-    if (selectedCard) {
-      // Try to move selected card to tableau
-      let newState: GameState | null = null;
-
-      if (selectedCard.type === 'freeCell') {
-        newState = moveCardFromFreeCell(gameState, selectedCard.index, columnIndex);
-      } else if (selectedCard.type === 'tableau') {
-        const numCards = gameState.tableau[selectedCard.column].length - selectedCard.cardIndex;
-        newState = moveCardsToTableau(gameState, selectedCard.column, numCards, columnIndex);
-      } else if (selectedCard.type === 'foundation') {
-        newState = moveCardFromFoundationToTableau(gameState, selectedCard.index, columnIndex);
-      }
-
-      if (newState) {
-        pushState(newState);
-        setSelectedCard(null);
-      } else {
-        setSelectedCard(null);
-      }
-    } else {
-      // Select this card/stack
-      setSelectedCard({ type: 'tableau', column: columnIndex, cardIndex });
-    }
-  }, [selectedCard, gameState, pushState]);
-
-  const handleEmptyColumnClick = (columnIndex: number) => {
-    if (selectedCard) {
-      let newState: GameState | null = null;
-
-      if (selectedCard.type === 'freeCell') {
-        newState = moveCardFromFreeCell(gameState, selectedCard.index, columnIndex);
-      } else if (selectedCard.type === 'tableau') {
-        const numCards = gameState.tableau[selectedCard.column].length - selectedCard.cardIndex;
-        newState = moveCardsToTableau(gameState, selectedCard.column, numCards, columnIndex);
-      } else if (selectedCard.type === 'foundation') {
-        newState = moveCardFromFoundationToTableau(gameState, selectedCard.index, columnIndex);
-      }
-
-      if (newState) {
-        pushState(newState);
-      }
-      setSelectedCard(null);
-    }
-  };
-
-  const handleFreeCellClick = (index: number) => {
-    if (selectedCard) {
-      // Try to move to free cell
-      let newState: GameState | null = null;
-
-      if (selectedCard.type === 'tableau') {
-        const column = gameState.tableau[selectedCard.column];
-        // Only single cards can go to free cells
-        if (selectedCard.cardIndex === column.length - 1) {
-          newState = moveCardToFreeCell(gameState, selectedCard.column, index);
-        }
-      } else if (selectedCard.type === 'foundation') {
-        newState = moveCardFromFoundationToFreeCell(gameState, selectedCard.index, index);
-      }
-
-      if (newState) {
-        pushState(newState);
-      }
-      setSelectedCard(null);
-    } else if (gameState.freeCells[index]) {
-      // Select from free cell
-      setSelectedCard({ type: 'freeCell', index });
-    }
-  };
-
-  const handleFoundationClick = (foundationIndex: number) => {
-    if (selectedCard) {
-      let newState: GameState | null = null;
-
-      if (selectedCard.type === 'freeCell') {
-        newState = moveCardToFoundation(gameState, 'freeCell', selectedCard.index, foundationIndex);
-      } else if (selectedCard.type === 'tableau') {
-        const column = gameState.tableau[selectedCard.column];
-        // Only single cards can go to foundations
-        if (selectedCard.cardIndex === column.length - 1) {
-          newState = moveCardToFoundation(gameState, 'tableau', selectedCard.column, foundationIndex);
-        }
-      }
-
-      if (newState) {
-        pushState(newState);
-      }
-      setSelectedCard(null);
-    } else {
-      // Select from foundation (if it has cards)
-      const foundation = gameState.foundations[foundationIndex];
-      if (foundation.length > 0) {
-        setSelectedCard({ type: 'foundation', index: foundationIndex });
-      }
-    }
-  };
-
   const handleNewGame = useCallback(() => {
     const newSeed = Date.now();
     setSeed(newSeed);
     resetHistory(initializeGame(newSeed));
-    setSelectedCard(null);
   }, [resetHistory]);
 
   const handleResetGame = useCallback(() => {
     resetHistory();
-    setSelectedCard(null);
   }, [resetHistory]);
+
+  // =============================================================================
+  // Card interaction handlers
+  // =============================================================================
+
+  /**
+   * Tableau click handler
+   */
+  const handleTableauClick = useCallback((columnIndex: number, cardIndex: number) => {
+    const cardCount = gameState.tableau[columnIndex].length - cardIndex;
+    sharedHandlers.handleCardClick({
+      type: 'tableau',
+      index: columnIndex,
+      cardCount,
+      cardIndex, // FreeCell uses cardIndex
+    });
+  }, [gameState.tableau, sharedHandlers]);
+
+  /**
+   * Empty column click handler
+   */
+  const handleEmptyColumnClick = useCallback((columnIndex: number) => {
+    sharedHandlers.handleCardClick({
+      type: 'tableau',
+      index: columnIndex,
+      cardCount: 0,
+    });
+  }, [sharedHandlers]);
+
+  /**
+   * Free cell click handler
+   */
+  const handleFreeCellClick = useCallback((index: number) => {
+    sharedHandlers.handleCardClick({
+      type: 'freeCell',
+      index,
+      cardCount: 1,
+    });
+  }, [sharedHandlers]);
+
+  /**
+   * Foundation click handler
+   */
+  const handleFoundationClick = useCallback((foundationIndex: number) => {
+    sharedHandlers.handleCardClick({
+      type: 'foundation',
+      index: foundationIndex,
+      cardCount: 1,
+    });
+  }, [sharedHandlers]);
+
+  // Convert GameLocation to SelectedCard for child components
+  const displaySelectedCard: SelectedCard = React.useMemo(() => {
+    const loc = sharedInteractionState.selectedCard;
+    if (!loc) return null;
+
+    if (loc.type === 'tableau') {
+      return {
+        type: 'tableau',
+        column: loc.index,
+        cardIndex: loc.cardIndex ?? (gameState.tableau[loc.index].length - (loc.cardCount ?? 1)),
+      };
+    } else if (loc.type === 'freeCell') {
+      return { type: 'freeCell', index: loc.index };
+    } else if (loc.type === 'foundation') {
+      return { type: 'foundation', index: loc.index };
+    }
+    return null;
+  }, [sharedInteractionState.selectedCard, gameState.tableau]);
 
   // Drag-and-drop handlers
   const handleDragStart = (source: SelectedCard) => (e: React.DragEvent) => {
     if (!source) return;
     setDraggingCard(source);
-    setSelectedCard(source);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', JSON.stringify(source));
   };
@@ -329,7 +321,6 @@ export const GameBoard: React.FC = () => {
       pushState(newState);
     }
     setDraggingCard(null);
-    setSelectedCard(null);
   };
 
   const handleFreeCellDrop = (index: number) => (e: React.DragEvent) => {
@@ -352,7 +343,6 @@ export const GameBoard: React.FC = () => {
       pushState(newState);
     }
     setDraggingCard(null);
-    setSelectedCard(null);
   };
 
   const handleFoundationDrop = (foundationIndex: number) => (e: React.DragEvent) => {
@@ -375,7 +365,6 @@ export const GameBoard: React.FC = () => {
       pushState(newState);
     }
     setDraggingCard(null);
-    setSelectedCard(null);
   };
 
   // Touch handlers
@@ -384,7 +373,6 @@ export const GameBoard: React.FC = () => {
     e.preventDefault(); // Prevent scrolling
     setTouchDragging(true);
     setDraggingCard(source);
-    setSelectedCard(source);
     const touch = e.touches[0];
     setTouchPosition({ x: touch.clientX, y: touch.clientY });
   };
@@ -452,14 +440,12 @@ export const GameBoard: React.FC = () => {
 
     setTouchDragging(false);
     setDraggingCard(null);
-    setSelectedCard(null);
     setTouchPosition(null);
   };
 
   const handleTouchCancel = () => {
     setTouchDragging(false);
     setDraggingCard(null);
-    setSelectedCard(null);
     setTouchPosition(null);
   };
 
@@ -632,7 +618,7 @@ export const GameBoard: React.FC = () => {
         >
         <FreeCellArea
           freeCells={gameState.freeCells}
-          selectedCard={selectedCard?.type === 'freeCell' ? selectedCard : null}
+          selectedCard={displaySelectedCard?.type === 'freeCell' ? displaySelectedCard : null}
           draggingCard={draggingCard}
           highlightedCardIds={highlightedCardIds}
           onFreeCellClick={handleFreeCellClick}
@@ -652,7 +638,7 @@ export const GameBoard: React.FC = () => {
         />
         <FoundationArea
           foundations={gameState.foundations}
-          selectedCard={selectedCard?.type === 'foundation' ? selectedCard : null}
+          selectedCard={displaySelectedCard?.type === 'foundation' ? displaySelectedCard : null}
           draggingCard={draggingCard}
           onFoundationClick={handleFoundationClick}
           onDragStart={(index) => handleDragStart({ type: 'foundation', index })}
@@ -674,7 +660,7 @@ export const GameBoard: React.FC = () => {
         {/* Tableau */}
         <Tableau
         tableau={gameState.tableau}
-        selectedCard={selectedCard?.type === 'tableau' ? selectedCard : null}
+        selectedCard={displaySelectedCard?.type === 'tableau' ? displaySelectedCard : null}
         draggingCard={draggingCard}
         highlightedCardIds={highlightedCardIds}
         onCardClick={handleTableauClick}

@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { type KlondikeGameState, type Location, isGameWon } from '../state/gameState';
-import { drawFromStock, moveCards, autoMoveToFoundations } from '../state/gameActions';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { type KlondikeGameState, isGameWon } from '../state/gameState';
+import { drawFromStock, autoMoveToFoundations } from '../state/gameActions';
 import { Tableau } from './Tableau';
 import { StockWaste } from './StockWaste';
 import { FoundationArea } from './FoundationArea';
 import { calculateLayoutSizes, type LayoutSizes } from '../utils/responsiveLayout';
-import { GameControls } from '@cardgames/shared';
-import { useGameHistory } from '@cardgames/shared';
+import {
+  GameControls,
+  useGameHistory,
+  useCardInteraction,
+  type GameLocation,
+} from '@cardgames/shared';
+import { validateMove } from '../rules/moveValidation';
+import { executeMove } from '../state/moveExecution';
 import { version } from '../../package.json';
 
 interface GameBoardProps {
   initialState: KlondikeGameState;
   onNewGame: () => void;
 }
-
-type SelectedCard =
-  | { type: 'waste' }
-  | { type: 'tableau'; columnIndex: number; cardCount: number }
-  | { type: 'foundation'; index: number }
-  | null;
 
 export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame }) => {
   // Use game history for undo/redo functionality
@@ -36,7 +36,23 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
     persistKey: 'klondike-game-history',
   });
 
-  const [selectedCard, setSelectedCard] = useState<SelectedCard>(null);
+  // RFC-004 Phase 2: Shared interaction hook (feature-flagged)
+  const sharedHookConfig = useMemo(() => ({
+    validateMove: (from: GameLocation, to: GameLocation) => {
+      return validateMove(gameState, from, to);
+    },
+    executeMove: (from: GameLocation, to: GameLocation) => {
+      const newState = executeMove(gameState, from, to);
+      if (newState) {
+        pushState(newState);
+      }
+    },
+  }), [gameState, pushState]);
+
+  const {
+    state: sharedInteractionState,
+    handlers: sharedHandlers
+  } = useCardInteraction<GameLocation>(sharedHookConfig);
 
   // Responsive layout sizing
   const [layoutSizes, setLayoutSizes] = useState<LayoutSizes>(() =>
@@ -66,100 +82,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
     const newState = drawFromStock(gameState);
     if (newState !== gameState) {
       pushState(newState);
-      setSelectedCard(null);
-    }
-  };
-
-  // Handle waste click (select card)
-  const handleWasteClick = () => {
-    if (gameState.waste.length === 0) return;
-
-    if (selectedCard?.type === 'waste') {
-      setSelectedCard(null);
-    } else {
-      setSelectedCard({ type: 'waste' });
-    }
-  };
-
-  // Handle tableau column click
-  const handleTableauClick = (columnIndex: number, cardIndex: number) => {
-    const column = gameState.tableau[columnIndex];
-    const faceDownCount = column.cards.length - column.faceUpCount;
-
-    // Can't select face-down cards
-    if (cardIndex < faceDownCount) return;
-
-    // If clicking same card, deselect
-    if (
-      selectedCard?.type === 'tableau' &&
-      selectedCard.columnIndex === columnIndex &&
-      cardIndex === column.cards.length - selectedCard.cardCount
-    ) {
-      setSelectedCard(null);
-      return;
-    }
-
-    // If a card is selected, try to move it here
-    if (selectedCard) {
-      const destination: Location = { type: 'tableau', index: columnIndex };
-
-      if (selectedCard.type === 'waste') {
-        const newState = moveCards(gameState, { type: 'waste' }, destination, 1);
-        if (newState) {
-          pushState(newState);
-          setSelectedCard(null);
-        }
-      } else if (selectedCard.type === 'tableau') {
-        const source: Location = { type: 'tableau', index: selectedCard.columnIndex };
-        const newState = moveCards(gameState, source, destination, selectedCard.cardCount);
-        if (newState) {
-          pushState(newState);
-          setSelectedCard(null);
-        }
-      } else if (selectedCard.type === 'foundation') {
-        const source: Location = { type: 'foundation', index: selectedCard.index };
-        const newState = moveCards(gameState, source, destination, 1);
-        if (newState) {
-          pushState(newState);
-          setSelectedCard(null);
-        }
-      }
-    } else {
-      // Select cards from this position to end
-      const cardCount = column.cards.length - cardIndex;
-      setSelectedCard({ type: 'tableau', columnIndex, cardCount });
-    }
-  };
-
-  // Handle foundation click
-  const handleFoundationClick = (foundationIndex: number) => {
-    // If a card is selected, try to move it to foundation
-    if (selectedCard) {
-      const destination: Location = { type: 'foundation', index: foundationIndex };
-
-      if (selectedCard.type === 'waste') {
-        const newState = moveCards(gameState, { type: 'waste' }, destination, 1);
-        if (newState) {
-          pushState(newState);
-          setSelectedCard(null);
-        }
-      } else if (selectedCard.type === 'tableau') {
-        // Only single cards to foundation
-        if (selectedCard.cardCount === 1) {
-          const source: Location = { type: 'tableau', index: selectedCard.columnIndex };
-          const newState = moveCards(gameState, source, destination, 1);
-          if (newState) {
-            pushState(newState);
-            setSelectedCard(null);
-          }
-        }
-      }
-    } else {
-      // Select top card from foundation
-      const foundation = gameState.foundations[foundationIndex];
-      if (foundation.length > 0) {
-        setSelectedCard({ type: 'foundation', index: foundationIndex });
-      }
     }
   };
 
@@ -168,15 +90,59 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
     const newState = autoMoveToFoundations(gameState);
     if (newState !== gameState) {
       pushState(newState);
-      setSelectedCard(null);
     }
   };
 
   // Reset game to initial state
   const handleResetGame = useCallback(() => {
     resetHistory();
-    setSelectedCard(null);
   }, [resetHistory]);
+
+  // =============================================================================
+  // Card interaction handlers
+  // =============================================================================
+
+  /**
+   * Waste pile click handler
+   */
+  const handleWasteClick = useCallback(() => {
+    if (gameState.waste.length === 0) return;
+
+    sharedHandlers.handleCardClick({
+      type: 'waste',
+      index: 0,
+      cardCount: 1,
+    });
+  }, [gameState.waste.length, sharedHandlers]);
+
+  /**
+   * Tableau click handler
+   */
+  const handleTableauClick = useCallback((columnIndex: number, cardIndex: number) => {
+    const column = gameState.tableau[columnIndex];
+    const faceDownCount = column.cards.length - column.faceUpCount;
+
+    // Can't select face-down cards
+    if (cardIndex < faceDownCount) return;
+
+    const cardCount = column.cards.length - cardIndex;
+    sharedHandlers.handleCardClick({
+      type: 'tableau',
+      index: columnIndex,
+      cardCount,
+    });
+  }, [gameState.tableau, sharedHandlers]);
+
+  /**
+   * Foundation click handler
+   */
+  const handleFoundationClick = useCallback((foundationIndex: number) => {
+    sharedHandlers.handleCardClick({
+      type: 'foundation',
+      index: foundationIndex,
+      cardCount: 1,
+    });
+  }, [sharedHandlers]);
 
   // Keyboard shortcuts for undo/redo
   useEffect(() => {
@@ -277,7 +243,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
           waste={gameState.waste}
           onStockClick={handleStockClick}
           onWasteClick={handleWasteClick}
-          isWasteSelected={selectedCard?.type === 'waste'}
+          isWasteSelected={sharedInteractionState.selectedCard?.type === 'waste'}
           layoutSizes={layoutSizes}
         />
 
@@ -285,7 +251,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
           foundations={gameState.foundations}
           onClick={handleFoundationClick}
           selectedFoundation={
-            selectedCard?.type === 'foundation' ? selectedCard.index : null
+            sharedInteractionState.selectedCard?.type === 'foundation'
+              ? sharedInteractionState.selectedCard.index
+              : null
           }
           layoutSizes={layoutSizes}
         />
@@ -296,10 +264,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
         tableau={gameState.tableau}
         onClick={handleTableauClick}
         selectedColumn={
-          selectedCard?.type === 'tableau'
+          sharedInteractionState.selectedCard?.type === 'tableau'
             ? {
-                columnIndex: selectedCard.columnIndex,
-                cardCount: selectedCard.cardCount,
+                columnIndex: sharedInteractionState.selectedCard.index,
+                cardCount: sharedInteractionState.selectedCard.cardCount ?? 1,
               }
             : null
         }
