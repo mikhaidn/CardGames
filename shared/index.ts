@@ -39,7 +39,3 @@ export {
 
 // Utilities
 export { HistoryManager } from './utils/HistoryManager.ts';
-
-// Config
-export { FEATURE_FLAGS } from './config/featureFlags';
-export type { FeatureFlags, FeatureFlagKey } from './config/featureFlags';
