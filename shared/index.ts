@@ -5,6 +5,9 @@
 // Components
 export { GameControls } from './components/GameControls.tsx';
 export { DraggingCardPreview } from './components/DraggingCardPreview';
+export { Card } from './components/Card';
+export { CardBack } from './components/CardBack';
+export { EmptyCell } from './components/EmptyCell';
 
 // Types
 export type { GameControlsProps } from './types/GameControls.ts';
@@ -39,6 +42,10 @@ export {
 
 // Utilities
 export { HistoryManager } from './utils/HistoryManager.ts';
+export { getCardColors, getCardBoxShadow } from './utils/highContrastStyles';
+export type { CardColors } from './utils/highContrastStyles';
+export { calculateLayoutSizes, getResponsiveFontSizes } from './utils/responsiveLayout';
+export type { LayoutSizes } from './utils/responsiveLayout';
 
 // Config
 export { FEATURE_FLAGS } from './config/featureFlags';

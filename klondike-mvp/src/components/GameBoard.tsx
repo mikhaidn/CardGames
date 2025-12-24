@@ -4,15 +4,16 @@ import { drawFromStock, autoMoveToFoundations } from '../state/gameActions';
 import { Tableau } from './Tableau';
 import { StockWaste } from './StockWaste';
 import { FoundationArea } from './FoundationArea';
-import { calculateLayoutSizes, type LayoutSizes } from '../utils/responsiveLayout';
 import {
   GameControls,
   useGameHistory,
   useCardInteraction,
   DraggingCardPreview,
+  Card,
+  calculateLayoutSizes,
+  type LayoutSizes,
   type GameLocation,
 } from '@cardgames/shared';
-import { Card } from './Card';
 import { validateMove } from '../rules/moveValidation';
 import { executeMove } from '../state/moveExecution';
 import { version } from '../../package.json';
@@ -252,7 +253,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
         display: 'flex',
         flexDirection: 'column',
         padding: '12px',
+        touchAction: 'none',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
       }}
+      onTouchMove={handleTouchMove}
     >
       {/* Header */}
       <div

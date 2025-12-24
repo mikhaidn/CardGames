@@ -7,8 +7,6 @@ import { FreeCellArea } from './FreeCellArea';
 import { FoundationArea } from './FoundationArea';
 import { Tableau } from './Tableau';
 import { SettingsModal } from './SettingsModal';
-import { Card } from './Card';
-import { calculateLayoutSizes, type LayoutSizes } from '../utils/responsiveLayout';
 import {
   type AccessibilitySettings,
   loadAccessibilitySettings,
@@ -20,6 +18,9 @@ import {
   useGameHistory,
   useCardInteraction,
   DraggingCardPreview,
+  Card,
+  calculateLayoutSizes,
+  type LayoutSizes,
   type GameLocation,
 } from '@cardgames/shared';
 import { validateMove } from '../rules/moveValidation';

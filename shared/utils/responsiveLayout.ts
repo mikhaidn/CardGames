@@ -1,5 +1,5 @@
 /**
- * Responsive layout utilities for FreeCell game
+ * Responsive layout utilities for card games
  * Calculates optimal card and spacing sizes based on viewport dimensions
  */
 
