@@ -253,7 +253,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
         display: 'flex',
         flexDirection: 'column',
         padding: '12px',
-        touchAction: 'none',
         userSelect: 'none',
         WebkitUserSelect: 'none',
       }}
