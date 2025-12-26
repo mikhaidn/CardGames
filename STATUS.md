@@ -9,12 +9,12 @@
 ## 🎯 Current Sprint
 
 ### Active Work
-- [ ] **RFC-005 Phase 2:** Standardize Move Execution (Week 2 - Ready to Start)
-  - Define GameActions.getValidMoves() interface
-  - Implement in Klondike and FreeCell
-  - Create moveExecution.ts helper utilities
-  - Add comprehensive tests for valid move detection
-  - **Goal:** Enable smart tap-to-move functionality
+- [ ] **RFC-005 Phase 2, Week 3:** Create Game Config System (Ready to Start)
+  - Define GameConfig<TState> interface with AnimationConfig
+  - Add GameLifecycleHooks<TState> to GameConfig
+  - Create animation queue utility (enqueue, executeNext, clear)
+  - Create lifecycle hook integration patterns
+  - **Goal:** Foundation for generic components in Weeks 4-5
 
 ### Blocked/Waiting
 - None
@@ -24,6 +24,21 @@
 ## ✅ Recently Completed
 
 ### Week of 2025-12-26
+
+**MILESTONE: RFC-005 Phase 2 Week 2 Complete - getValidMoves() Implemented 🎉**
+
+- [x] **RFC-005 Phase 2 Week 2: Standardize Move Execution** ✅ COMPLETE
+  - Implemented `getValidMoves()` in Klondike gameActions.ts
+  - Implemented `getValidMoves()` in FreeCell gameActions.ts
+  - Added 24 comprehensive integration tests (12 per game)
+  - All 440 tests passing (172 FreeCell + 191 Klondike + 77 Shared)
+  - Zero regressions - all existing functionality preserved
+  - **Deliverables:**
+    - klondike-mvp/src/state/gameActions.ts: `getValidMoves()` function
+    - freecell-mvp/src/state/gameActions.ts: `getValidMoves()` function + location types
+    - Comprehensive test coverage for smart tap scenarios
+    - Ready for smart tap-to-move UI integration in Phase 3
+  - **Impact:** Smart tap toggle in settings can now be activated!
 
 **MILESTONE: RFC-005 Phase 1 Complete - UI Prototype Ready 🎉**
 
@@ -170,9 +185,9 @@
 - **Uptime:** 100% (GitHub Pages)
 
 ### Code Quality
-- **Tests:** 415 tests passing across monorepo (159 + 179 + 77)
-  - FreeCell: 159 tests, 95%+ coverage on core logic
-  - Klondike: 179 tests including 25 card display tests (comprehensive coverage)
+- **Tests:** 440 tests passing across monorepo (172 + 191 + 77)
+  - FreeCell: 172 tests including 12 getValidMoves tests, 95%+ coverage on core logic
+  - Klondike: 191 tests including 12 getValidMoves tests and 25 card display tests
   - Shared: 77 tests, full coverage on utilities and hooks
 - **Linting:** All files pass ESLint
 - **TypeScript:** Strict mode, zero errors
@@ -252,21 +267,7 @@
 
 ## 📋 Next 3 Tasks
 
-1. **RFC-005 Phase 2, Week 2: Standardize Move Execution** (5-7 days) ⬅️ CURRENT
-   - Define GameActions.getValidMoves() method signature
-   - Implement getValidMoves() in KlondikeGameActions
-     - Check all tableau columns for valid destinations
-     - Check all foundations for valid destinations
-     - Check waste/stock if applicable
-   - Implement getValidMoves() in FreeCellGameActions
-     - Check all tableau columns
-     - Check all foundations
-     - Check all free cells
-   - Add comprehensive tests for valid move detection (each game)
-   - Update GameActions interface documentation
-   - **Goal:** Enable smart tap-to-move functionality in Phase 3
-
-2. **RFC-005 Phase 2, Week 3: Create Game Config System** (5-7 days)
+1. **RFC-005 Phase 2, Week 3: Create Game Config System** (5-7 days) ⬅️ CURRENT
    - Define GameConfig<TState> interface with AnimationConfig
    - Add GameLifecycleHooks<TState> to GameConfig
    - Create animation queue utility (enqueue, executeNext, clear)
