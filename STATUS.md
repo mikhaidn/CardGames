@@ -9,11 +9,12 @@
 ## 🎯 Current Sprint
 
 ### Active Work
-- [ ] **RFC-005 Phase 1:** UI Prototype with Settings Integration (In Progress)
-  - ✅ Day 1 Complete: Animation experiments (spring drag, flip, win celebration)
-  - ✅ Day 2 Complete: Settings UI + Shared component consolidation
-  - Day 3: Mobile interactions + documentation
-  - **Critical:** Build settings toggles for all features (user-configurable, not forced)
+- [ ] **RFC-005 Phase 2, Week 3:** Create Game Config System (Ready to Start)
+  - Define GameConfig<TState> interface with AnimationConfig
+  - Add GameLifecycleHooks<TState> to GameConfig
+  - Create animation queue utility (enqueue, executeNext, clear)
+  - Create lifecycle hook integration patterns
+  - **Goal:** Foundation for generic components in Weeks 4-5
 
 ### Blocked/Waiting
 - None
@@ -23,6 +24,36 @@
 ## ✅ Recently Completed
 
 ### Week of 2025-12-26
+
+**MILESTONE: RFC-005 Phase 2 Week 2 Complete - getValidMoves() Implemented 🎉**
+
+- [x] **RFC-005 Phase 2 Week 2: Standardize Move Execution** ✅ COMPLETE
+  - Implemented `getValidMoves()` in Klondike gameActions.ts
+  - Implemented `getValidMoves()` in FreeCell gameActions.ts
+  - Added 24 comprehensive integration tests (12 per game)
+  - All 440 tests passing (172 FreeCell + 191 Klondike + 77 Shared)
+  - Zero regressions - all existing functionality preserved
+  - **Deliverables:**
+    - klondike-mvp/src/state/gameActions.ts: `getValidMoves()` function
+    - freecell-mvp/src/state/gameActions.ts: `getValidMoves()` function + location types
+    - Comprehensive test coverage for smart tap scenarios
+    - Ready for smart tap-to-move UI integration in Phase 3
+  - **Impact:** Smart tap toggle in settings can now be activated!
+
+**MILESTONE: RFC-005 Phase 1 Complete - UI Prototype Ready 🎉**
+
+- [x] **RFC-005 Phase 1: UI Prototype with Settings Integration** ✅ COMPLETE
+  - Day 1: Animation experiments (spring drag, flip, win celebration)
+  - Day 2: Settings UI + Shared component consolidation
+  - Day 3: Created comprehensive UI requirements documentation
+  - **Deliverables:**
+    - docs/architecture/ui-requirements.md (comprehensive requirements doc)
+    - Unified settings system (animation, interaction, accessibility)
+    - Smart tap-to-move toggle (ready for Phase 2 implementation)
+    - Performance targets defined (60fps, <100ms response)
+    - Lifecycle hooks designed for animation coordination
+    - Animation queue requirements documented
+  - **Ready for Phase 2:** GameActions interface extension and move execution standardization
 
 **RFC-005 Shared Component Consolidation 🎉**
 
@@ -154,9 +185,9 @@
 - **Uptime:** 100% (GitHub Pages)
 
 ### Code Quality
-- **Tests:** 415 tests passing across monorepo (159 + 179 + 77)
-  - FreeCell: 159 tests, 95%+ coverage on core logic
-  - Klondike: 179 tests including 25 card display tests (comprehensive coverage)
+- **Tests:** 440 tests passing across monorepo (172 + 191 + 77)
+  - FreeCell: 172 tests including 12 getValidMoves tests, 95%+ coverage on core logic
+  - Klondike: 191 tests including 12 getValidMoves tests and 25 card display tests
   - Shared: 77 tests, full coverage on utilities and hooks
 - **Linting:** All files pass ESLint
 - **TypeScript:** Strict mode, zero errors
@@ -236,28 +267,15 @@
 
 ## 📋 Next 3 Tasks
 
-1. **RFC-005 Phase 1: UI Prototype + Settings** (2-3 days) ⬅️ CURRENT
-   - ✅ **Day 1 DONE:** Animation experiments (framer-motion, spring physics, flip, confetti)
-   - **Day 2:** Settings UI + Smart Tap-to-Move
-     - Add animation settings: level (full/reduced/none), win celebration (on/off)
-     - Add interaction settings: smart tap-to-move (on/off), drag physics
-     - Implement smart tap-to-move with toggle
-     - Test on real devices (iOS Safari, Android Chrome, iPad)
-     - Validate 60fps, touch targets (44x44px), response time (<100ms)
-   - **Day 3:** Documentation
-     - Create docs/architecture/ui-requirements.md
-     - Document settings system integration
-     - Performance requirements and accessibility considerations
-   - **Critical:** All features must be user-configurable, not forced
+1. **RFC-005 Phase 2, Week 3: Create Game Config System** (5-7 days) ⬅️ CURRENT
+   - Define GameConfig<TState> interface with AnimationConfig
+   - Add GameLifecycleHooks<TState> to GameConfig
+   - Create animation queue utility (enqueue, executeNext, clear)
+   - Create lifecycle hook integration patterns
+   - Document config system for future games
+   - **Goal:** Foundation for generic components in Weeks 4-5
 
-2. **Settings System Enhancement** (2-3 hours)
-   - Extend existing settings modal with animation/interaction preferences
-   - Add to both FreeCell and Klondike
-   - Persist to localStorage (integrate with existing accessibility settings)
-   - Respect prefers-reduced-motion media query
-   - Test settings persistence across page reloads
-
-3. **RFC-005 Phase 2: Standardize Move Execution** (Weeks 2-5)
+3. **RFC-005 Phase 2, Weeks 4-5: Generic Components** (10-12 days)
    - Define GameActions interface (validateMove, executeMove, getCardAt, etc.)
    - Create moveExecution.ts helper (createMoveExecutor)
    - Migrate Klondike to GameActions interface
