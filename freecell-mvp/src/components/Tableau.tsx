@@ -107,6 +107,7 @@ export const Tableau: React.FC<TableauProps> = ({
                     highContrastMode={highContrastMode}
                     onDragStart={onDragStart ? onDragStart(columnIndex, cardIndex) : undefined}
                     onDragEnd={onDragEnd}
+                    onDragOver={onDragOver}
                     onTouchStart={onTouchStart ? onTouchStart(columnIndex, cardIndex) : undefined}
                     onTouchMove={onTouchMove}
                     onTouchEnd={onTouchEnd}

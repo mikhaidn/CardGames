@@ -14,6 +14,7 @@ interface CardProps {
   style?: React.CSSProperties;
   onDragStart?: (e: React.DragEvent) => void;
   onDragEnd?: (e: React.DragEvent) => void;
+  onDragOver?: (e: React.DragEvent) => void;
   onTouchStart?: (e: React.TouchEvent) => void;
   onTouchMove?: (e: React.TouchEvent) => void;
   onTouchEnd?: (e: React.TouchEvent) => void;
@@ -42,6 +43,7 @@ export const Card: React.FC<CardProps> = ({
   style = {},
   onDragStart,
   onDragEnd,
+  onDragOver,
   onTouchStart,
   onTouchMove,
   onTouchEnd,
@@ -109,6 +111,7 @@ export const Card: React.FC<CardProps> = ({
       onClick={handleClick}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
+      onDragOver={onDragOver}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
