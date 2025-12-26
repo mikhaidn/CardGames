@@ -18,6 +18,7 @@ export interface CardBackProps {
   onClick?: () => void;
   onDragStart?: (e: React.DragEvent) => void;
   onDragEnd?: (e: React.DragEvent) => void;
+  onDragOver?: (e: React.DragEvent) => void;
   onTouchStart?: (e: React.TouchEvent) => void;
   onTouchEnd?: (e: React.TouchEvent) => void;
   draggable?: boolean;
@@ -71,6 +72,7 @@ export function CardBack({
   onClick,
   onDragStart,
   onDragEnd,
+  onDragOver,
   onTouchStart,
   onTouchEnd,
   draggable = false,
@@ -98,6 +100,7 @@ export function CardBack({
       onClick={onClick}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
+      onDragOver={onDragOver}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       draggable={draggable}
