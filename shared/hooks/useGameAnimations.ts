@@ -145,7 +145,7 @@ export function useGameAnimations(
   /**
    * Flip a card with 3D rotation animation
    */
-  const flipCard = useCallback(async (cardId: string, faceUp: boolean): Promise<void> => {
+  const flipCard = useCallback(async (cardId: string, _faceUp: boolean): Promise<void> => {
     startAnimating(cardId);
 
     // Create a promise that resolves when animation completes
@@ -197,7 +197,7 @@ export function useGameAnimations(
    * Animate an auto-move (e.g., auto-complete)
    */
   const animateAutoMove = useCallback(
-    async (from: GameLocation, to: GameLocation): Promise<void> => {
+    async (from: GameLocation, _to: GameLocation): Promise<void> => {
       const cardId = `${from.type}-${from.index}`;
       startAnimating(cardId);
 
@@ -218,7 +218,7 @@ export function useGameAnimations(
    * Animate a regular move (drag or click-to-select)
    */
   const animateMove = useCallback(
-    async (from: GameLocation, to: GameLocation): Promise<void> => {
+    async (from: GameLocation, _to: GameLocation): Promise<void> => {
       const cardId = `${from.type}-${from.index}`;
       startAnimating(cardId);
 
