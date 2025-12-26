@@ -230,11 +230,7 @@ describe('Touch Interaction Bugs - Diagnostic Tests', () => {
 
       // EXPECTED: Should construct valid drop location even without card-index
       // (Tableau column drops should work even if specific card isn't specified)
-      const expectedDropLocation: GameLocation = {
-        type: 'tableau',
-        index: 3,
-        // card-index and card-count are optional for column drops
-      };
+      // Expected location: { type: 'tableau', index: 3 }
 
       expect(mockValidateMove).toHaveBeenCalledWith(
         sourceLocation,
@@ -308,9 +304,9 @@ describe('Touch Interaction Bugs - Diagnostic Tests', () => {
 
   describe('Touch behavior edge cases', () => {
     it('Should distinguish between tap and drag based on movement threshold', () => {
-      const { result } = renderHook(() => useCardInteraction(config));
-
-      const location: GameLocation = { type: 'tableau', index: 0, cardIndex: 5, cardCount: 1 };
+      // TODO: Hook into actual useCardInteraction behavior when implemented
+      // const { result } = renderHook(() => useCardInteraction(config));
+      // const location: GameLocation = { type: 'tableau', index: 0, cardIndex: 5, cardCount: 1 };
 
       // Small movement (< threshold) = tap
       const tap = {
