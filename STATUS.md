@@ -1,20 +1,15 @@
 # Project Status
 
 **Last Updated:** 2025-12-26
-**Current Phase:** P5 - RFC-005 Planning & Implementation
-**Next Milestone:** Unified Game Builder (RFC-005)
+**Current Phase:** P5 - RFC-005 Phase 2 Complete
+**Next Milestone:** RFC-005 Phase 3 - Perfect UI
 
 ---
 
 ## 🎯 Current Sprint
 
 ### Active Work
-- [ ] **RFC-005 Phase 2, Weeks 4-5:** Create Generic Components (Ready to Start)
-  - Build GenericGameBoard component
-  - Build GenericTableau component
-  - Migrate Klondike to use generic components
-  - Migrate FreeCell to use generic components
-  - **Goal:** Config-driven game rendering
+- None (RFC-005 Phase 2 complete, awaiting Phase 3 prioritization)
 
 ### Blocked/Waiting
 - None
@@ -24,6 +19,23 @@
 ## ✅ Recently Completed
 
 ### Week of 2025-12-26
+
+**MILESTONE: RFC-005 Phase 2 Complete - Generic Components & Unification 🎉**
+
+- [x] **RFC-005 Phase 2 Weeks 4-5: Create Generic Components** ✅ COMPLETE
+  - Built GenericTableau component in shared library
+  - Migrated Klondike to use GenericTableau (absolute positioning)
+  - Migrated FreeCell to use GenericTableau (margin positioning)
+  - Fixed Klondike scrolling issue (removed unnecessary overflow: auto)
+  - Added 8 comprehensive tests for GenericTableau
+  - Created tableau adapters for both games
+  - **Deliverables:**
+    - shared/components/GenericTableau.tsx: Flexible tableau renderer
+    - shared/components/__tests__/GenericTableau.test.tsx: Component tests
+    - klondike-mvp/src/utils/tableauAdapter.ts: Klondike adapter
+    - freecell-mvp/src/utils/tableauAdapter.ts: FreeCell adapter
+  - **Impact:** ~200 lines of duplicate code eliminated, foundation ready for new games
+  - **Test Results:** All 145 shared tests passing, zero regressions
 
 **MILESTONE: RFC-005 Phase 2 Week 3 Complete - Game Config System Created 🎉**
 
@@ -205,14 +217,14 @@
 - **Uptime:** 100% (GitHub Pages)
 
 ### Code Quality
-- **Tests:** 440 tests passing across monorepo (172 + 191 + 77)
+- **Tests:** 508 tests passing across monorepo (172 + 191 + 145)
   - FreeCell: 172 tests including 12 getValidMoves tests, 95%+ coverage on core logic
   - Klondike: 191 tests including 12 getValidMoves tests and 25 card display tests
-  - Shared: 77 tests, full coverage on utilities and hooks
+  - Shared: 145 tests, full coverage on utilities, hooks, and components
 - **Linting:** All files pass ESLint
 - **TypeScript:** Strict mode, zero errors
 - **Build:** ✅ Monorepo builds succeed (shared → games)
-- **Shared Components:** 7 components (Card, CardBack, EmptyCell, GameControls, DraggingCardPreview, SettingsModal, FoundationArea)
+- **Shared Components:** 8 components (Card, CardBack, EmptyCell, GameControls, DraggingCardPreview, SettingsModal, FoundationArea, GenericTableau)
 
 ### User Metrics
 - **DAU:** 0 (no tracking yet)
@@ -287,14 +299,20 @@
 
 ## 📋 Next 3 Tasks
 
-1. **RFC-005 Phase 2, Weeks 4-5: Generic Components** (10-12 days) ⬅️ CURRENT
-   - Define GameActions interface (validateMove, executeMove, getCardAt, etc.)
-   - Create moveExecution.ts helper (createMoveExecutor)
-   - Migrate Klondike to GameActions interface
-   - Migrate FreeCell to GameActions interface
-   - Create GameConfig interface and config files
-   - Build generic components (GenericGameBoard, GenericTableau)
-   - All tests passing, visual regression testing
+1. **RFC-005 Phase 3 or Pivot to User Retention** (TBD)
+   - Option A: Continue RFC-005 Phase 3 (Animation System, Smart Tap, Unified Settings)
+   - Option B: Pivot to game persistence and analytics (P6/P7 from ROADMAP)
+   - **Decision needed:** Prioritize UI polish vs user retention features
+
+2. **Game Persistence** (if Option B chosen)
+   - Auto-save to localStorage on each move
+   - "Continue" vs "New Game" dialog
+   - Works for both FreeCell and Klondike
+
+3. **Privacy-First Analytics** (if Option B chosen)
+   - Add Plausible or Simple Analytics
+   - Track: games_started, games_won, device_type
+   - Zero PII, GDPR-compliant
 
 ---
 
