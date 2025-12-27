@@ -59,6 +59,9 @@ export interface GenericTableauProps {
   /** Highlighted card IDs (for hints) */
   highlightedCardIds?: string[];
 
+  /** Highlighted cells (for smart tap destinations) */
+  highlightedCells?: GameLocation[];
+
   // Event handlers
   onClick: (columnIndex: number, cardIndex: number) => void;
   onEmptyColumnClick: (columnIndex: number) => void;
@@ -128,6 +131,7 @@ export const GenericTableau: React.FC<GenericTableauProps> = ({
   selectedCard,
   draggingCard,
   highlightedCardIds = [],
+  highlightedCells = [],
   onClick,
   onEmptyColumnClick,
   onDragStart,
@@ -162,6 +166,11 @@ export const GenericTableau: React.FC<GenericTableauProps> = ({
             : cardHeight + (column.cards.length - 1) * cardOverlap;
         const columnHeight = baseColumnHeight + dropZoneHeight;
 
+        // Check if this empty column is highlighted
+        const isEmptyColumnHighlighted =
+          column.cards.length === 0 &&
+          highlightedCells.some((cell) => cell.type === 'tableau' && cell.index === columnIndex);
+
         return (
           <div
             key={columnIndex}
@@ -184,6 +193,9 @@ export const GenericTableau: React.FC<GenericTableauProps> = ({
                 cardHeight={cardHeight}
                 label={column.emptyLabel}
                 onClick={() => onEmptyColumnClick(columnIndex)}
+                isHighlighted={isEmptyColumnHighlighted}
+                data-drop-target-type="tableau"
+                data-drop-target-index={columnIndex}
               />
             ) : (
               column.cards.map((tableauCard, cardIndex) => {

@@ -536,6 +536,7 @@ export const GameBoard: React.FC = () => {
           selectedCard={displaySelectedCard?.type === 'freeCell' ? displaySelectedCard : null}
           draggingCard={displayDraggingCard}
           highlightedCardIds={highlightedCardIds}
+          highlightedCells={sharedInteractionState.highlightedCells}
           onFreeCellClick={handleFreeCellClick}
           onDragStart={(index) => handleDragStart({ type: 'freeCell', index })}
           onDragEnd={handleDragEnd}
@@ -561,6 +562,7 @@ export const GameBoard: React.FC = () => {
               ? { type: 'foundation', index: displayDraggingCard.index }
               : null
           }
+          highlightedCells={sharedInteractionState.highlightedCells}
           onClick={handleFoundationClick}
           onDragStart={(index) => handleDragStart({ type: 'foundation', index })}
           onDragEnd={handleDragEnd}
@@ -582,6 +584,7 @@ export const GameBoard: React.FC = () => {
         selectedCard={sharedInteractionState.selectedCard}
         draggingCard={sharedInteractionState.draggingCard}
         highlightedCardIds={highlightedCardIds}
+        highlightedCells={sharedInteractionState.highlightedCells}
         onClick={handleTableauClick}
         onEmptyColumnClick={handleEmptyColumnClick}
         onDragStart={(columnIndex, cardIndex) => {
