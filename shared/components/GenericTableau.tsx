@@ -253,10 +253,8 @@ export const GenericTableau: React.FC<GenericTableauProps> = ({
                       onTouchCancel={onTouchCancel}
                       data-drop-target-type="tableau"
                       data-drop-target-index={columnIndex}
-                      {...(positioningStrategy === 'margin' && {
-                        'data-drop-target-card-index': cardIndex,
-                        'data-drop-target-card-count': cardCount,
-                      })}
+                      data-drop-target-card-index={cardIndex}
+                      data-drop-target-card-count={cardCount}
                     />
                   </div>
                 );
