@@ -61,7 +61,7 @@ export type {
   AnalyticsProvider,
 } from './types/Analytics';
 export { NoOpAnalyticsProvider } from './types/Analytics';
-export { AnalyticsProvider as AnalyticsContextProvider, AnalyticsContext } from './contexts/AnalyticsContext';
+export { AnalyticsContextProvider, AnalyticsContext } from './contexts/AnalyticsContext';
 export { useAnalytics } from './hooks/useAnalytics';
 
 // Rules

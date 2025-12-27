@@ -14,7 +14,7 @@ interface AnalyticsContextValue {
 
 export const AnalyticsContext = createContext<AnalyticsContextValue | null>(null);
 
-interface AnalyticsProviderProps {
+interface AnalyticsContextProviderProps {
   children: React.ReactNode;
 
   /** Analytics provider implementation (defaults to NoOp) */
@@ -25,27 +25,27 @@ interface AnalyticsProviderProps {
 }
 
 /**
- * Analytics provider component
+ * Analytics context provider component
  *
  * Wraps the app to provide analytics tracking
  *
  * @example
  * ```tsx
- * <AnalyticsProvider game="freecell">
+ * <AnalyticsContextProvider game="freecell">
  *   <App />
- * </AnalyticsProvider>
+ * </AnalyticsContextProvider>
  * ```
  *
  * @example With custom provider (future Plausible integration)
  * ```tsx
  * const plausibleProvider = new PlausibleAnalyticsProvider();
  *
- * <AnalyticsProvider game="klondike" provider={plausibleProvider}>
+ * <AnalyticsContextProvider game="klondike" provider={plausibleProvider}>
  *   <App />
- * </AnalyticsProvider>
+ * </AnalyticsContextProvider>
  * ```
  */
-export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({
+export const AnalyticsContextProvider: React.FC<AnalyticsContextProviderProps> = ({
   children,
   provider = new NoOpAnalyticsProvider(),
   game,
