@@ -11,6 +11,7 @@ import { Card } from './Card';
 import { EmptyCell } from './EmptyCell';
 import type { LayoutSizes } from '../utils/responsiveLayout';
 import type { Card as CardType } from '../types/Card';
+import type { GameLocation } from '../types/CardInteraction';
 
 interface FoundationAreaProps {
   foundations: CardType[][];
@@ -18,6 +19,7 @@ interface FoundationAreaProps {
   selectedFoundation?: number | null;
   layoutSizes: LayoutSizes;
   draggingCard?: { type: string; index: number } | null;
+  highlightedCells?: GameLocation[];
   onDragStart?: (index: number) => (e: React.DragEvent) => void;
   onDragEnd?: () => void;
   onDragOver?: (e: React.DragEvent) => void;
@@ -40,6 +42,7 @@ export const FoundationArea: React.FC<FoundationAreaProps> = ({
   selectedFoundation,
   layoutSizes,
   draggingCard,
+  highlightedCells = [],
   onDragStart,
   onDragEnd,
   onDragOver,
@@ -58,6 +61,9 @@ export const FoundationArea: React.FC<FoundationAreaProps> = ({
       {foundations.map((foundation, index) => {
         const isDragging = draggingCard?.type === 'foundation' && draggingCard?.index === index;
         const isSelected = selectedFoundation === index;
+        const isHighlightedCell = highlightedCells.some(
+          (cell) => cell.type === 'foundation' && cell.index === index
+        );
 
         return (
           <div
@@ -81,6 +87,7 @@ export const FoundationArea: React.FC<FoundationAreaProps> = ({
                 cardHeight={cardHeight}
                 fontSize={fontSize}
                 isSelected={isSelected}
+                isHighlighted={isHighlightedCell}
                 isDragging={isDragging}
                 draggable={true}
                 onDragStart={onDragStart ? onDragStart(index) : undefined}
@@ -99,6 +106,9 @@ export const FoundationArea: React.FC<FoundationAreaProps> = ({
                 cardHeight={cardHeight}
                 label={suitLabels[index]}
                 onClick={() => onClick(index)}
+                isHighlighted={isHighlightedCell}
+                data-drop-target-type="foundation"
+                data-drop-target-index={index}
               />
             )}
           </div>

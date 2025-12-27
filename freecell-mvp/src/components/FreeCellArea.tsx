@@ -1,5 +1,5 @@
 import React from 'react';
-import { type CardType } from '@cardgames/shared';
+import { type CardType, type GameLocation } from '@cardgames/shared';
 import { Card, EmptyCell } from '@cardgames/shared';
 
 interface FreeCellAreaProps {
@@ -11,6 +11,7 @@ interface FreeCellAreaProps {
     | { type: 'foundation'; index: number }
     | null;
   highlightedCardIds?: string[];
+  highlightedCells?: GameLocation[];
   onFreeCellClick: (index: number) => void;
   onDragStart?: (index: number) => (e: React.DragEvent) => void;
   onDragEnd?: () => void;
@@ -38,6 +39,7 @@ export const FreeCellArea: React.FC<FreeCellAreaProps> = ({
   selectedCard,
   draggingCard,
   highlightedCardIds = [],
+  highlightedCells = [],
   onFreeCellClick,
   onDragStart,
   onDragEnd,
@@ -57,7 +59,11 @@ export const FreeCellArea: React.FC<FreeCellAreaProps> = ({
     <div style={{ display: 'flex', gap: `${cardGap}px` }}>
       {freeCells.map((card, index) => {
         const isDragging = draggingCard?.type === 'freeCell' && draggingCard.index === index;
-        const isHighlighted = card ? highlightedCardIds.includes(card.id) : false;
+        const isHighlightedByCardId = card ? highlightedCardIds.includes(card.id) : false;
+        const isHighlightedByLocation = highlightedCells.some(
+          (cell) => cell.type === 'freeCell' && cell.index === index
+        );
+        const isHighlighted = isHighlightedByCardId || isHighlightedByLocation;
 
         return (
           <div
@@ -93,6 +99,9 @@ export const FreeCellArea: React.FC<FreeCellAreaProps> = ({
                 onClick={() => onFreeCellClick(index)}
                 cardWidth={cardWidth}
                 cardHeight={cardHeight}
+                isHighlighted={isHighlighted}
+                data-drop-target-type="freeCell"
+                data-drop-target-index={index}
               />
             )}
           </div>
