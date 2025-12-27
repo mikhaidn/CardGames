@@ -43,35 +43,36 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
   });
 
   // RFC-005 Phase 3: Shared interaction hook with smart tap-to-move support
-  const sharedHookConfig = useMemo(() => ({
-    validateMove: (from: GameLocation, to: GameLocation) => {
-      return validateMove(gameState, from, to);
-    },
-    executeMove: (from: GameLocation, to: GameLocation) => {
-      const newState = executeMove(gameState, from, to);
-      if (newState) {
-        pushState(newState);
-      }
-    },
-    getValidMoves: (from: GameLocation) => {
-      const klondikeLocation = {
-        type: from.type as 'tableau' | 'stock' | 'waste' | 'foundation',
-        index: from.index,
-      };
-      const validMoves = getValidMoves(gameState, klondikeLocation, from.cardCount ?? 1);
-      // Convert Location[] to GameLocation[]
-      return validMoves.map(loc => ({
-        ...loc,
-        type: loc.type as GameLocation['type'],
-        index: loc.index ?? 0,
-      }));
-    },
-  }), [gameState, pushState]);
+  const sharedHookConfig = useMemo(
+    () => ({
+      validateMove: (from: GameLocation, to: GameLocation) => {
+        return validateMove(gameState, from, to);
+      },
+      executeMove: (from: GameLocation, to: GameLocation) => {
+        const newState = executeMove(gameState, from, to);
+        if (newState) {
+          pushState(newState);
+        }
+      },
+      getValidMoves: (from: GameLocation) => {
+        const klondikeLocation = {
+          type: from.type as 'tableau' | 'stock' | 'waste' | 'foundation',
+          index: from.index,
+        };
+        const validMoves = getValidMoves(gameState, klondikeLocation, from.cardCount ?? 1);
+        // Convert Location[] to GameLocation[]
+        return validMoves.map((loc) => ({
+          ...loc,
+          type: loc.type as GameLocation['type'],
+          index: loc.index ?? 0,
+        }));
+      },
+    }),
+    [gameState, pushState]
+  );
 
-  const {
-    state: sharedInteractionState,
-    handlers: sharedHandlers
-  } = useCardInteraction<GameLocation>(sharedHookConfig);
+  const { state: sharedInteractionState, handlers: sharedHandlers } =
+    useCardInteraction<GameLocation>(sharedHookConfig);
 
   // Responsive layout sizing
   const [layoutSizes, setLayoutSizes] = useState<LayoutSizes>(() =>
@@ -143,31 +144,37 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
   /**
    * Tableau click handler
    */
-  const handleTableauClick = useCallback((columnIndex: number, cardIndex: number) => {
-    const column = gameState.tableau[columnIndex];
-    const faceDownCount = column.cards.length - column.faceUpCount;
+  const handleTableauClick = useCallback(
+    (columnIndex: number, cardIndex: number) => {
+      const column = gameState.tableau[columnIndex];
+      const faceDownCount = column.cards.length - column.faceUpCount;
 
-    // Can't select face-down cards
-    if (cardIndex < faceDownCount) return;
+      // Can't select face-down cards
+      if (cardIndex < faceDownCount) return;
 
-    const cardCount = column.cards.length - cardIndex;
-    sharedHandlers.handleCardClick({
-      type: 'tableau',
-      index: columnIndex,
-      cardCount,
-    });
-  }, [gameState.tableau, sharedHandlers]);
+      const cardCount = column.cards.length - cardIndex;
+      sharedHandlers.handleCardClick({
+        type: 'tableau',
+        index: columnIndex,
+        cardCount,
+      });
+    },
+    [gameState.tableau, sharedHandlers]
+  );
 
   /**
    * Foundation click handler
    */
-  const handleFoundationClick = useCallback((foundationIndex: number) => {
-    sharedHandlers.handleCardClick({
-      type: 'foundation',
-      index: foundationIndex,
-      cardCount: 1,
-    });
-  }, [sharedHandlers]);
+  const handleFoundationClick = useCallback(
+    (foundationIndex: number) => {
+      sharedHandlers.handleCardClick({
+        type: 'foundation',
+        index: foundationIndex,
+        cardCount: 1,
+      });
+    },
+    [sharedHandlers]
+  );
 
   // =============================================================================
   // Drag and touch handlers
@@ -176,9 +183,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
   /**
    * Drag start handler - creates location and delegates to shared handler
    */
-  const handleDragStart = useCallback((location: GameLocation) => (e: React.DragEvent) => {
-    sharedHandlers.handleDragStart(location)(e);
-  }, [sharedHandlers]);
+  const handleDragStart = useCallback(
+    (location: GameLocation) => (e: React.DragEvent) => {
+      sharedHandlers.handleDragStart(location)(e);
+    },
+    [sharedHandlers]
+  );
 
   /**
    * Drag end handler
@@ -190,37 +200,52 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
   /**
    * Drag over handler
    */
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    sharedHandlers.handleDragOver(e);
-  }, [sharedHandlers]);
+  const handleDragOver = useCallback(
+    (e: React.DragEvent) => {
+      sharedHandlers.handleDragOver(e);
+    },
+    [sharedHandlers]
+  );
 
   /**
    * Drop handler - creates location and delegates to shared handler
    */
-  const handleDrop = useCallback((location: GameLocation) => (e: React.DragEvent) => {
-    sharedHandlers.handleDrop(location)(e);
-  }, [sharedHandlers]);
+  const handleDrop = useCallback(
+    (location: GameLocation) => (e: React.DragEvent) => {
+      sharedHandlers.handleDrop(location)(e);
+    },
+    [sharedHandlers]
+  );
 
   /**
    * Touch start handler
    */
-  const handleTouchStart = useCallback((location: GameLocation) => (e: React.TouchEvent) => {
-    sharedHandlers.handleTouchStart(location)(e);
-  }, [sharedHandlers]);
+  const handleTouchStart = useCallback(
+    (location: GameLocation) => (e: React.TouchEvent) => {
+      sharedHandlers.handleTouchStart(location)(e);
+    },
+    [sharedHandlers]
+  );
 
   /**
    * Touch move handler
    */
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    sharedHandlers.handleTouchMove(e);
-  }, [sharedHandlers]);
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      sharedHandlers.handleTouchMove(e);
+    },
+    [sharedHandlers]
+  );
 
   /**
    * Touch end handler
    */
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    sharedHandlers.handleTouchEnd(e);
-  }, [sharedHandlers]);
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      sharedHandlers.handleTouchEnd(e);
+    },
+    [sharedHandlers]
+  );
 
   /**
    * Touch cancel handler
@@ -455,34 +480,35 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
         cardWidth={layoutSizes.cardWidth}
         cardHeight={layoutSizes.cardHeight}
       >
-        {sharedInteractionState.draggingCard && (() => {
-          const { type, index, cardCount } = sharedInteractionState.draggingCard;
-          let card = null;
+        {sharedInteractionState.draggingCard &&
+          (() => {
+            const { type, index, cardCount } = sharedInteractionState.draggingCard;
+            let card = null;
 
-          if (type === 'waste' && gameState.waste.length > 0) {
-            card = gameState.waste[gameState.waste.length - 1];
-          } else if (type === 'tableau' && gameState.tableau[index]) {
-            const column = gameState.tableau[index];
-            const startIndex = column.cards.length - (cardCount ?? 1);
-            card = column.cards[startIndex];
-          } else if (type === 'foundation' && gameState.foundations[index].length > 0) {
-            const foundation = gameState.foundations[index];
-            card = foundation[foundation.length - 1];
-          }
+            if (type === 'waste' && gameState.waste.length > 0) {
+              card = gameState.waste[gameState.waste.length - 1];
+            } else if (type === 'tableau' && gameState.tableau[index]) {
+              const column = gameState.tableau[index];
+              const startIndex = column.cards.length - (cardCount ?? 1);
+              card = column.cards[startIndex];
+            } else if (type === 'foundation' && gameState.foundations[index].length > 0) {
+              const foundation = gameState.foundations[index];
+              card = foundation[foundation.length - 1];
+            }
 
-          if (!card) return null;
+            if (!card) return null;
 
-          return (
-            <Card
-              card={card}
-              faceUp={true}
-              isSelected={true}
-              cardWidth={layoutSizes.cardWidth}
-              cardHeight={layoutSizes.cardHeight}
-              fontSize={layoutSizes.fontSize}
-            />
-          );
-        })()}
+            return (
+              <Card
+                card={card}
+                faceUp={true}
+                isSelected={true}
+                cardWidth={layoutSizes.cardWidth}
+                cardHeight={layoutSizes.cardHeight}
+                fontSize={layoutSizes.fontSize}
+              />
+            );
+          })()}
       </DraggingCardPreview>
 
       {/* Footer */}

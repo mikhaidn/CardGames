@@ -35,7 +35,7 @@ describe('initializeGame', () => {
   test('creates 4 empty foundations', () => {
     const state = initializeGame(12345);
     expect(state.foundations).toHaveLength(4);
-    state.foundations.forEach(f => expect(f).toEqual([]));
+    state.foundations.forEach((f) => expect(f).toEqual([]));
   });
 
   test('same seed produces same initial state', () => {
@@ -63,14 +63,14 @@ describe('initializeGame', () => {
   test('all cards in tableau are unique', () => {
     const state = initializeGame(42);
     const allCards = state.tableau.flat();
-    const ids = allCards.map(c => c.id);
+    const ids = allCards.map((c) => c.id);
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(52);
   });
 
   test('distribution pattern is correct', () => {
     const state = initializeGame(100);
-    const columnLengths = state.tableau.map(col => col.length);
+    const columnLengths = state.tableau.map((col) => col.length);
     expect(columnLengths).toEqual([7, 7, 7, 7, 6, 6, 6, 6]);
   });
 });
@@ -86,12 +86,22 @@ describe('checkWinCondition', () => {
 
     // Simulate a won game by filling foundations
     state.foundations = [
-      Array(13).fill(null).map((_, i) => ({ suit: '♠', value: 'A', rank: i + 1, id: `${i + 1}♠` })),
-      Array(13).fill(null).map((_, i) => ({ suit: '♥', value: 'A', rank: i + 1, id: `${i + 1}♥` })),
-      Array(13).fill(null).map((_, i) => ({ suit: '♦', value: 'A', rank: i + 1, id: `${i + 1}♦` })),
-      Array(13).fill(null).map((_, i) => ({ suit: '♣', value: 'A', rank: i + 1, id: `${i + 1}♣` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♠', value: 'A', rank: i + 1, id: `${i + 1}♠` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♥', value: 'A', rank: i + 1, id: `${i + 1}♥` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♦', value: 'A', rank: i + 1, id: `${i + 1}♦` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♣', value: 'A', rank: i + 1, id: `${i + 1}♣` })),
     ];
-    state.tableau = Array(8).fill(null).map(() => []);
+    state.tableau = Array(8)
+      .fill(null)
+      .map(() => []);
     state.freeCells = [null, null, null, null];
 
     expect(checkWinCondition(state)).toBe(true);
@@ -101,9 +111,15 @@ describe('checkWinCondition', () => {
     const state = initializeGame(12345);
 
     state.foundations = [
-      Array(13).fill(null).map((_, i) => ({ suit: '♠', value: 'A', rank: i + 1, id: `${i + 1}♠` })),
-      Array(13).fill(null).map((_, i) => ({ suit: '♥', value: 'A', rank: i + 1, id: `${i + 1}♥` })),
-      Array(13).fill(null).map((_, i) => ({ suit: '♦', value: 'A', rank: i + 1, id: `${i + 1}♦` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♠', value: 'A', rank: i + 1, id: `${i + 1}♠` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♥', value: 'A', rank: i + 1, id: `${i + 1}♥` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♦', value: 'A', rank: i + 1, id: `${i + 1}♦` })),
       [], // Empty foundation
     ];
 
@@ -114,8 +130,12 @@ describe('checkWinCondition', () => {
     const state = initializeGame(12345);
 
     state.foundations = [
-      Array(5).fill(null).map((_, i) => ({ suit: '♠', value: 'A', rank: i + 1, id: `${i + 1}♠` })),
-      Array(3).fill(null).map((_, i) => ({ suit: '♥', value: 'A', rank: i + 1, id: `${i + 1}♥` })),
+      Array(5)
+        .fill(null)
+        .map((_, i) => ({ suit: '♠', value: 'A', rank: i + 1, id: `${i + 1}♠` })),
+      Array(3)
+        .fill(null)
+        .map((_, i) => ({ suit: '♥', value: 'A', rank: i + 1, id: `${i + 1}♥` })),
       [],
       [],
     ];
@@ -128,12 +148,22 @@ describe('checkWinCondition', () => {
 
     // All foundations must have exactly 13 cards
     state.foundations = [
-      Array(13).fill(null).map((_, i) => ({ suit: '♠', value: 'A', rank: i + 1, id: `${i + 1}♠` })),
-      Array(13).fill(null).map((_, i) => ({ suit: '♥', value: 'A', rank: i + 1, id: `${i + 1}♥` })),
-      Array(13).fill(null).map((_, i) => ({ suit: '♦', value: 'A', rank: i + 1, id: `${i + 1}♦` })),
-      Array(13).fill(null).map((_, i) => ({ suit: '♣', value: 'A', rank: i + 1, id: `${i + 1}♣` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♠', value: 'A', rank: i + 1, id: `${i + 1}♠` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♥', value: 'A', rank: i + 1, id: `${i + 1}♥` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♦', value: 'A', rank: i + 1, id: `${i + 1}♦` })),
+      Array(13)
+        .fill(null)
+        .map((_, i) => ({ suit: '♣', value: 'A', rank: i + 1, id: `${i + 1}♣` })),
     ];
-    state.tableau = Array(8).fill(null).map(() => []);
+    state.tableau = Array(8)
+      .fill(null)
+      .map(() => []);
     state.freeCells = [null, null, null, null];
 
     expect(checkWinCondition(state)).toBe(true);

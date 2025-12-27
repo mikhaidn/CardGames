@@ -1,5 +1,5 @@
 import { type GameState } from './gameState';
-import { type Card } from '../core/types';
+import { type CardType as Card } from '@cardgames/shared';
 import { canStackOnTableau, canStackOnFoundation } from '../rules/validation';
 import { isValidStack, getMaxMovable } from '../rules/movement';
 
@@ -11,9 +11,9 @@ type MoveSource = 'tableau' | 'freeCell' | 'foundation';
 function cloneState(state: GameState): GameState {
   return {
     ...state,
-    tableau: state.tableau.map(col => [...col]),
+    tableau: state.tableau.map((col) => [...col]),
     freeCells: [...state.freeCells],
-    foundations: state.foundations.map(f => [...f]),
+    foundations: state.foundations.map((f) => [...f]),
   };
 }
 
@@ -199,8 +199,10 @@ export function moveCardsToTableau(
   if (!isValidStack(cardsToMove)) return null;
 
   // Calculate max movable cards
-  const emptyFreeCells = state.freeCells.filter(c => c === null).length;
-  const emptyColumns = state.tableau.filter((col, idx) => col.length === 0 && idx !== targetIndex).length;
+  const emptyFreeCells = state.freeCells.filter((c) => c === null).length;
+  const emptyColumns = state.tableau.filter(
+    (col, idx) => col.length === 0 && idx !== targetIndex
+  ).length;
   const maxMovable = getMaxMovable(emptyFreeCells, emptyColumns);
 
   if (numCards > maxMovable) return null;
@@ -257,10 +259,7 @@ export interface DestinationLocation {
  *   // Auto-execute move
  * }
  */
-export function getValidMoves(
-  state: GameState,
-  from: SourceLocation
-): DestinationLocation[] {
+export function getValidMoves(state: GameState, from: SourceLocation): DestinationLocation[] {
   const validMoves: DestinationLocation[] = [];
 
   // Get the card we're trying to move
@@ -273,8 +272,10 @@ export function getValidMoves(
     card = column[column.length - 1];
 
     // For tableau, check if we can move multiple cards as a sequence
-    const emptyFreeCells = state.freeCells.filter(c => c === null).length;
-    const emptyColumns = state.tableau.filter((col, idx) => col.length === 0 && idx !== from.index).length;
+    const emptyFreeCells = state.freeCells.filter((c) => c === null).length;
+    const emptyColumns = state.tableau.filter(
+      (col, idx) => col.length === 0 && idx !== from.index
+    ).length;
     const maxMovable = getMaxMovable(emptyFreeCells, emptyColumns);
 
     // Try to move as many valid cards as possible

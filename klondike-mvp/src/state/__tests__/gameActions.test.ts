@@ -102,9 +102,9 @@ describe('drawFromStock', () => {
       { suit: '♠', value: 'K', rank: 13, id: 'K♠' },
     ];
 
-    const wasteIds = state.waste.map(c => c.id);
+    const wasteIds = state.waste.map((c) => c.id);
     const newState = drawFromStock(state);
-    const stockIds = newState.stock.map(c => c.id);
+    const stockIds = newState.stock.map((c) => c.id);
 
     expect(stockIds.sort()).toEqual(wasteIds.sort());
   });

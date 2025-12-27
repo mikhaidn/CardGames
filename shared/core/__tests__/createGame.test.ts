@@ -5,12 +5,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import {
-  createGame,
-  defineGameConfig,
-  createGameRegistry,
-  supportsFeature,
-} from '../createGame';
+import { createGame, defineGameConfig, createGameRegistry, supportsFeature } from '../createGame';
 import type { GameConfig, GameActions } from '../../types/GameConfig';
 import type { GameLocation } from '../../types/GameLocation';
 

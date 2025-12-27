@@ -1,4 +1,4 @@
-import { type Card } from '../core/types';
+import { type CardType as Card } from '@cardgames/shared';
 import { canStackOnTableau } from './validation';
 
 /**

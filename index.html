@@ -1,211 +1,221 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Card Games Collection</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card Games Collection</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
 
-    .container {
-      max-width: 1200px;
-      width: 100%;
-    }
+      .container {
+        max-width: 1200px;
+        width: 100%;
+      }
 
-    header {
-      text-align: center;
-      margin-bottom: 60px;
-      color: white;
-    }
+      header {
+        text-align: center;
+        margin-bottom: 60px;
+        color: white;
+      }
 
-    h1 {
-      font-size: 3.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .subtitle {
-      font-size: 1.3rem;
-      opacity: 0.95;
-      font-weight: 300;
-    }
-
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      margin-bottom: 40px;
-    }
-
-    .game-card {
-      background: white;
-      border-radius: 16px;
-      padding: 40px 30px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-
-    .game-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .game-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
-    }
-
-    .game-card h2 {
-      font-size: 1.8rem;
-      margin-bottom: 12px;
-      color: #333;
-    }
-
-    .game-card p {
-      color: #666;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .status.available {
-      background: #10b981;
-      color: white;
-    }
-
-    .status.coming-soon {
-      background: #f59e0b;
-      color: white;
-    }
-
-    .game-card.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .game-card.disabled:hover {
-      transform: none;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    footer {
-      text-align: center;
-      color: white;
-      padding: 40px 20px 20px;
-    }
-
-    footer a {
-      color: white;
-      text-decoration: underline;
-      opacity: 0.9;
-      transition: opacity 0.2s;
-    }
-
-    footer a:hover {
-      opacity: 1;
-    }
-
-    @media (max-width: 768px) {
       h1 {
-        font-size: 2.5rem;
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
       }
 
       .subtitle {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
+        opacity: 0.95;
+        font-weight: 300;
       }
 
       .games-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
       }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1>🂡 Card Games Collection</h1>
-      <p class="subtitle">Classic solitaire games built with modern web technology</p>
-    </header>
 
-    <main>
-      <div class="games-grid">
-        <a href="./freecell/" class="game-card">
-          <div class="game-icon">🃏</div>
-          <h2>FreeCell</h2>
-          <p>Strategic solitaire where every card is visible. Plan your moves carefully to build the foundations!</p>
-          <span class="status available">Play Now</span>
-        </a>
+      .game-card {
+        background: white;
+        border-radius: 16px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
 
-        <div class="game-card disabled">
-          <div class="game-icon">🂱</div>
-          <h2>Spider Solitaire</h2>
-          <p>Arrange cards in descending sequences. Master one, two, or four suits!</p>
-          <span class="status coming-soon">Coming Soon</span>
+      .game-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .game-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+      }
+
+      .game-card h2 {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+        color: #333;
+      }
+
+      .game-card p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status.available {
+        background: #10b981;
+        color: white;
+      }
+
+      .status.coming-soon {
+        background: #f59e0b;
+        color: white;
+      }
+
+      .game-card.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .game-card.disabled:hover {
+        transform: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      footer {
+        text-align: center;
+        color: white;
+        padding: 40px 20px 20px;
+      }
+
+      footer a {
+        color: white;
+        text-decoration: underline;
+        opacity: 0.9;
+        transition: opacity 0.2s;
+      }
+
+      footer a:hover {
+        opacity: 1;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .subtitle {
+          font-size: 1.1rem;
+        }
+
+        .games-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🂡 Card Games Collection</h1>
+        <p class="subtitle">Classic solitaire games built with modern web technology</p>
+      </header>
+
+      <main>
+        <div class="games-grid">
+          <a href="./freecell/" class="game-card">
+            <div class="game-icon">🃏</div>
+            <h2>FreeCell</h2>
+            <p>
+              Strategic solitaire where every card is visible. Plan your moves carefully to build
+              the foundations!
+            </p>
+            <span class="status available">Play Now</span>
+          </a>
+
+          <div class="game-card disabled">
+            <div class="game-icon">🂱</div>
+            <h2>Spider Solitaire</h2>
+            <p>Arrange cards in descending sequences. Master one, two, or four suits!</p>
+            <span class="status coming-soon">Coming Soon</span>
+          </div>
+
+          <a href="./klondike/" class="game-card">
+            <div class="game-icon">🎴</div>
+            <h2>Klondike</h2>
+            <p>The classic solitaire game everyone knows and loves. Draw one card at a time!</p>
+            <span class="status available">Play Now</span>
+          </a>
+
+          <div class="game-card disabled">
+            <div class="game-icon">♠️</div>
+            <h2>Pyramid</h2>
+            <p>Match pairs of cards that add up to 13. Clear the pyramid to win!</p>
+            <span class="status coming-soon">Coming Soon</span>
+          </div>
+
+          <div class="game-card disabled">
+            <div class="game-icon">♦️</div>
+            <h2>Tri-Peaks</h2>
+            <p>Clear three peaks of cards by matching ranks. Fast-paced solitaire action!</p>
+            <span class="status coming-soon">Coming Soon</span>
+          </div>
+
+          <div class="game-card disabled">
+            <div class="game-icon">♣️</div>
+            <h2>Yukon</h2>
+            <p>FreeCell meets Klondike. Move face-up sequences without using free cells!</p>
+            <span class="status coming-soon">Coming Soon</span>
+          </div>
         </div>
+      </main>
 
-        <a href="./klondike/" class="game-card">
-          <div class="game-icon">🎴</div>
-          <h2>Klondike</h2>
-          <p>The classic solitaire game everyone knows and loves. Draw one card at a time!</p>
-          <span class="status available">Play Now</span>
-        </a>
-
-        <div class="game-card disabled">
-          <div class="game-icon">♠️</div>
-          <h2>Pyramid</h2>
-          <p>Match pairs of cards that add up to 13. Clear the pyramid to win!</p>
-          <span class="status coming-soon">Coming Soon</span>
-        </div>
-
-        <div class="game-card disabled">
-          <div class="game-icon">♦️</div>
-          <h2>Tri-Peaks</h2>
-          <p>Clear three peaks of cards by matching ranks. Fast-paced solitaire action!</p>
-          <span class="status coming-soon">Coming Soon</span>
-        </div>
-
-        <div class="game-card disabled">
-          <div class="game-icon">♣️</div>
-          <h2>Yukon</h2>
-          <p>FreeCell meets Klondike. Move face-up sequences without using free cells!</p>
-          <span class="status coming-soon">Coming Soon</span>
-        </div>
-      </div>
-    </main>
-
-    <footer>
-      <p>Built with React, TypeScript, and Vite</p>
-      <p><a href="https://github.com/mikhaidn/CardGames" target="_blank" rel="noopener">View on GitHub</a></p>
-    </footer>
-  </div>
-</body>
+      <footer>
+        <p>Built with React, TypeScript, and Vite</p>
+        <p>
+          <a href="https://github.com/mikhaidn/CardGames" target="_blank" rel="noopener"
+            >View on GitHub</a
+          >
+        </p>
+      </footer>
+    </div>
+  </body>
 </html>

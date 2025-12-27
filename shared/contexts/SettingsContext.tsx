@@ -11,7 +11,12 @@
  */
 
 import React, { createContext, useState, useEffect } from 'react';
-import { loadSettings, saveSettings, migrateOldSettings, resetSettings as resetToDefaults } from '../utils/settingsStorage';
+import {
+  loadSettings,
+  saveSettings,
+  migrateOldSettings,
+  resetSettings as resetToDefaults,
+} from '../utils/settingsStorage';
 import { applyAccessibilityOverrides, type GameSettings } from '../types/GameSettings';
 
 interface SettingsContextValue {

@@ -131,9 +131,7 @@ export function createGame<TState>(config: GameConfig<TState>): GameInstance<TSt
       ? (state: TState, from: GameLocation) => config.actions.getValidMoves!(state, from)
       : undefined,
 
-    getHint: config.actions.getHint
-      ? (state: TState) => config.actions.getHint!(state)
-      : undefined,
+    getHint: config.actions.getHint ? (state: TState) => config.actions.getHint!(state) : undefined,
 
     getAutoMoves: config.actions.getAutoMoves
       ? (state: TState) => config.actions.getAutoMoves!(state)
@@ -179,7 +177,7 @@ export function createGameRegistry<TState = any>(configs: GameConfig<TState>[]) 
   const registry = new Map<string, GameInstance<TState>>();
 
   // Initialize all games
-  configs.forEach(config => {
+  configs.forEach((config) => {
     const game = createGame(config);
     registry.set(config.metadata.id, game);
   });
@@ -203,7 +201,7 @@ export function createGameRegistry<TState = any>(configs: GameConfig<TState>[]) 
      * Get all game metadata (for menus)
      */
     getAllMetadata() {
-      return Array.from(registry.values()).map(game => game.metadata);
+      return Array.from(registry.values()).map((game) => game.metadata);
     },
 
     /**

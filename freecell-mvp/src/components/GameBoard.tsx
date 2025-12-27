@@ -18,7 +18,7 @@ import {
   GenericTableau,
   WinCelebration,
 } from '@cardgames/shared';
-import { getMinButtonHeight } from '../config/accessibilitySettings';
+import { getMinButtonHeight } from '@cardgames/shared';
 import { validateMove } from '../rules/moveValidation';
 import { executeMove } from '../state/moveExecution';
 import { convertTableauToGeneric } from '../utils/tableauAdapter';
@@ -48,29 +48,33 @@ export const GameBoard: React.FC = () => {
   });
 
   // RFC-005 Phase 3: Shared interaction hook with smart tap-to-move support
-  const sharedHookConfig = useMemo(() => ({
-    validateMove: (from: GameLocation, to: GameLocation) => {
-      return validateMove(gameState, from, to);
-    },
-    executeMove: (from: GameLocation, to: GameLocation) => {
-      const newState = executeMove(gameState, from, to);
-      if (newState) {
-        pushState(newState);
-      }
-    },
-    getValidMoves: (from: GameLocation) => {
-      // Filter out invalid source types for FreeCell
-      if (from.type === 'waste' || from.type === 'stock') {
-        return [];
-      }
-      return getValidMoves(gameState, from as { type: 'tableau' | 'freeCell' | 'foundation'; index: number });
-    },
-  }), [gameState, pushState]);
+  const sharedHookConfig = useMemo(
+    () => ({
+      validateMove: (from: GameLocation, to: GameLocation) => {
+        return validateMove(gameState, from, to);
+      },
+      executeMove: (from: GameLocation, to: GameLocation) => {
+        const newState = executeMove(gameState, from, to);
+        if (newState) {
+          pushState(newState);
+        }
+      },
+      getValidMoves: (from: GameLocation) => {
+        // Filter out invalid source types for FreeCell
+        if (from.type === 'waste' || from.type === 'stock') {
+          return [];
+        }
+        return getValidMoves(
+          gameState,
+          from as { type: 'tableau' | 'freeCell' | 'foundation'; index: number }
+        );
+      },
+    }),
+    [gameState, pushState]
+  );
 
-  const {
-    state: sharedInteractionState,
-    handlers: sharedHandlers
-  } = useCardInteraction<GameLocation>(sharedHookConfig);
+  const { state: sharedInteractionState, handlers: sharedHandlers } =
+    useCardInteraction<GameLocation>(sharedHookConfig);
 
   const [showHints, setShowHints] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -94,9 +98,7 @@ export const GameBoard: React.FC = () => {
   // Update layout sizes on window resize
   useEffect(() => {
     const handleResize = () => {
-      setLayoutSizes(
-        calculateLayoutSizes(window.innerWidth, window.innerHeight)
-      );
+      setLayoutSizes(calculateLayoutSizes(window.innerWidth, window.innerHeight));
     };
 
     window.addEventListener('resize', handleResize);
@@ -144,7 +146,12 @@ export const GameBoard: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [gameState, sharedInteractionState.draggingCard, sharedInteractionState.selectedCard, pushState]);
+  }, [
+    gameState,
+    sharedInteractionState.draggingCard,
+    sharedInteractionState.selectedCard,
+    pushState,
+  ]);
 
   // Keyboard shortcuts for undo/redo
   useEffect(() => {
@@ -200,84 +207,100 @@ export const GameBoard: React.FC = () => {
   /**
    * Tableau click handler
    */
-  const handleTableauClick = useCallback((columnIndex: number, cardIndex: number) => {
-    const cardCount = gameState.tableau[columnIndex].length - cardIndex;
-    sharedHandlers.handleCardClick({
-      type: 'tableau',
-      index: columnIndex,
-      cardCount,
-      cardIndex, // FreeCell uses cardIndex
-    });
-  }, [gameState.tableau, sharedHandlers]);
+  const handleTableauClick = useCallback(
+    (columnIndex: number, cardIndex: number) => {
+      const cardCount = gameState.tableau[columnIndex].length - cardIndex;
+      sharedHandlers.handleCardClick({
+        type: 'tableau',
+        index: columnIndex,
+        cardCount,
+        cardIndex, // FreeCell uses cardIndex
+      });
+    },
+    [gameState.tableau, sharedHandlers]
+  );
 
   /**
    * Empty column click handler
    */
-  const handleEmptyColumnClick = useCallback((columnIndex: number) => {
-    sharedHandlers.handleCardClick({
-      type: 'tableau',
-      index: columnIndex,
-      cardCount: 0,
-    });
-  }, [sharedHandlers]);
+  const handleEmptyColumnClick = useCallback(
+    (columnIndex: number) => {
+      sharedHandlers.handleCardClick({
+        type: 'tableau',
+        index: columnIndex,
+        cardCount: 0,
+      });
+    },
+    [sharedHandlers]
+  );
 
   /**
    * Free cell click handler
    */
-  const handleFreeCellClick = useCallback((index: number) => {
-    sharedHandlers.handleCardClick({
-      type: 'freeCell',
-      index,
-      cardCount: 1,
-    });
-  }, [sharedHandlers]);
+  const handleFreeCellClick = useCallback(
+    (index: number) => {
+      sharedHandlers.handleCardClick({
+        type: 'freeCell',
+        index,
+        cardCount: 1,
+      });
+    },
+    [sharedHandlers]
+  );
 
   /**
    * Foundation click handler
    */
-  const handleFoundationClick = useCallback((foundationIndex: number) => {
-    sharedHandlers.handleCardClick({
-      type: 'foundation',
-      index: foundationIndex,
-      cardCount: 1,
-    });
-  }, [sharedHandlers]);
+  const handleFoundationClick = useCallback(
+    (foundationIndex: number) => {
+      sharedHandlers.handleCardClick({
+        type: 'foundation',
+        index: foundationIndex,
+        cardCount: 1,
+      });
+    },
+    [sharedHandlers]
+  );
 
   // Convert GameLocation to SelectedCard for child components
   // Convert GameLocation to SelectedCard format for display
-  const convertLocationToSelected = useCallback((loc: GameLocation | null): SelectedCard => {
-    if (!loc) return null;
+  const convertLocationToSelected = useCallback(
+    (loc: GameLocation | null): SelectedCard => {
+      if (!loc) return null;
 
-    if (loc.type === 'tableau') {
-      return {
-        type: 'tableau',
-        column: loc.index,
-        cardIndex: loc.cardIndex ?? (gameState.tableau[loc.index].length - (loc.cardCount ?? 1)),
-      };
-    } else if (loc.type === 'freeCell') {
-      return { type: 'freeCell', index: loc.index };
-    } else if (loc.type === 'foundation') {
-      return { type: 'foundation', index: loc.index };
-    }
-    return null;
-  }, [gameState.tableau]);
+      if (loc.type === 'tableau') {
+        return {
+          type: 'tableau',
+          column: loc.index,
+          cardIndex: loc.cardIndex ?? gameState.tableau[loc.index].length - (loc.cardCount ?? 1),
+        };
+      } else if (loc.type === 'freeCell') {
+        return { type: 'freeCell', index: loc.index };
+      } else if (loc.type === 'foundation') {
+        return { type: 'foundation', index: loc.index };
+      }
+      return null;
+    },
+    [gameState.tableau]
+  );
 
-  const displaySelectedCard: SelectedCard = React.useMemo(() =>
-    convertLocationToSelected(sharedInteractionState.selectedCard),
+  const displaySelectedCard: SelectedCard = React.useMemo(
+    () => convertLocationToSelected(sharedInteractionState.selectedCard),
     [sharedInteractionState.selectedCard, convertLocationToSelected]
   );
 
-  const displayDraggingCard: SelectedCard = React.useMemo(() =>
-    convertLocationToSelected(sharedInteractionState.draggingCard),
+  const displayDraggingCard: SelectedCard = React.useMemo(
+    () => convertLocationToSelected(sharedInteractionState.draggingCard),
     [sharedInteractionState.draggingCard, convertLocationToSelected]
   );
 
   // Wrapper functions to convert SelectedCard to GameLocation and call shared handlers
   const handleDragStart = (source: SelectedCard) => (e: React.DragEvent) => {
     if (!source) return;
-    const location: GameLocation = source.type === 'tableau'
-      ? { type: 'tableau', index: source.column, cardIndex: source.cardIndex }
-      : { type: source.type, index: source.index };
+    const location: GameLocation =
+      source.type === 'tableau'
+        ? { type: 'tableau', index: source.column, cardIndex: source.cardIndex }
+        : { type: source.type, index: source.index };
     sharedHandlers.handleDragStart(location)(e);
   };
 
@@ -307,9 +330,10 @@ export const GameBoard: React.FC = () => {
   // Touch handlers
   const handleTouchStart = (source: SelectedCard) => (e: React.TouchEvent) => {
     if (!source) return;
-    const location: GameLocation = source.type === 'tableau'
-      ? { type: 'tableau', index: source.column, cardIndex: source.cardIndex }
-      : { type: source.type, index: source.index };
+    const location: GameLocation =
+      source.type === 'tableau'
+        ? { type: 'tableau', index: source.column, cardIndex: source.cardIndex }
+        : { type: source.type, index: source.index };
     sharedHandlers.handleTouchStart(location)(e);
   };
 
@@ -472,39 +496,41 @@ export const GameBoard: React.FC = () => {
       onTouchMove={handleTouchMove}
     >
       {/* Header */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: isMobile ? 'column' : 'row',
-            justifyContent: 'space-between',
-            alignItems: isMobile ? 'flex-start' : 'center',
-            marginBottom: `${padding}px`,
-            color: 'white',
-            gap: isMobile ? '12px' : '0',
-          }}
-        >
-          <div>
-            <h1 style={{ margin: 0, fontSize: titleSize }}>FreeCell</h1>
-            <div style={{
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          justifyContent: 'space-between',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          marginBottom: `${padding}px`,
+          color: 'white',
+          gap: isMobile ? '12px' : '0',
+        }}
+      >
+        <div>
+          <h1 style={{ margin: 0, fontSize: titleSize }}>FreeCell</h1>
+          <div
+            style={{
               fontSize: '0.7em',
               opacity: 0.6,
               marginTop: '4px',
-              fontFamily: 'monospace'
-            }}>
-              v{BUILD_VERSION}
-            </div>
+              fontFamily: 'monospace',
+            }}
+          >
+            v{BUILD_VERSION}
           </div>
-          {!buttonsAtBottom && buttonControls}
         </div>
+        {!buttonsAtBottom && buttonControls}
+      </div>
 
-        {/* Top Area: Free Cells and Foundations */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: `${layoutSizes.cardGap * 3}px`,
-          }}
-        >
+      {/* Top Area: Free Cells and Foundations */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: `${layoutSizes.cardGap * 3}px`,
+        }}
+      >
         <FreeCellArea
           freeCells={gameState.freeCells}
           selectedCard={displaySelectedCard?.type === 'freeCell' ? displaySelectedCard : null}
@@ -527,8 +553,14 @@ export const GameBoard: React.FC = () => {
         />
         <FoundationArea
           foundations={gameState.foundations}
-          selectedFoundation={displaySelectedCard?.type === 'foundation' ? displaySelectedCard.index : null}
-          draggingCard={displayDraggingCard?.type === 'foundation' ? { type: 'foundation', index: displayDraggingCard.index } : null}
+          selectedFoundation={
+            displaySelectedCard?.type === 'foundation' ? displaySelectedCard.index : null
+          }
+          draggingCard={
+            displayDraggingCard?.type === 'foundation'
+              ? { type: 'foundation', index: displayDraggingCard.index }
+              : null
+          }
           onClick={handleFoundationClick}
           onDragStart={(index) => handleDragStart({ type: 'foundation', index })}
           onDragEnd={handleDragEnd}
@@ -541,44 +573,44 @@ export const GameBoard: React.FC = () => {
           layoutSizes={layoutSizes}
           highContrastMode={accessibilityDefaults.highContrastMode}
         />
-        </div>
+      </div>
 
-        {/* Tableau - RFC-005: Using GenericTableau */}
-        <GenericTableau
-          columns={convertTableauToGeneric(gameState)}
-          layoutSizes={layoutSizes}
-          selectedCard={sharedInteractionState.selectedCard}
-          draggingCard={sharedInteractionState.draggingCard}
-          highlightedCardIds={highlightedCardIds}
-          onClick={handleTableauClick}
-          onEmptyColumnClick={handleEmptyColumnClick}
-          onDragStart={(columnIndex, cardIndex) => {
-            const location: GameLocation = {
-              type: 'tableau',
-              index: columnIndex,
-              cardIndex,
-              cardCount: gameState.tableau[columnIndex].length - cardIndex,
-            };
-            return sharedHandlers.handleDragStart(location);
-          }}
-          onDragEnd={handleDragEnd}
-          onDragOver={handleDragOver}
-          onDrop={handleTableauDrop}
-          onTouchStart={(columnIndex, cardIndex) => {
-            const location: GameLocation = {
-              type: 'tableau',
-              index: columnIndex,
-              cardIndex,
-              cardCount: gameState.tableau[columnIndex].length - cardIndex,
-            };
-            return sharedHandlers.handleTouchStart(location);
-          }}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onTouchCancel={handleTouchCancel}
-          positioningStrategy="margin"
-          highContrastMode={accessibilityDefaults.highContrastMode}
-        />
+      {/* Tableau - RFC-005: Using GenericTableau */}
+      <GenericTableau
+        columns={convertTableauToGeneric(gameState)}
+        layoutSizes={layoutSizes}
+        selectedCard={sharedInteractionState.selectedCard}
+        draggingCard={sharedInteractionState.draggingCard}
+        highlightedCardIds={highlightedCardIds}
+        onClick={handleTableauClick}
+        onEmptyColumnClick={handleEmptyColumnClick}
+        onDragStart={(columnIndex, cardIndex) => {
+          const location: GameLocation = {
+            type: 'tableau',
+            index: columnIndex,
+            cardIndex,
+            cardCount: gameState.tableau[columnIndex].length - cardIndex,
+          };
+          return sharedHandlers.handleDragStart(location);
+        }}
+        onDragEnd={handleDragEnd}
+        onDragOver={handleDragOver}
+        onDrop={handleTableauDrop}
+        onTouchStart={(columnIndex, cardIndex) => {
+          const location: GameLocation = {
+            type: 'tableau',
+            index: columnIndex,
+            cardIndex,
+            cardCount: gameState.tableau[columnIndex].length - cardIndex,
+          };
+          return sharedHandlers.handleTouchStart(location);
+        }}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchCancel}
+        positioningStrategy="margin"
+        highContrastMode={accessibilityDefaults.highContrastMode}
+      />
 
       {/* Win Celebration */}
       <WinCelebration
@@ -588,25 +620,29 @@ export const GameBoard: React.FC = () => {
 
       {/* Win Modal */}
       {showWin && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.7)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: `${padding}px`,
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: isMobile ? '24px' : '32px',
-            borderRadius: '12px',
-            textAlign: 'center',
-            maxWidth: isMobile ? '90%' : '400px',
-          }}>
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: `${padding}px`,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: 'white',
+              padding: isMobile ? '24px' : '32px',
+              borderRadius: '12px',
+              textAlign: 'center',
+              maxWidth: isMobile ? '90%' : '400px',
+            }}
+          >
             <h2 style={{ fontSize: isMobile ? '1.5em' : '2em' }}>Congratulations!</h2>
             <p style={{ fontSize: `${fontSize}em` }}>You won in {gameState.moves} moves!</p>
             <p style={{ fontSize: `${fontSize}em` }}>Seed: {gameState.seed}</p>
@@ -648,10 +684,7 @@ export const GameBoard: React.FC = () => {
       )}
 
       {/* Settings Modal */}
-      <SettingsModal
-        isOpen={showSettings}
-        onClose={() => setShowSettings(false)}
-      />
+      <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
 
       {/* Touch drag preview */}
       <DraggingCardPreview
@@ -660,31 +693,32 @@ export const GameBoard: React.FC = () => {
         cardWidth={layoutSizes.cardWidth}
         cardHeight={layoutSizes.cardHeight}
       >
-        {displayDraggingCard && (() => {
-          let card = null;
-          if (displayDraggingCard.type === 'freeCell') {
-            card = gameState.freeCells[displayDraggingCard.index];
-          } else if (displayDraggingCard.type === 'tableau') {
-            const column = gameState.tableau[displayDraggingCard.column];
-            card = column[displayDraggingCard.cardIndex];
-          } else if (displayDraggingCard.type === 'foundation') {
-            const foundation = gameState.foundations[displayDraggingCard.index];
-            card = foundation.length > 0 ? foundation[foundation.length - 1] : null;
-          }
+        {displayDraggingCard &&
+          (() => {
+            let card = null;
+            if (displayDraggingCard.type === 'freeCell') {
+              card = gameState.freeCells[displayDraggingCard.index];
+            } else if (displayDraggingCard.type === 'tableau') {
+              const column = gameState.tableau[displayDraggingCard.column];
+              card = column[displayDraggingCard.cardIndex];
+            } else if (displayDraggingCard.type === 'foundation') {
+              const foundation = gameState.foundations[displayDraggingCard.index];
+              card = foundation.length > 0 ? foundation[foundation.length - 1] : null;
+            }
 
-          if (!card) return null;
+            if (!card) return null;
 
-          return (
-            <Card
-              card={card}
-              isSelected={true}
-              cardWidth={layoutSizes.cardWidth}
-              cardHeight={layoutSizes.cardHeight}
-              fontSize={layoutSizes.fontSize}
-              highContrastMode={accessibilityDefaults.highContrastMode}
-            />
-          );
-        })()}
+            return (
+              <Card
+                card={card}
+                isSelected={true}
+                cardWidth={layoutSizes.cardWidth}
+                cardHeight={layoutSizes.cardHeight}
+                fontSize={layoutSizes.fontSize}
+                highContrastMode={accessibilityDefaults.highContrastMode}
+              />
+            );
+          })()}
       </DraggingCardPreview>
     </div>
   );

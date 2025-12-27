@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { Card } from '@cardgames/shared';
-import type { Card as CardType } from '../../core/types';
+import type { CardType } from '@cardgames/shared';
 
 const testCard: CardType = {
   suit: '♥',
@@ -12,9 +12,7 @@ const testCard: CardType = {
 
 describe('Card with faceUp prop', () => {
   test('renders face-up by default (backwards compatibility)', () => {
-    const { container } = render(
-      <Card card={testCard} cardWidth={60} cardHeight={84} />
-    );
+    const { container } = render(<Card card={testCard} cardWidth={60} cardHeight={84} />);
 
     const card = container.firstChild as HTMLElement;
     // Face-up cards show the card content
@@ -26,12 +24,7 @@ describe('Card with faceUp prop', () => {
 
   test('renders face-up when faceUp={true}', () => {
     const { container } = render(
-      <Card
-        card={testCard}
-        cardWidth={60}
-        cardHeight={84}
-        faceUp={true}
-      />
+      <Card card={testCard} cardWidth={60} cardHeight={84} faceUp={true} />
     );
 
     const card = container.firstChild as HTMLElement;
@@ -41,12 +34,7 @@ describe('Card with faceUp prop', () => {
 
   test('renders face-down when faceUp={false}', () => {
     const { container } = render(
-      <Card
-        card={testCard}
-        cardWidth={60}
-        cardHeight={84}
-        faceUp={false}
-      />
+      <Card card={testCard} cardWidth={60} cardHeight={84} faceUp={false} />
     );
 
     const card = container.firstChild as HTMLElement;
@@ -60,12 +48,7 @@ describe('Card with faceUp prop', () => {
 
   test('face-down card uses blue theme by default', () => {
     const { container } = render(
-      <Card
-        card={testCard}
-        cardWidth={60}
-        cardHeight={84}
-        faceUp={false}
-      />
+      <Card card={testCard} cardWidth={60} cardHeight={84} faceUp={false} />
     );
 
     const card = container.firstChild as HTMLElement;
@@ -75,13 +58,7 @@ describe('Card with faceUp prop', () => {
 
   test('face-down card uses red theme when specified', () => {
     const { container } = render(
-      <Card
-        card={testCard}
-        cardWidth={60}
-        cardHeight={84}
-        faceUp={false}
-        cardBackTheme="red"
-      />
+      <Card card={testCard} cardWidth={60} cardHeight={84} faceUp={false} cardBackTheme="red" />
     );
 
     const card = container.firstChild as HTMLElement;
@@ -91,12 +68,7 @@ describe('Card with faceUp prop', () => {
 
   test('face-down card has correct dimensions', () => {
     const { container } = render(
-      <Card
-        card={testCard}
-        cardWidth={80}
-        cardHeight={112}
-        faceUp={false}
-      />
+      <Card card={testCard} cardWidth={80} cardHeight={112} faceUp={false} />
     );
 
     const card = container.firstChild as HTMLElement;

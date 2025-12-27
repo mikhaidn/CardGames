@@ -17,14 +17,14 @@
  * Standard game events we track
  */
 export type GameEventType =
-  | 'game_start'      // New game started
-  | 'game_won'        // Game completed successfully
-  | 'game_lost'       // Game abandoned/given up
-  | 'card_moved'      // Card moved (throttled to avoid spam)
-  | 'hint_used'       // Hint requested
-  | 'undo_used'       // Undo performed
-  | 'redo_used'       // Redo performed
-  | 'auto_complete'   // Auto-complete triggered
+  | 'game_start' // New game started
+  | 'game_won' // Game completed successfully
+  | 'game_lost' // Game abandoned/given up
+  | 'card_moved' // Card moved (throttled to avoid spam)
+  | 'hint_used' // Hint requested
+  | 'undo_used' // Undo performed
+  | 'redo_used' // Redo performed
+  | 'auto_complete' // Auto-complete triggered
   | 'settings_opened' // Settings modal opened
   | 'new_game_click'; // New game button clicked
 
@@ -34,12 +34,12 @@ export type GameEventType =
 export interface GameEventProperties {
   // Game context
   game?: 'freecell' | 'klondike' | 'spider';
-  mode?: string;  // e.g., 'draw-1', 'draw-3', '1-suit', '4-suit'
+  mode?: string; // e.g., 'draw-1', 'draw-3', '1-suit', '4-suit'
   seed?: number;
 
   // Game outcome
   moves?: number;
-  time?: number;  // seconds
+  time?: number; // seconds
   won?: boolean;
 
   // User context (derived, never PII)
@@ -69,10 +69,7 @@ export interface GameEventProperties {
  * trackEvent('game_start', { game: 'klondike', mode: 'draw-3' });
  * trackEvent('game_won', { game: 'freecell', moves: 87, time: 245 });
  */
-export function trackEvent(
-  event: GameEventType,
-  properties?: GameEventProperties
-): void {
+export function trackEvent(event: GameEventType, properties?: GameEventProperties): void {
   // No-op implementation for now
   // When ready, uncomment one of these:
 
@@ -130,9 +127,7 @@ export function getPlatform(): 'ios' | 'android' | 'windows' | 'macos' | 'linux'
 /**
  * Create enriched event properties with device/platform context
  */
-export function enrichEventProperties(
-  properties?: GameEventProperties
-): GameEventProperties {
+export function enrichEventProperties(properties?: GameEventProperties): GameEventProperties {
   return {
     ...properties,
     device: getDeviceType(),

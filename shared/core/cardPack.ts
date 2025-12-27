@@ -10,7 +10,7 @@
  * - Performance: iPad 2+ support (2011+), 60fps
  */
 
-import type { Card } from './types';
+import type { Card } from '../types/Card';
 
 /**
  * Card size dimensions
@@ -24,9 +24,9 @@ export interface CardSize {
  * Font sizes for card rendering
  */
 export interface FontSizes {
-  large: number;   // Suit symbol
-  medium: number;  // Card value
-  small: number;   // Corner text
+  large: number; // Suit symbol
+  medium: number; // Card value
+  small: number; // Corner text
 }
 
 /**
@@ -34,8 +34,8 @@ export interface FontSizes {
  */
 export interface AnimationDefinition {
   type: 'css' | 'javascript';
-  duration: number;  // milliseconds
-  easing?: string;   // CSS timing function (e.g., 'ease-in-out')
+  duration: number; // milliseconds
+  easing?: string; // CSS timing function (e.g., 'ease-in-out')
 
   // CSS-based animations
   keyframes?: Record<string, React.CSSProperties>;
@@ -63,17 +63,17 @@ export interface CardPackManifest {
 
   // Performance & compatibility metadata
   requirements: {
-    maxBundleSize: string;      // e.g., "10kb"
-    minSafariVersion?: string;  // e.g., "9.0"
-    requiresJS: boolean;        // Card backs work without JS?
-    gpuAccelerated?: boolean;   // Uses CSS transforms?
+    maxBundleSize: string; // e.g., "10kb"
+    minSafariVersion?: string; // e.g., "9.0"
+    requiresJS: boolean; // Card backs work without JS?
+    gpuAccelerated?: boolean; // Uses CSS transforms?
   };
 
   // Asset information
   assets: {
     cardBacks: {
       type: 'css-pattern' | 'svg' | 'png' | 'custom';
-      estimatedSize: string;  // e.g., "2kb"
+      estimatedSize: string; // e.g., "2kb"
     };
     cardFronts?: {
       type: 'default' | 'svg-inline' | 'image-atlas';

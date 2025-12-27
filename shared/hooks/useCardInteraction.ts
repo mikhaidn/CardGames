@@ -49,7 +49,9 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
   const [touchDragging, setTouchDragging] = useState(false);
   const [touchPosition, setTouchPosition] = useState<{ x: number; y: number } | null>(null);
   const [touchStartLocation, setTouchStartLocation] = useState<TLocation | null>(null);
-  const [touchStartPosition, setTouchStartPosition] = useState<{ x: number; y: number } | null>(null);
+  const [touchStartPosition, setTouchStartPosition] = useState<{ x: number; y: number } | null>(
+    null
+  );
   const [highlightedCells, setHighlightedCells] = useState<TLocation[]>([]);
 
   /**
@@ -93,7 +95,7 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
 
       // If there's a selected card, check if this click is on a highlighted cell
       if (selectedCard && highlightedCells.length > 0) {
-        const isHighlightedCell = highlightedCells.some(cell => locationsEqual(cell, location));
+        const isHighlightedCell = highlightedCells.some((cell) => locationsEqual(cell, location));
 
         if (isHighlightedCell) {
           // Clicking a highlighted destination - execute the move
@@ -178,24 +180,30 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
         // else: keep selectedCard unchanged
       }
     },
-    [selectedCard, draggingCard, highlightedCells, validateMove, executeMove, getValidMoves, settings.smartTapToMove, locationsEqual]
+    [
+      selectedCard,
+      draggingCard,
+      highlightedCells,
+      validateMove,
+      executeMove,
+      getValidMoves,
+      settings.smartTapToMove,
+      locationsEqual,
+    ]
   );
 
   /**
    * Drag start handler (mouse)
    */
-  const handleDragStart = useCallback(
-    (location: TLocation) => {
-      return (e: React.DragEvent) => {
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', JSON.stringify(location));
-        setDraggingCard(location);
-        setSelectedCard(null); // Clear selection when drag starts
-        setHighlightedCells([]); // Clear highlights when drag starts
-      };
-    },
-    []
-  );
+  const handleDragStart = useCallback((location: TLocation) => {
+    return (e: React.DragEvent) => {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', JSON.stringify(location));
+      setDraggingCard(location);
+      setSelectedCard(null); // Clear selection when drag starts
+      setHighlightedCells([]); // Clear highlights when drag starts
+    };
+  }, []);
 
   /**
    * Drag end handler (mouse)
@@ -240,20 +248,17 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
    * and only start dragging if the user moves their finger significantly.
    * If they release without moving, treat it as a tap (click-to-select).
    */
-  const handleTouchStart = useCallback(
-    (location: TLocation) => {
-      return (e: React.TouchEvent) => {
-        e.preventDefault(); // Prevent scrolling
+  const handleTouchStart = useCallback((location: TLocation) => {
+    return (e: React.TouchEvent) => {
+      e.preventDefault(); // Prevent scrolling
 
-        const touch = e.touches[0];
-        // Store touch start location and position, but don't start dragging yet
-        setTouchStartLocation(location);
-        setTouchStartPosition({ x: touch.clientX, y: touch.clientY });
-        setTouchPosition({ x: touch.clientX, y: touch.clientY });
-      };
-    },
-    []
-  );
+      const touch = e.touches[0];
+      // Store touch start location and position, but don't start dragging yet
+      setTouchStartLocation(location);
+      setTouchStartPosition({ x: touch.clientX, y: touch.clientY });
+      setTouchPosition({ x: touch.clientX, y: touch.clientY });
+    };
+  }, []);
 
   /**
    * Touch move handler (mobile)
@@ -261,34 +266,37 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
    * If the user moves their finger more than a threshold distance,
    * start the drag operation. Otherwise, keep it as a potential tap.
    */
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!touchStartLocation || !touchStartPosition) return;
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartLocation || !touchStartPosition) return;
 
-    e.preventDefault(); // Prevent scrolling
+      e.preventDefault(); // Prevent scrolling
 
-    const touch = e.touches[0];
-    const currentPos = { x: touch.clientX, y: touch.clientY };
+      const touch = e.touches[0];
+      const currentPos = { x: touch.clientX, y: touch.clientY };
 
-    // Calculate distance moved
-    const dx = currentPos.x - touchStartPosition.x;
-    const dy = currentPos.y - touchStartPosition.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+      // Calculate distance moved
+      const dx = currentPos.x - touchStartPosition.x;
+      const dy = currentPos.y - touchStartPosition.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-    // Movement threshold: 10 pixels
-    // If moved more than threshold, start dragging
-    const DRAG_THRESHOLD = 10;
+      // Movement threshold: 10 pixels
+      // If moved more than threshold, start dragging
+      const DRAG_THRESHOLD = 10;
 
-    if (!touchDragging && distance > DRAG_THRESHOLD) {
-      // Start drag
-      setDraggingCard(touchStartLocation);
-      setTouchDragging(true);
-      setSelectedCard(null); // Clear selection when drag starts
-      setHighlightedCells([]); // Clear highlights when drag starts
-    }
+      if (!touchDragging && distance > DRAG_THRESHOLD) {
+        // Start drag
+        setDraggingCard(touchStartLocation);
+        setTouchDragging(true);
+        setSelectedCard(null); // Clear selection when drag starts
+        setHighlightedCells([]); // Clear highlights when drag starts
+      }
 
-    // Update touch position for drag preview
-    setTouchPosition(currentPos);
-  }, [touchStartLocation, touchStartPosition, touchDragging]);
+      // Update touch position for drag preview
+      setTouchPosition(currentPos);
+    },
+    [touchStartLocation, touchStartPosition, touchDragging]
+  );
 
   /**
    * Touch end handler (mobile)

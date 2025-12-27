@@ -1,5 +1,5 @@
-import { type Card } from '../core/types';
-import { createDeck, shuffleWithSeed } from '../core/deck';
+import { type CardType as Card } from '@cardgames/shared';
+import { createDeck, shuffleWithSeed } from '@cardgames/shared';
 
 /**
  * Represents the complete state of a FreeCell game.
@@ -38,7 +38,9 @@ export function initializeGame(seed: number): GameState {
   const shuffled = shuffleWithSeed(deck, seed);
 
   // Initialize empty tableau columns
-  const tableau: Card[][] = Array(8).fill(null).map(() => []);
+  const tableau: Card[][] = Array(8)
+    .fill(null)
+    .map(() => []);
 
   // Distribute cards to tableau
   // First 4 columns get 7 cards, last 4 get 6 cards
@@ -67,5 +69,5 @@ export function initializeGame(seed: number): GameState {
  * @returns true if the game is won
  */
 export function checkWinCondition(state: GameState): boolean {
-  return state.foundations.every(foundation => foundation.length === 13);
+  return state.foundations.every((foundation) => foundation.length === 13);
 }

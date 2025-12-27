@@ -34,11 +34,9 @@ export function executeMove(
   to: GameLocation
 ): GameState | null {
   // Determine card count
-  const cardCount = from.cardCount ?? (
-    from.cardIndex !== undefined
-      ? state.tableau[from.index].length - from.cardIndex
-      : 1
-  );
+  const cardCount =
+    from.cardCount ??
+    (from.cardIndex !== undefined ? state.tableau[from.index].length - from.cardIndex : 1);
 
   // Route to appropriate action based on source and destination
   if (from.type === 'tableau' && to.type === 'freeCell') {

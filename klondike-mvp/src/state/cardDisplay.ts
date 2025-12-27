@@ -111,7 +111,7 @@ export function isCardFaceUp(
 export function getCardsAtLocation(
   state: KlondikeGameState,
   location: GameLocation
-): import('../core/types').Card[] {
+): import('@cardgames/shared').CardType[] {
   switch (location.type) {
     case 'tableau':
       return state.tableau[location.index]?.cards ?? [];
@@ -146,7 +146,7 @@ export function getCardsAtLocation(
 export function getCardAtLocation(
   state: KlondikeGameState,
   location: GameLocation
-): import('../core/types').Card | null {
+): import('@cardgames/shared').CardType | null {
   const cards = getCardsAtLocation(state, location);
   return cards.length > 0 ? cards[cards.length - 1] : null;
 }

@@ -11,7 +11,7 @@
 import { describe, it, expect } from 'vitest';
 import { isCardFaceUp, getCardsAtLocation, getCardAtLocation } from '../cardDisplay';
 import { createInitialState } from '../gameState';
-import type { Card } from '../../core/types';
+import type { CardType as Card } from '@cardgames/shared';
 
 describe('isCardFaceUp (RFC-005 compatible)', () => {
   describe('Stock pile', () => {
@@ -102,17 +102,17 @@ describe('isCardFaceUp (RFC-005 compatible)', () => {
 
       // Column 1: 2 cards total, 1 face-up (faceDownCount = 1)
       expect(isCardFaceUp(state, { type: 'tableau', index: 1 }, 0)).toBe(false); // face-down
-      expect(isCardFaceUp(state, { type: 'tableau', index: 1 }, 1)).toBe(true);  // face-up
+      expect(isCardFaceUp(state, { type: 'tableau', index: 1 }, 1)).toBe(true); // face-up
 
       // Column 2: 3 cards total, 1 face-up (faceDownCount = 2)
       expect(isCardFaceUp(state, { type: 'tableau', index: 2 }, 0)).toBe(false); // face-down
       expect(isCardFaceUp(state, { type: 'tableau', index: 2 }, 1)).toBe(false); // face-down
-      expect(isCardFaceUp(state, { type: 'tableau', index: 2 }, 2)).toBe(true);  // face-up
+      expect(isCardFaceUp(state, { type: 'tableau', index: 2 }, 2)).toBe(true); // face-up
 
       // Column 6: 7 cards total, 1 face-up (faceDownCount = 6)
       expect(isCardFaceUp(state, { type: 'tableau', index: 6 }, 0)).toBe(false); // face-down
       expect(isCardFaceUp(state, { type: 'tableau', index: 6 }, 5)).toBe(false); // face-down
-      expect(isCardFaceUp(state, { type: 'tableau', index: 6 }, 6)).toBe(true);  // face-up
+      expect(isCardFaceUp(state, { type: 'tableau', index: 6 }, 6)).toBe(true); // face-up
     });
 
     it('handles increased faceUpCount after flipping cards', () => {

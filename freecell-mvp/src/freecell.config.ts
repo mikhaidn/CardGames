@@ -10,7 +10,7 @@
 
 import type { GameConfig, GameActions } from '@cardgames/shared';
 import type { GameLocation } from '@cardgames/shared';
-import type { Card } from './core/types';
+import type { CardType as Card } from '@cardgames/shared';
 import type { GameState } from './state/gameState';
 import type { SourceLocation, DestinationLocation } from './state/gameActions';
 import { initializeGame, checkWinCondition } from './state/gameState';

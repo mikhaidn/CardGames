@@ -6,7 +6,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { StockWaste } from '../StockWaste';
-import type { Card } from '../../core/types';
+import type { CardType as Card } from '@cardgames/shared';
 
 describe('StockWaste - Flip Animations', () => {
   const mockStock: Card[] = [
@@ -14,9 +14,7 @@ describe('StockWaste - Flip Animations', () => {
     { suit: '♥', value: 'K', rank: 13, id: 'K♥' },
   ];
 
-  const mockWaste: Card[] = [
-    { suit: '♦', value: '7', rank: 7, id: '7♦' },
-  ];
+  const mockWaste: Card[] = [{ suit: '♦', value: '7', rank: 7, id: '7♦' }];
 
   const mockLayoutSizes = {
     cardWidth: 60,

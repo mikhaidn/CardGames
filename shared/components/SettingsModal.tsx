@@ -67,7 +67,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   ];
 
   // Animation level options
-  const animationLevels: { value: GameSettings['animationLevel']; label: string; description: string }[] = [
+  const animationLevels: {
+    value: GameSettings['animationLevel'];
+    label: string;
+    description: string;
+  }[] = [
     {
       value: 'full',
       label: 'Full',
@@ -86,7 +90,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   ];
 
   // Drag physics options
-  const dragPhysicsOptions: { value: GameSettings['dragPhysics']; label: string; description: string }[] = [
+  const dragPhysicsOptions: {
+    value: GameSettings['dragPhysics'];
+    label: string;
+    description: string;
+  }[] = [
     {
       value: 'spring',
       label: 'Bouncy',
@@ -180,7 +188,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   display: 'block',
                   padding: '12px',
                   marginBottom: '8px',
-                  border: localSettings.gameMode === mode.value ? '3px solid #4caf50' : '2px solid #ddd',
+                  border:
+                    localSettings.gameMode === mode.value ? '3px solid #4caf50' : '2px solid #ddd',
                   borderRadius: '8px',
                   cursor: 'pointer',
                   backgroundColor: localSettings.gameMode === mode.value ? '#f1f8f4' : 'white',
@@ -212,9 +221,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     <div style={{ fontSize, fontWeight: 'bold', marginBottom: '4px' }}>
                       {mode.label}
                     </div>
-                    <div style={{ fontSize: '0.9em', color: '#666' }}>
-                      {mode.description}
-                    </div>
+                    <div style={{ fontSize: '0.9em', color: '#666' }}>{mode.description}</div>
                   </div>
                 </div>
               </label>
@@ -238,10 +245,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   display: 'block',
                   padding: '10px',
                   marginBottom: '6px',
-                  border: localSettings.animationLevel === level.value ? '2px solid #4caf50' : '1px solid #ddd',
+                  border:
+                    localSettings.animationLevel === level.value
+                      ? '2px solid #4caf50'
+                      : '1px solid #ddd',
                   borderRadius: '6px',
                   cursor: 'pointer',
-                  backgroundColor: localSettings.animationLevel === level.value ? '#f1f8f4' : 'white',
+                  backgroundColor:
+                    localSettings.animationLevel === level.value ? '#f1f8f4' : 'white',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -348,10 +359,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   display: 'block',
                   padding: '10px',
                   marginBottom: '6px',
-                  border: localSettings.dragPhysics === physics.value ? '2px solid #4caf50' : '1px solid #ddd',
+                  border:
+                    localSettings.dragPhysics === physics.value
+                      ? '2px solid #4caf50'
+                      : '1px solid #ddd',
                   borderRadius: '6px',
                   cursor: localSettings.animationLevel === 'none' ? 'not-allowed' : 'pointer',
-                  backgroundColor: localSettings.dragPhysics === physics.value ? '#f1f8f4' : 'white',
+                  backgroundColor:
+                    localSettings.dragPhysics === physics.value ? '#f1f8f4' : 'white',
                   opacity: localSettings.animationLevel === 'none' ? 0.5 : 1,
                 }}
               >

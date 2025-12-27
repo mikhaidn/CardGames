@@ -95,9 +95,7 @@ const DEFAULT_CONFIG: Required<AnimationConfig> = {
  * );
  * ```
  */
-export function useGameAnimations(
-  config: AnimationConfig = {}
-): UseGameAnimationsReturn {
+export function useGameAnimations(config: AnimationConfig = {}): UseGameAnimationsReturn {
   // Merge with defaults
   const animConfig: Required<AnimationConfig> = {
     ...DEFAULT_CONFIG,
@@ -121,14 +119,14 @@ export function useGameAnimations(
    * Add a card to the animating set
    */
   const startAnimating = useCallback((cardId: string) => {
-    setAnimatingCards(prev => new Set(prev).add(cardId));
+    setAnimatingCards((prev) => new Set(prev).add(cardId));
   }, []);
 
   /**
    * Remove a card from the animating set
    */
   const stopAnimating = useCallback((cardId: string) => {
-    setAnimatingCards(prev => {
+    setAnimatingCards((prev) => {
       const next = new Set(prev);
       next.delete(cardId);
       return next;
@@ -138,26 +136,32 @@ export function useGameAnimations(
   /**
    * Check if a card is currently animating
    */
-  const isAnimating = useCallback((cardId: string): boolean => {
-    return animatingCards.has(cardId);
-  }, [animatingCards]);
+  const isAnimating = useCallback(
+    (cardId: string): boolean => {
+      return animatingCards.has(cardId);
+    },
+    [animatingCards]
+  );
 
   /**
    * Flip a card with 3D rotation animation
    */
-  const flipCard = useCallback(async (cardId: string, _faceUp: boolean): Promise<void> => {
-    startAnimating(cardId);
+  const flipCard = useCallback(
+    async (cardId: string, _faceUp: boolean): Promise<void> => {
+      startAnimating(cardId);
 
-    // Create a promise that resolves when animation completes
-    return new Promise<void>((resolve) => {
-      // The actual animation is handled by CSS/framer-motion in the Card component
-      // This just tracks the animation state and timing
-      setTimeout(() => {
-        stopAnimating(cardId);
-        resolve();
-      }, animConfig.flipDuration);
-    });
-  }, [animConfig.flipDuration, startAnimating, stopAnimating]);
+      // Create a promise that resolves when animation completes
+      return new Promise<void>((resolve) => {
+        // The actual animation is handled by CSS/framer-motion in the Card component
+        // This just tracks the animation state and timing
+        setTimeout(() => {
+          stopAnimating(cardId);
+          resolve();
+        }, animConfig.flipDuration);
+      });
+    },
+    [animConfig.flipDuration, startAnimating, stopAnimating]
+  );
 
   /**
    * Celebrate win with confetti and optional card cascade

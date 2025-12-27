@@ -1,5 +1,5 @@
-import type { Card } from '../core/types';
-import { createDeck, shuffleWithSeed } from '../core/deck';
+import { type CardType as Card } from '@cardgames/shared';
+import { createDeck, shuffleWithSeed } from '@cardgames/shared';
 
 /**
  * Klondike Game State
@@ -16,12 +16,12 @@ export interface TableauColumn {
 }
 
 export interface KlondikeGameState {
-  tableau: TableauColumn[];    // 7 columns
-  stock: Card[];                // Draw pile (face-down)
-  waste: Card[];                // Discard pile (face-up)
-  foundations: Card[][];        // 4 foundation piles (face-up)
-  seed: number;                 // For reproducible games
-  moves: number;                // Move counter
+  tableau: TableauColumn[]; // 7 columns
+  stock: Card[]; // Draw pile (face-down)
+  waste: Card[]; // Discard pile (face-up)
+  foundations: Card[][]; // 4 foundation piles (face-up)
+  seed: number; // For reproducible games
+  moves: number; // Move counter
 }
 
 /**
@@ -108,10 +108,7 @@ export function isCardFaceUp(
 /**
  * Helper: Get cards from a location
  */
-export function getCardsAtLocation(
-  state: KlondikeGameState,
-  location: Location
-): Card[] {
+export function getCardsAtLocation(state: KlondikeGameState, location: Location): Card[] {
   switch (location.type) {
     case 'tableau':
       return location.index !== undefined ? state.tableau[location.index].cards : [];

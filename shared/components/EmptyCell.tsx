@@ -36,10 +36,7 @@ export const EmptyCell: React.FC<EmptyCellProps> = ({
   };
 
   return (
-    <div
-      style={cellStyle}
-      onClick={onClick}
-    >
+    <div style={cellStyle} onClick={onClick}>
       {label && <span>{label}</span>}
     </div>
   );

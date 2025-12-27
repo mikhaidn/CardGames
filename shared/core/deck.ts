@@ -1,4 +1,4 @@
-import { type Card, SUITS, VALUES } from './types';
+import { type Card, SUITS, VALUES } from '../types/Card';
 import { seededRandom } from './rng';
 
 /**

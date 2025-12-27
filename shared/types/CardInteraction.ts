@@ -12,10 +12,10 @@ import type { GameLocation } from './GameLocation';
  * @deprecated Use GameLocation instead. This is kept for backward compatibility.
  */
 export interface CardLocation {
-  type: string;  // Game-specific (e.g., 'tableau', 'freeCell', 'foundation', 'waste', 'stock')
-  index?: number;  // Column/pile index
-  cardIndex?: number;  // Index of card within the pile
-  cardCount?: number;  // Number of cards to move (for stacks)
+  type: string; // Game-specific (e.g., 'tableau', 'freeCell', 'foundation', 'waste', 'stock')
+  index?: number; // Column/pile index
+  cardIndex?: number; // Index of card within the pile
+  cardCount?: number; // Number of cards to move (for stacks)
 }
 
 /**

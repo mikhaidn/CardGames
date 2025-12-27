@@ -45,17 +45,21 @@ export function calculateLayoutSizes(
 
   // Calculate maximum card width based on viewport width
   const availableWidth = viewportWidth - HORIZONTAL_PADDING;
-  const maxCardWidthFromViewport = (availableWidth - (NUM_GAPS * BASE_GAP)) / NUM_TABLEAU_COLUMNS;
+  const maxCardWidthFromViewport = (availableWidth - NUM_GAPS * BASE_GAP) / NUM_TABLEAU_COLUMNS;
 
   // Calculate maximum card height based on viewport height
   const availableHeight = viewportHeight - VERTICAL_PADDING;
   // Account for card stacking: need space for at least 6-7 overlapped cards
-  const estimatedStackHeight = BASE_CARD_HEIGHT + (6 * (BASE_CARD_HEIGHT - BASE_OVERLAP));
+  const estimatedStackHeight = BASE_CARD_HEIGHT + 6 * (BASE_CARD_HEIGHT - BASE_OVERLAP);
   const maxCardHeightFromViewport = (availableHeight / estimatedStackHeight) * BASE_CARD_HEIGHT;
 
   // Use the smaller constraint and maintain aspect ratio
   const cardWidthFromHeight = maxCardHeightFromViewport * (BASE_CARD_WIDTH / BASE_CARD_HEIGHT);
-  const constrainedCardWidth = Math.min(maxCardWidthFromViewport, cardWidthFromHeight, maxCardWidth);
+  const constrainedCardWidth = Math.min(
+    maxCardWidthFromViewport,
+    cardWidthFromHeight,
+    maxCardWidth
+  );
 
   // Calculate scale factor
   const scale = constrainedCardWidth / BASE_CARD_WIDTH;

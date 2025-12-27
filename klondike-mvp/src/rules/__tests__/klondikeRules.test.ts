@@ -6,7 +6,7 @@ import {
   canPlaceOnFoundation,
   isValidTableauSequence,
 } from '../klondikeRules';
-import type { Card } from '../../core/types';
+import type { CardType as Card } from '@cardgames/shared';
 
 describe('isRed', () => {
   test('identifies hearts as red', () => {

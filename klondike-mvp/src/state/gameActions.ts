@@ -1,5 +1,5 @@
 import type { KlondikeGameState, Location, TableauColumn } from './gameState';
-import type { Card } from '../core/types';
+import { type CardType as Card } from '@cardgames/shared';
 import {
   canPlaceOnTableau,
   canPlaceOnEmptyTableau,
@@ -178,11 +178,7 @@ function getCardsToMove(
 /**
  * Remove cards from a location (immutable)
  */
-function removeCards(
-  state: KlondikeGameState,
-  location: Location,
-  count: number
-): Card[] | null {
+function removeCards(state: KlondikeGameState, location: Location, count: number): Card[] | null {
   if (location.type === 'waste') {
     if (state.waste.length === 0) return null;
     const card = state.waste[state.waste.length - 1];
@@ -201,9 +197,7 @@ function removeCards(
       faceUpCount: Math.max(0, column.faceUpCount - count),
     };
 
-    state.tableau = state.tableau.map((col, i) =>
-      i === location.index ? newColumn : col
-    );
+    state.tableau = state.tableau.map((col, i) => (i === location.index ? newColumn : col));
 
     return cards;
   }
@@ -226,11 +220,7 @@ function removeCards(
 /**
  * Add cards to a location (immutable)
  */
-function addCards(
-  state: KlondikeGameState,
-  location: Location,
-  cards: Card[]
-): KlondikeGameState {
+function addCards(state: KlondikeGameState, location: Location, cards: Card[]): KlondikeGameState {
   if (location.type === 'tableau' && location.index !== undefined) {
     const column = state.tableau[location.index];
     const newColumn: TableauColumn = {
@@ -240,18 +230,14 @@ function addCards(
 
     return {
       ...state,
-      tableau: state.tableau.map((col, i) =>
-        i === location.index ? newColumn : col
-      ),
+      tableau: state.tableau.map((col, i) => (i === location.index ? newColumn : col)),
     };
   }
 
   if (location.type === 'foundation' && location.index !== undefined) {
     return {
       ...state,
-      foundations: state.foundations.map((f, i) =>
-        i === location.index ? [...f, ...cards] : f
-      ),
+      foundations: state.foundations.map((f, i) => (i === location.index ? [...f, ...cards] : f)),
     };
   }
 
@@ -261,10 +247,7 @@ function addCards(
 /**
  * Flip the top card in a tableau column (if face-down)
  */
-function flipTopTableauCard(
-  state: KlondikeGameState,
-  columnIndex: number
-): KlondikeGameState {
+function flipTopTableauCard(state: KlondikeGameState, columnIndex: number): KlondikeGameState {
   const column = state.tableau[columnIndex];
 
   // If column is empty or top card is already face-up, no change
@@ -280,9 +263,7 @@ function flipTopTableauCard(
 
   return {
     ...state,
-    tableau: state.tableau.map((col, i) =>
-      i === columnIndex ? newColumn : col
-    ),
+    tableau: state.tableau.map((col, i) => (i === columnIndex ? newColumn : col)),
   };
 }
 
@@ -332,12 +313,7 @@ function tryAutoMoveFromWaste(state: KlondikeGameState): KlondikeGameState | nul
   const foundationIndex = getFoundationIndex(card);
 
   if (canPlaceOnFoundation(card, state.foundations[foundationIndex])) {
-    return moveCards(
-      state,
-      { type: 'waste' },
-      { type: 'foundation', index: foundationIndex },
-      1
-    );
+    return moveCards(state, { type: 'waste' }, { type: 'foundation', index: foundationIndex }, 1);
   }
 
   return null;

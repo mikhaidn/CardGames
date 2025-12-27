@@ -275,13 +275,7 @@ describe('isValidSequence', () => {
   });
 
   it('should return true for valid 5-card sequence', () => {
-    const cards = [
-      card(10, '♠'),
-      card(9, '♥'),
-      card(8, '♣'),
-      card(7, '♦'),
-      card(6, '♠'),
-    ];
+    const cards = [card(10, '♠'), card(9, '♥'), card(8, '♣'), card(7, '♦'), card(6, '♠')];
     expect(isValidSequence(cards, descendingValidator)).toBe(true);
   });
 
@@ -307,21 +301,12 @@ describe('isValidSequence', () => {
 
 describe('isValidTableauSequence', () => {
   it('should validate FreeCell-style sequence (descending, alternating)', () => {
-    const cards = [
-      card(8, '♠'),
-      card(7, '♥'),
-      card(6, '♣'),
-      card(5, '♦'),
-    ];
+    const cards = [card(8, '♠'), card(7, '♥'), card(6, '♣'), card(5, '♦')];
     expect(isValidTableauSequence(cards)).toBe(true);
   });
 
   it('should validate Klondike-style sequence (descending, alternating)', () => {
-    const cards = [
-      card(10, '♦'),
-      card(9, '♠'),
-      card(8, '♥'),
-    ];
+    const cards = [card(10, '♦'), card(9, '♠'), card(8, '♥')];
     expect(isValidTableauSequence(cards)).toBe(true);
   });
 

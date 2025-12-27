@@ -1,5 +1,5 @@
 import React from 'react';
-import { type Card as CardType } from '../core/types';
+import { type CardType } from '@cardgames/shared';
 import { Card, EmptyCell } from '@cardgames/shared';
 
 interface SelectedCard {
