@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { canStackOnTableau, canStackOnFoundation, isRed, isBlack } from '../validation';
-import { type Card } from '@cardgames/shared';
+import { type CardType as Card } from '@cardgames/shared';
 
 describe('isRed', () => {
   test('identifies hearts as red', () => {
