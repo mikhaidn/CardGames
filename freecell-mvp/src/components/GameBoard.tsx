@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { initializeGame, checkWinCondition, type GameState } from '../state/gameState';
-import { moveCardToFoundation } from '../state/gameActions';
+import { moveCardToFoundation, getValidMoves } from '../state/gameActions';
 import { findSafeAutoMove } from '../rules/autoComplete';
 import { getLowestPlayableCards } from '../rules/hints';
 import { FreeCellArea } from './FreeCellArea';
@@ -46,8 +46,7 @@ export const GameBoard: React.FC = () => {
     persistKey: 'freecell-game-history',
   });
 
-  // RFC-004 Phase 2: Shared interaction hook (feature-flagged)
-  // Prepared for Phase 3 full integration (currently infrastructure only)
+  // RFC-005 Phase 3: Shared interaction hook with smart tap-to-move support
   const sharedHookConfig = useMemo(() => ({
     validateMove: (from: GameLocation, to: GameLocation) => {
       return validateMove(gameState, from, to);
@@ -57,6 +56,13 @@ export const GameBoard: React.FC = () => {
       if (newState) {
         pushState(newState);
       }
+    },
+    getValidMoves: (from: GameLocation) => {
+      // Filter out invalid source types for FreeCell
+      if (from.type === 'waste' || from.type === 'stock') {
+        return [];
+      }
+      return getValidMoves(gameState, from as { type: 'tableau' | 'freeCell' | 'foundation'; index: number });
     },
   }), [gameState, pushState]);
 

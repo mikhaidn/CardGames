@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { type KlondikeGameState, isGameWon } from '../state/gameState';
-import { drawFromStock, autoMoveToFoundations } from '../state/gameActions';
+import { drawFromStock, autoMoveToFoundations, getValidMoves } from '../state/gameActions';
 import { StockWaste } from './StockWaste';
 import {
   GameControls,
@@ -40,7 +40,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
     persistKey: 'klondike-game-history',
   });
 
-  // RFC-004 Phase 2: Shared interaction hook (feature-flagged)
+  // RFC-005 Phase 3: Shared interaction hook with smart tap-to-move support
   const sharedHookConfig = useMemo(() => ({
     validateMove: (from: GameLocation, to: GameLocation) => {
       return validateMove(gameState, from, to);
@@ -50,6 +50,19 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
       if (newState) {
         pushState(newState);
       }
+    },
+    getValidMoves: (from: GameLocation) => {
+      const klondikeLocation = {
+        type: from.type as 'tableau' | 'stock' | 'waste' | 'foundation',
+        index: from.index,
+      };
+      const validMoves = getValidMoves(gameState, klondikeLocation, from.cardCount ?? 1);
+      // Convert Location[] to GameLocation[]
+      return validMoves.map(loc => ({
+        ...loc,
+        type: loc.type as GameLocation['type'],
+        index: loc.index ?? 0,
+      }));
     },
   }), [gameState, pushState]);
 
