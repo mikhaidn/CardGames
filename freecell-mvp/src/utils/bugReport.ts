@@ -50,9 +50,7 @@ ${moves !== undefined ? `Moves: ${moves}` : ''}
 
 `;
 
-  const title = seed !== undefined
-    ? `[BUG] Issue in game seed ${seed}`
-    : '[BUG] ';
+  const title = seed !== undefined ? `[BUG] Issue in game seed ${seed}` : '[BUG] ';
 
   const url = new URL('https://github.com/mikhaidn/CardGames/issues/new');
   url.searchParams.set('template', 'bug_report.md');
@@ -66,10 +64,7 @@ ${moves !== undefined ? `Moves: ${moves}` : ''}
 /**
  * Generate bug report from current game state
  */
-export function createBugReportFromGameState(
-  gameState: GameState,
-  description?: string
-): string {
+export function createBugReportFromGameState(gameState: GameState, description?: string): string {
   return createBugReportUrl({
     seed: gameState.seed,
     moves: gameState.moves,

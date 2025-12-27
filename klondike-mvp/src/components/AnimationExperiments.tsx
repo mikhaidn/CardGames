@@ -80,13 +80,15 @@ export const AnimationExperiments: React.FC = () => {
   });
 
   return (
-    <div style={{
-      width: '100%',
-      minHeight: '100vh',
-      backgroundColor: '#1e40af',
-      padding: '24px',
-      color: 'white',
-    }}>
+    <div
+      style={{
+        width: '100%',
+        minHeight: '100vh',
+        backgroundColor: '#1e40af',
+        padding: '24px',
+        color: 'white',
+      }}
+    >
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '8px' }}>
@@ -98,12 +100,14 @@ export const AnimationExperiments: React.FC = () => {
       </div>
 
       {/* Experiment selector */}
-      <div style={{
-        display: 'flex',
-        gap: '12px',
-        marginBottom: '48px',
-        flexWrap: 'wrap',
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '12px',
+          marginBottom: '48px',
+          flexWrap: 'wrap',
+        }}
+      >
         <button
           onClick={() => setActiveExperiment('drag')}
           style={{
@@ -152,24 +156,23 @@ export const AnimationExperiments: React.FC = () => {
       </div>
 
       {/* Experiment containers */}
-      <div style={{
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        borderRadius: '12px',
-        padding: '48px',
-        minHeight: '500px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-      }}>
-
+      <div
+        style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          borderRadius: '12px',
+          padding: '48px',
+          minHeight: '500px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+        }}
+      >
         {/* Experiment 1: Spring Drag */}
         {activeExperiment === 'drag' && (
           <div style={{ textAlign: 'center' }}>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>
-              Spring Physics Drag
-            </h2>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>Spring Physics Drag</h2>
             <p style={{ marginBottom: '32px', color: 'rgba(255, 255, 255, 0.8)' }}>
               Drag the card and release. Notice the spring bounce and subtle rotation.
             </p>
@@ -207,7 +210,9 @@ export const AnimationExperiments: React.FC = () => {
               />
             </motion.div>
 
-            <div style={{ marginTop: '32px', fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.6)' }}>
+            <div
+              style={{ marginTop: '32px', fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.6)' }}
+            >
               <p>Parameters:</p>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 <li>bounceStiffness: 300</li>
@@ -222,9 +227,7 @@ export const AnimationExperiments: React.FC = () => {
         {/* Experiment 2: Card Flip */}
         {activeExperiment === 'flip' && (
           <div style={{ textAlign: 'center' }}>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>
-              3D Card Flip
-            </h2>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>3D Card Flip</h2>
             <p style={{ marginBottom: '32px', color: 'rgba(255, 255, 255, 0.8)' }}>
               Click the card to flip it and reveal the face.
             </p>
@@ -289,7 +292,9 @@ export const AnimationExperiments: React.FC = () => {
               </motion.div>
             </motion.div>
 
-            <div style={{ marginTop: '32px', fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.6)' }}>
+            <div
+              style={{ marginTop: '32px', fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.6)' }}
+            >
               <p>Parameters:</p>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 <li>duration: 0.4s</li>
@@ -304,9 +309,7 @@ export const AnimationExperiments: React.FC = () => {
         {/* Experiment 3: Win Celebration */}
         {activeExperiment === 'win' && (
           <div style={{ textAlign: 'center' }}>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>
-              Win Celebration
-            </h2>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>Win Celebration</h2>
             <p style={{ marginBottom: '32px', color: 'rgba(255, 255, 255, 0.8)' }}>
               Confetti explosion + card cascade animation
             </p>
@@ -341,13 +344,15 @@ export const AnimationExperiments: React.FC = () => {
 
             {/* Card cascade */}
             {showConfetti && (
-              <div style={{
-                display: 'flex',
-                gap: '8px',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                maxWidth: '600px',
-              }}>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '8px',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  maxWidth: '600px',
+                }}
+              >
                 {cascadeCards.map((card, index) => (
                   <motion.div
                     key={`${card.suit}-${card.rank}`}
@@ -381,7 +386,9 @@ export const AnimationExperiments: React.FC = () => {
               </div>
             )}
 
-            <div style={{ marginTop: '32px', fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.6)' }}>
+            <div
+              style={{ marginTop: '32px', fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.6)' }}
+            >
               <p>Parameters:</p>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 <li>Confetti: 300 pieces, 5s duration</li>
@@ -395,12 +402,14 @@ export const AnimationExperiments: React.FC = () => {
       </div>
 
       {/* Performance notes */}
-      <div style={{
-        marginTop: '32px',
-        padding: '16px',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        borderRadius: '8px',
-      }}>
+      <div
+        style={{
+          marginTop: '32px',
+          padding: '16px',
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          borderRadius: '8px',
+        }}
+      >
         <h3 style={{ fontSize: '1rem', marginBottom: '8px' }}>Performance Notes:</h3>
         <ul style={{ fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.6 }}>
           <li>All animations use GPU-accelerated transforms (translateX/Y, rotate, scale)</li>
@@ -411,12 +420,14 @@ export const AnimationExperiments: React.FC = () => {
       </div>
 
       {/* Observations section */}
-      <div style={{
-        marginTop: '32px',
-        padding: '16px',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        borderRadius: '8px',
-      }}>
+      <div
+        style={{
+          marginTop: '32px',
+          padding: '16px',
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          borderRadius: '8px',
+        }}
+      >
         <h3 style={{ fontSize: '1rem', marginBottom: '8px' }}>Observations:</h3>
         <ul style={{ fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.6 }}>
           <li>✅ Spring drag feels natural and responsive</li>

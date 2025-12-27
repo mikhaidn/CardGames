@@ -6,7 +6,7 @@ import {
   isGameWon,
   type Location,
 } from '../gameState';
-import type { Card } from '../../core/types';
+import type { CardType as Card } from '@cardgames/shared';
 
 describe('createInitialState', () => {
   test('creates 7 tableau columns', () => {
@@ -134,7 +134,7 @@ describe('isCardFaceUp', () => {
     // Only the last card (index 6) should be face-up initially
     expect(isCardFaceUp(state, location, 0)).toBe(false); // First card
     expect(isCardFaceUp(state, location, 5)).toBe(false); // 6th card
-    expect(isCardFaceUp(state, location, 6)).toBe(true);  // 7th card (last)
+    expect(isCardFaceUp(state, location, 6)).toBe(true); // 7th card (last)
   });
 
   test('stock cards are always face-down', () => {
@@ -183,8 +183,8 @@ describe('isCardFaceUp', () => {
     const location: Location = { type: 'tableau', index: 0 };
 
     expect(isCardFaceUp(state, location, 0)).toBe(false); // Face-down
-    expect(isCardFaceUp(state, location, 1)).toBe(true);  // Face-up
-    expect(isCardFaceUp(state, location, 2)).toBe(true);  // Face-up
+    expect(isCardFaceUp(state, location, 1)).toBe(true); // Face-up
+    expect(isCardFaceUp(state, location, 2)).toBe(true); // Face-up
   });
 
   test('handles tableau with all cards face-up', () => {
@@ -324,7 +324,21 @@ describe('isGameWon', () => {
   test('returns false when 3 foundations are complete', () => {
     const state = createInitialState(12345);
     const suits = ['♠', '♥', '♦'] as const;
-    const values: Card['value'][] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    const values: Card['value'][] = [
+      'A',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      'J',
+      'Q',
+      'K',
+    ];
 
     for (let i = 0; i < 3; i++) {
       state.foundations[i] = values.map((value, index) => ({
@@ -342,7 +356,21 @@ describe('isGameWon', () => {
   test('returns true when all 4 foundations have 13 cards', () => {
     const state = createInitialState(12345);
     const suits = ['♠', '♥', '♦', '♣'] as const;
-    const values: Card['value'][] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    const values: Card['value'][] = [
+      'A',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10',
+      'J',
+      'Q',
+      'K',
+    ];
 
     for (let i = 0; i < 4; i++) {
       state.foundations[i] = values.map((value, index) => ({

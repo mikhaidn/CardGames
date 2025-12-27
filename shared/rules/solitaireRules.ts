@@ -99,10 +99,7 @@ export function canStackDescending(
     allowEmpty?: boolean;
   } = {}
 ): boolean {
-  const {
-    requireAlternatingColors = true,
-    allowEmpty = true,
-  } = options;
+  const { requireAlternatingColors = true, allowEmpty = true } = options;
 
   // Handle empty column
   if (!targetCard) return allowEmpty;
@@ -165,9 +162,7 @@ export function canStackOnFoundation(
   const correctRank = cardToPlace.rank === topCard.rank + 1;
 
   // Check suit: must match if required
-  const correctSuit = requireSameSuit
-    ? hasSameSuit(cardToPlace, topCard)
-    : true;
+  const correctSuit = requireSameSuit ? hasSameSuit(cardToPlace, topCard) : true;
 
   return correctRank && correctSuit;
 }

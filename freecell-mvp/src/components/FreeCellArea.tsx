@@ -1,11 +1,15 @@
 import React from 'react';
-import { type Card as CardType } from '../core/types';
+import { type CardType } from '@cardgames/shared';
 import { Card, EmptyCell } from '@cardgames/shared';
 
 interface FreeCellAreaProps {
   freeCells: (CardType | null)[];
   selectedCard: { type: 'freeCell'; index: number } | null;
-  draggingCard: { type: 'tableau'; column: number; cardIndex: number } | { type: 'freeCell'; index: number } | { type: 'foundation'; index: number } | null;
+  draggingCard:
+    | { type: 'tableau'; column: number; cardIndex: number }
+    | { type: 'freeCell'; index: number }
+    | { type: 'foundation'; index: number }
+    | null;
   highlightedCardIds?: string[];
   onFreeCellClick: (index: number) => void;
   onDragStart?: (index: number) => (e: React.DragEvent) => void;

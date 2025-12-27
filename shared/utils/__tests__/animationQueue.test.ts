@@ -72,7 +72,7 @@ describe('AnimationQueue', () => {
       queue.enqueue(anim2);
 
       // Wait for all animations to complete
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       expect(executionOrder).toEqual(['anim-1', 'anim-2']);
       expect(queue.isEmpty).toBe(true);
@@ -94,7 +94,7 @@ describe('AnimationQueue', () => {
       queue.enqueue(animation);
 
       // Wait for animation to complete
-      await new Promise(resolve => setTimeout(resolve, 30));
+      await new Promise((resolve) => setTimeout(resolve, 30));
 
       expect(onComplete).toHaveBeenCalled();
     });
@@ -128,7 +128,7 @@ describe('AnimationQueue', () => {
       queue.enqueuePriority(priorityAnim);
 
       // Wait for animations to complete
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       expect(executionOrder).toEqual(['normal', 'priority']);
     });
@@ -205,7 +205,7 @@ describe('AnimationQueue', () => {
       queue.enqueue(anim2);
 
       // Wait a bit
-      await new Promise(resolve => setTimeout(resolve, 30));
+      await new Promise((resolve) => setTimeout(resolve, 30));
 
       // Only first animation should have executed (it started before pause)
       expect(executionOrder.length).toBeLessThanOrEqual(1);
@@ -213,7 +213,7 @@ describe('AnimationQueue', () => {
       queue.resume();
 
       // Wait for remaining animations
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       expect(executionOrder).toEqual(['anim-1', 'anim-2']);
     });
@@ -246,7 +246,7 @@ describe('AnimationQueue', () => {
       queue.enqueue(successAnim);
 
       // Wait for animations to complete
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       expect(executionOrder).toEqual(['success']);
     });

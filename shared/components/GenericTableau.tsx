@@ -62,11 +62,19 @@ export interface GenericTableauProps {
   // Event handlers
   onClick: (columnIndex: number, cardIndex: number) => void;
   onEmptyColumnClick: (columnIndex: number) => void;
-  onDragStart?: (columnIndex: number, cardIndex: number, cardCount: number) => (e: React.DragEvent) => void;
+  onDragStart?: (
+    columnIndex: number,
+    cardIndex: number,
+    cardCount: number
+  ) => (e: React.DragEvent) => void;
   onDragEnd?: () => void;
   onDragOver?: (e: React.DragEvent) => void;
   onDrop?: (columnIndex: number) => (e: React.DragEvent) => void;
-  onTouchStart?: (columnIndex: number, cardIndex: number, cardCount: number) => (e: React.TouchEvent) => void;
+  onTouchStart?: (
+    columnIndex: number,
+    cardIndex: number,
+    cardCount: number
+  ) => (e: React.TouchEvent) => void;
   onTouchMove?: (e: React.TouchEvent) => void;
   onTouchEnd?: (e: React.TouchEvent) => void;
   onTouchCancel?: () => void;

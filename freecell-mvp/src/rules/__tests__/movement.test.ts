@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { getMaxMovable, isValidStack } from '../movement';
-import { type Card } from '../../core/types';
+import { type Card } from '@cardgames/shared';
 
 describe('getMaxMovable', () => {
   test('with 0 free cells and 0 empty columns: max = 1', () => {

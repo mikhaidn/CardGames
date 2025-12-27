@@ -18,28 +18,14 @@ describe('CardFlip', () => {
 
   describe('Basic rendering', () => {
     it('should render card back when face-down', () => {
-      render(
-        <CardFlip
-          card={mockCard}
-          faceUp={false}
-          cardWidth={60}
-          cardHeight={84}
-        />
-      );
+      render(<CardFlip card={mockCard} faceUp={false} cardWidth={60} cardHeight={84} />);
 
       const cardBack = screen.getByTestId('card-back');
       expect(cardBack).toBeTruthy();
     });
 
     it('should render card face when face-up', () => {
-      render(
-        <CardFlip
-          card={mockCard}
-          faceUp={true}
-          cardWidth={60}
-          cardHeight={84}
-        />
-      );
+      render(<CardFlip card={mockCard} faceUp={true} cardWidth={60} cardHeight={84} />);
 
       // Card should show suit symbol
       const suitElements = screen.getAllByText('♥');
@@ -48,12 +34,7 @@ describe('CardFlip', () => {
 
     it('should apply 3D transform styles', () => {
       const { container } = render(
-        <CardFlip
-          card={mockCard}
-          faceUp={true}
-          cardWidth={60}
-          cardHeight={84}
-        />
+        <CardFlip card={mockCard} faceUp={true} cardWidth={60} cardHeight={84} />
       );
 
       const flipContainer = container.querySelector('.card-flip-container');
@@ -64,13 +45,7 @@ describe('CardFlip', () => {
   describe('Flip animation', () => {
     it('should use custom flip duration', () => {
       const { container } = render(
-        <CardFlip
-          card={mockCard}
-          faceUp={true}
-          cardWidth={60}
-          cardHeight={84}
-          flipDuration={500}
-        />
+        <CardFlip card={mockCard} faceUp={true} cardWidth={60} cardHeight={84} flipDuration={500} />
       );
 
       const flipInner = container.querySelector('.card-flip-inner');
@@ -79,12 +54,7 @@ describe('CardFlip', () => {
 
     it('should use default 300ms duration when not specified', () => {
       const { container } = render(
-        <CardFlip
-          card={mockCard}
-          faceUp={true}
-          cardWidth={60}
-          cardHeight={84}
-        />
+        <CardFlip card={mockCard} faceUp={true} cardWidth={60} cardHeight={84} />
       );
 
       const flipInner = container.querySelector('.card-flip-inner');
@@ -95,12 +65,7 @@ describe('CardFlip', () => {
   describe('Responsive sizing', () => {
     it('should apply custom card dimensions', () => {
       const { container } = render(
-        <CardFlip
-          card={mockCard}
-          faceUp={true}
-          cardWidth={80}
-          cardHeight={112}
-        />
+        <CardFlip card={mockCard} faceUp={true} cardWidth={80} cardHeight={112} />
       );
 
       const flipContainer = container.querySelector('.card-flip-container');

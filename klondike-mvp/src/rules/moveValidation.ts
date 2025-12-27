@@ -1,6 +1,6 @@
 import type { GameLocation } from '@cardgames/shared';
 import type { KlondikeGameState, Location } from '../state/gameState';
-import type { Card } from '../core/types';
+import { type CardType as Card } from '@cardgames/shared';
 import {
   canPlaceOnTableau,
   canPlaceOnEmptyTableau,
@@ -89,10 +89,7 @@ export function validateMove(
  * @param location - Location to get cards from
  * @returns Array of cards, or null if location is invalid
  */
-function getCardsAtLocation(
-  state: KlondikeGameState,
-  location: GameLocation
-): Card[] | null {
+function getCardsAtLocation(state: KlondikeGameState, location: GameLocation): Card[] | null {
   const cardCount = location.cardCount ?? 1;
 
   switch (location.type) {
@@ -156,10 +153,7 @@ export function gameLocationToLocation(location: GameLocation): Location {
  * @param cardCount - Optional card count
  * @returns GameLocation for shared hook
  */
-export function locationToGameLocation(
-  location: Location,
-  cardCount?: number
-): GameLocation {
+export function locationToGameLocation(location: Location, cardCount?: number): GameLocation {
   return {
     type: location.type,
     index: location.index ?? 0,

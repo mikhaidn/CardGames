@@ -50,9 +50,7 @@ ${moves !== undefined ? `Moves: ${moves}` : ''}
 
 `;
 
-  const title = seed !== undefined
-    ? `[BUG] Issue in game seed ${seed}`
-    : '[BUG] ';
+  const title = seed !== undefined ? `[BUG] Issue in game seed ${seed}` : '[BUG] ';
 
   const url = new URL('https://github.com/mikhaidn/CardGames/issues/new');
   url.searchParams.set('template', 'bug_report.md');

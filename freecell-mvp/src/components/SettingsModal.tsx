@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-  type AccessibilitySettings,
-  type GameMode,
-} from '../config/accessibilitySettings';
+import { type AccessibilitySettings, type GameMode } from '@cardgames/shared';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -99,7 +96,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 display: 'block',
                 padding: '16px',
                 marginBottom: '12px',
-                border: localSettings.gameMode === mode.value ? '3px solid #4caf50' : '2px solid #ddd',
+                border:
+                  localSettings.gameMode === mode.value ? '3px solid #4caf50' : '2px solid #ddd',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 backgroundColor: localSettings.gameMode === mode.value ? '#f1f8f4' : 'white',
@@ -131,9 +129,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <div style={{ fontSize, fontWeight: 'bold', marginBottom: '4px' }}>
                     {mode.label}
                   </div>
-                  <div style={{ fontSize: '0.9em', color: '#666' }}>
-                    {mode.description}
-                  </div>
+                  <div style={{ fontSize: '0.9em', color: '#666' }}>{mode.description}</div>
                 </div>
               </div>
             </label>

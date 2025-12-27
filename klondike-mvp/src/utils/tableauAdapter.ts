@@ -15,9 +15,7 @@ import { isCardFaceUp } from '../state/cardDisplay';
  * @param gameState - Current Klondike game state
  * @returns Tableau columns in GenericTableau format
  */
-export function convertTableauToGeneric(
-  gameState: KlondikeGameState
-): TableauColumnData[] {
+export function convertTableauToGeneric(gameState: KlondikeGameState): TableauColumnData[] {
   return gameState.tableau.map((column: TableauColumn, columnIndex: number) => {
     const location: GameLocation = { type: 'tableau', index: columnIndex };
 

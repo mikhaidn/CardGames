@@ -158,11 +158,7 @@ export const CardFlip: React.FC<CardFlipProps> = ({
   };
 
   return (
-    <div
-      className="card-flip-container"
-      style={containerStyle}
-      aria-label={ariaLabel}
-    >
+    <div className="card-flip-container" style={containerStyle} aria-label={ariaLabel}>
       <div className={`card-flip-inner ${isFlipped ? 'flipped' : ''}`} style={innerStyle}>
         {/* Front face (card face) */}
         <div className="card-flip-front" style={frontStyle}>

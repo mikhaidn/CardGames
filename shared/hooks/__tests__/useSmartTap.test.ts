@@ -182,7 +182,7 @@ describe('useSmartTap', () => {
 
       const { result } = renderHook(() => useSmartTap(mockGetValidMoves));
 
-      locations.forEach(location => {
+      locations.forEach((location) => {
         const action = result.current.handleTap(location);
         expect(action.action).toBe('invalid');
         expect(mockGetValidMoves).toHaveBeenCalledWith(location);

@@ -165,15 +165,18 @@ export function useGameHistory<TState>({
    *
    * @param newInitialState - Optional new initial state to reset to
    */
-  const reset = useCallback((newInitialState?: TState) => {
-    if (!historyRef.current) return;
-    const stateToUse = newInitialState ?? initialState;
-    historyRef.current.clear();
-    historyRef.current.push(stateToUse);
-    setCurrentState(stateToUse);
-    updateFlags();
-    onStateChange?.(stateToUse);
-  }, [initialState, onStateChange]);
+  const reset = useCallback(
+    (newInitialState?: TState) => {
+      if (!historyRef.current) return;
+      const stateToUse = newInitialState ?? initialState;
+      historyRef.current.clear();
+      historyRef.current.push(stateToUse);
+      setCurrentState(stateToUse);
+      updateFlags();
+      onStateChange?.(stateToUse);
+    },
+    [initialState, onStateChange]
+  );
 
   return {
     currentState,

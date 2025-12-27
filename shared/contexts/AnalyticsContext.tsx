@@ -58,9 +58,5 @@ export const AnalyticsContextProvider: React.FC<AnalyticsContextProviderProps> =
     [provider, game]
   );
 
-  return (
-    <AnalyticsContext.Provider value={value}>
-      {children}
-    </AnalyticsContext.Provider>
-  );
+  return <AnalyticsContext.Provider value={value}>{children}</AnalyticsContext.Provider>;
 };

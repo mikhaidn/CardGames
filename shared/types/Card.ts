@@ -9,7 +9,7 @@ export interface Card {
   suit: Suit;
   value: Value;
   rank: number; // 1-13 (A=1, K=13)
-  id: string;   // e.g., "A♠", "K♥"
+  id: string; // e.g., "A♠", "K♥"
 }
 
 export const SUITS = ['♠', '♥', '♦', '♣'] as const;

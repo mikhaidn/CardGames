@@ -81,9 +81,7 @@ describe('getValidMoves', () => {
       const validMoves = getValidMoves(state, from);
 
       // Should not include tableau index 3 (source)
-      const hasSelf = validMoves.some(
-        (m) => m.type === 'tableau' && m.index === 3
-      );
+      const hasSelf = validMoves.some((m) => m.type === 'tableau' && m.index === 3);
       expect(hasSelf).toBe(false);
     });
 

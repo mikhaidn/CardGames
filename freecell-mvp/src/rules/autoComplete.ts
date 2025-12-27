@@ -1,4 +1,4 @@
-import { type Card } from '../core/types';
+import { type CardType as Card } from '@cardgames/shared';
 import { type GameState } from '../state/gameState';
 import { canStackOnFoundation } from './validation';
 

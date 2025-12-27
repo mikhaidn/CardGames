@@ -78,7 +78,12 @@ describe('Touch Interaction Bugs - Diagnostic Tests', () => {
       mockValidateMove.mockReturnValue(true);
       const { result } = renderHook(() => useCardInteraction(config));
 
-      const sourceLocation: GameLocation = { type: 'tableau', index: 0, cardIndex: 5, cardCount: 1 };
+      const sourceLocation: GameLocation = {
+        type: 'tableau',
+        index: 0,
+        cardIndex: 5,
+        cardCount: 1,
+      };
       const destLocation: GameLocation = { type: 'freeCell', index: 0, cardCount: 1 };
 
       // First tap - select source card
@@ -130,17 +135,25 @@ describe('Touch Interaction Bugs - Diagnostic Tests', () => {
       });
 
       // EXPECTED: Move should be executed
-      expect(mockExecuteMove).toHaveBeenCalledWith(sourceLocation, expect.objectContaining({
-        type: 'freeCell',
-        index: 0,
-      }));
+      expect(mockExecuteMove).toHaveBeenCalledWith(
+        sourceLocation,
+        expect.objectContaining({
+          type: 'freeCell',
+          index: 0,
+        })
+      );
     });
 
     it('PASSING: Long press with movement should trigger drag', () => {
       mockValidateMove.mockReturnValue(true);
       const { result } = renderHook(() => useCardInteraction(config));
 
-      const sourceLocation: GameLocation = { type: 'tableau', index: 0, cardIndex: 5, cardCount: 1 };
+      const sourceLocation: GameLocation = {
+        type: 'tableau',
+        index: 0,
+        cardIndex: 5,
+        cardCount: 1,
+      };
 
       const touchStartEvent = {
         touches: [{ clientX: 100, clientY: 200 }],
@@ -193,7 +206,7 @@ describe('Touch Interaction Bugs - Diagnostic Tests', () => {
         type: 'tableau',
         index: 0,
         cardIndex: 5,
-        cardCount: 1
+        cardCount: 1,
       };
 
       const touchStartEvent = {
@@ -258,7 +271,7 @@ describe('Touch Interaction Bugs - Diagnostic Tests', () => {
         type: 'tableau',
         index: 0,
         cardIndex: 5,
-        cardCount: 1
+        cardCount: 1,
       };
 
       const touchStartEvent = {

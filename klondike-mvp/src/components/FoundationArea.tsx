@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, EmptyCell, type LayoutSizes } from '@cardgames/shared';
-import type { Card as CardType, Suit } from '../core/types';
+import type { CardType, Suit } from '@cardgames/shared';
 
 interface FoundationAreaProps {
   foundations: CardType[][];

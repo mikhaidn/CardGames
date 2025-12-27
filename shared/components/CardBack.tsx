@@ -28,10 +28,7 @@ export interface CardBackProps {
 /**
  * Get CSS background for card back based on theme
  */
-function getCardBackBackground(
-  theme: 'blue' | 'red' | 'custom',
-  customImage?: string
-): string {
+function getCardBackBackground(theme: 'blue' | 'red' | 'custom', customImage?: string): string {
   if (theme === 'custom' && customImage) {
     return `url(${customImage}) center/cover`;
   }

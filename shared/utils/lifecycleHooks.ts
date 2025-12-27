@@ -72,7 +72,12 @@ export class LifecycleHookExecutor<TState> {
   /**
    * Execute onCardFlip hook
    */
-  async cardFlip(state: TState, location: GameLocation, index: number, faceUp: boolean): Promise<void> {
+  async cardFlip(
+    state: TState,
+    location: GameLocation,
+    index: number,
+    faceUp: boolean
+  ): Promise<void> {
     if (this.hooks?.onCardFlip) {
       try {
         this.hooks.onCardFlip(state, location, index, faceUp);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { CardFlip, EmptyCell, type LayoutSizes } from '@cardgames/shared';
-import type { Card as CardType } from '../core/types';
+import type { CardType } from '@cardgames/shared';
 
 interface StockWasteProps {
   stock: CardType[];
@@ -95,11 +95,7 @@ export const StockWaste: React.FC<StockWasteProps> = ({
             onTouchEnd={onTouchEnd}
           />
         ) : (
-          <EmptyCell
-            cardWidth={cardWidth}
-            cardHeight={cardHeight}
-            label=""
-          />
+          <EmptyCell cardWidth={cardWidth} cardHeight={cardHeight} label="" />
         )}
       </div>
     </div>

@@ -152,7 +152,7 @@ export class AnimationQueue {
     const cancelled = this.queue.splice(0);
 
     // Call onCancel callbacks for all cancelled animations
-    cancelled.forEach(animation => {
+    cancelled.forEach((animation) => {
       animation.onCancel?.();
     });
 
@@ -231,7 +231,7 @@ export class AnimationQueue {
  * @returns Promise that resolves when animation completes
  */
 export function createAnimationDelay(duration: number): Promise<void> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, duration);
   });
 }

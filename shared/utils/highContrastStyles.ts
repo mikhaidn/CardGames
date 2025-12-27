@@ -15,7 +15,12 @@ export interface CardColors {
 /**
  * Get card colors based on high contrast mode
  */
-export function getCardColors(card: Card, highContrast: boolean, isSelected: boolean, isHighlighted: boolean): CardColors {
+export function getCardColors(
+  card: Card,
+  highContrast: boolean,
+  isSelected: boolean,
+  isHighlighted: boolean
+): CardColors {
   const red = isRed(card);
 
   if (highContrast) {
@@ -40,7 +45,11 @@ export function getCardColors(card: Card, highContrast: boolean, isSelected: boo
 /**
  * Get box shadow based on selection state and high contrast mode
  */
-export function getCardBoxShadow(isSelected: boolean, isHighlighted: boolean, highContrast: boolean): string {
+export function getCardBoxShadow(
+  isSelected: boolean,
+  isHighlighted: boolean,
+  highContrast: boolean
+): string {
   if (highContrast) {
     if (isSelected) {
       return '0 0 12px rgba(0, 170, 0, 0.8)';

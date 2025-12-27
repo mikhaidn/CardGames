@@ -13,7 +13,11 @@ export { EmptyCell } from './components/EmptyCell';
 export { SettingsModal } from './components/SettingsModal';
 export { FoundationArea } from './components/FoundationArea';
 export { GenericTableau } from './components/GenericTableau';
-export type { GenericTableauProps, TableauCard, TableauColumnData } from './components/GenericTableau';
+export type {
+  GenericTableauProps,
+  TableauCard,
+  TableauColumnData,
+} from './components/GenericTableau';
 export { WinCelebration } from './components/WinCelebration';
 
 // Types
@@ -26,8 +30,8 @@ export type {
   UseCardInteractionReturn,
 } from './types/CardInteraction';
 // Note: Card type not exported to avoid conflict with Card component
-// Games should import Card type from their local core/types
-export type { Suit, Value } from './types/Card';
+// Import Card type separately if needed
+export type { Card as CardType, Suit, Value } from './types/Card';
 export { SUITS, VALUES } from './types/Card';
 export type { GameLocation } from './types/GameLocation';
 export { cardIndexToCount, cardCountToIndex } from './types/GameLocation';
@@ -48,7 +52,12 @@ export type { SmartTapAction } from './hooks/useSmartTap';
 // Settings (RFC-005 Phase 1 Day 2)
 export type { GameSettings } from './types/GameSettings';
 export { DEFAULT_GAME_SETTINGS, applyAccessibilityOverrides } from './types/GameSettings';
-export { loadSettings, saveSettings, migrateOldSettings, resetSettings } from './utils/settingsStorage';
+export {
+  loadSettings,
+  saveSettings,
+  migrateOldSettings,
+  resetSettings,
+} from './utils/settingsStorage';
 export { SettingsProvider, SettingsContext, useSettings } from './contexts/SettingsContext';
 
 // Analytics (React hook-based approach)
@@ -109,9 +118,35 @@ export type { GameEventType, GameEventProperties } from './utils/analytics';
 // Config
 export { FEATURE_FLAGS } from './config/featureFlags';
 export type { FeatureFlags, FeatureFlagKey } from './config/featureFlags';
+export type { AccessibilitySettings, GameMode } from './config/accessibilitySettings';
+export {
+  DEFAULT_ACCESSIBILITY_SETTINGS,
+  loadAccessibilitySettings,
+  saveAccessibilitySettings,
+  getSettingsFromMode,
+  getMinButtonHeight,
+} from './config/accessibilitySettings';
+
+// Core utilities
+export { seededRandom } from './core/rng';
+export { createDeck, shuffleWithSeed } from './core/deck';
+export type {
+  CardSize,
+  FontSizes,
+  AnimationDefinition,
+  AnimationOptions,
+  CardPackManifest,
+  CardPack,
+} from './core/cardPack';
+export { DEFAULT_CARD_PACK_MANIFEST, DEFAULT_FLIP_ANIMATION, useCardPack } from './core/cardPack';
 
 // Core (RFC-005 Phase 2 Week 3)
-export { createGame, defineGameConfig, createGameRegistry, supportsFeature } from './core/createGame';
+export {
+  createGame,
+  defineGameConfig,
+  createGameRegistry,
+  supportsFeature,
+} from './core/createGame';
 export type { GameFactoryProps, GameInstance } from './core/createGame';
 
 // RFC-005 Draft Types (future unified game builder)

@@ -1,11 +1,15 @@
 import React from 'react';
-import { type Card as CardType } from '../core/types';
+import { type CardType } from '@cardgames/shared';
 import { Card, EmptyCell } from '@cardgames/shared';
 
 interface TableauProps {
   tableau: CardType[][];
   selectedCard: { type: 'tableau'; column: number; cardIndex: number } | null;
-  draggingCard: { type: 'tableau'; column: number; cardIndex: number } | { type: 'freeCell'; index: number } | { type: 'foundation'; index: number } | null;
+  draggingCard:
+    | { type: 'tableau'; column: number; cardIndex: number }
+    | { type: 'freeCell'; index: number }
+    | { type: 'foundation'; index: number }
+    | null;
   highlightedCardIds?: string[];
   onCardClick: (columnIndex: number, cardIndex: number) => void;
   onEmptyColumnClick: (columnIndex: number) => void;

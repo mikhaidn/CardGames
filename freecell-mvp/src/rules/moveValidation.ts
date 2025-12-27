@@ -1,6 +1,6 @@
 import type { GameLocation } from '@cardgames/shared';
 import type { GameState } from '../state/gameState';
-import type { Card } from '../core/types';
+import { type CardType as Card } from '@cardgames/shared';
 import { canStackOnTableau, canStackOnFoundation, isValidFreeCellSequence } from './validation';
 import { getMaxMovable } from './movement';
 
@@ -18,20 +18,14 @@ import { getMaxMovable } from './movement';
  * const to: GameLocation = { type: 'tableau', index: 5 };
  * validateMove(gameState, from, to); // true if valid supermove
  */
-export function validateMove(
-  state: GameState,
-  from: GameLocation,
-  to: GameLocation
-): boolean {
+export function validateMove(state: GameState, from: GameLocation, to: GameLocation): boolean {
   // Get source cards
   const sourceCards = getCardsAtLocation(state, from);
   if (!sourceCards || sourceCards.length === 0) return false;
 
-  const cardCount = from.cardCount ?? (
-    from.cardIndex !== undefined
-      ? state.tableau[from.index].length - from.cardIndex
-      : 1
-  );
+  const cardCount =
+    from.cardCount ??
+    (from.cardIndex !== undefined ? state.tableau[from.index].length - from.cardIndex : 1);
 
   const cardToPlace = sourceCards[0];
 
@@ -53,9 +47,7 @@ export function validateMove(
 
     case 'tableau': {
       const targetColumn = state.tableau[to.index];
-      const targetCard = targetColumn.length > 0
-        ? targetColumn[targetColumn.length - 1]
-        : null;
+      const targetCard = targetColumn.length > 0 ? targetColumn[targetColumn.length - 1] : null;
 
       // Check if card can stack
       if (!canStackOnTableau(cardToPlace, targetCard)) {
@@ -70,9 +62,9 @@ export function validateMove(
         }
 
         // Calculate max movable cards based on available resources
-        const emptyFreeCells = state.freeCells.filter(fc => fc === null).length;
-        const emptyColumns = state.tableau.filter((col, idx) =>
-          col.length === 0 && idx !== from.index && idx !== to.index
+        const emptyFreeCells = state.freeCells.filter((fc) => fc === null).length;
+        const emptyColumns = state.tableau.filter(
+          (col, idx) => col.length === 0 && idx !== from.index && idx !== to.index
         ).length;
         const maxMovable = getMaxMovable(emptyFreeCells, emptyColumns);
 
@@ -96,28 +88,21 @@ export function validateMove(
  * @param location - Location to get cards from
  * @returns Array of cards, or null if location is invalid
  */
-function getCardsAtLocation(
-  state: GameState,
-  location: GameLocation
-): Card[] | null {
+function getCardsAtLocation(state: GameState, location: GameLocation): Card[] | null {
   // Determine card count
-  const cardCount = location.cardCount ?? (
-    location.cardIndex !== undefined
+  const cardCount =
+    location.cardCount ??
+    (location.cardIndex !== undefined
       ? state.tableau[location.index].length - location.cardIndex
-      : 1
-  );
+      : 1);
 
   switch (location.type) {
     case 'freeCell':
-      return state.freeCells[location.index] !== null
-        ? [state.freeCells[location.index]!]
-        : null;
+      return state.freeCells[location.index] !== null ? [state.freeCells[location.index]!] : null;
 
     case 'foundation': {
       const foundation = state.foundations[location.index];
-      return foundation.length > 0
-        ? [foundation[foundation.length - 1]]
-        : null;
+      return foundation.length > 0 ? [foundation[foundation.length - 1]] : null;
     }
 
     case 'tableau': {

@@ -5,8 +5,8 @@ import { CardBack } from './CardBack';
 
 interface CardProps {
   card: CardType;
-  faceUp?: boolean;  // NEW: Whether card is face-up (defaults to true for backwards compatibility)
-  cardBackTheme?: 'blue' | 'red' | 'custom';  // NEW: Theme for card back
+  faceUp?: boolean; // NEW: Whether card is face-up (defaults to true for backwards compatibility)
+  cardBackTheme?: 'blue' | 'red' | 'custom'; // NEW: Theme for card back
   onClick?: () => void;
   isSelected?: boolean;
   isHighlighted?: boolean;
@@ -39,7 +39,7 @@ interface CardProps {
 
 export const Card: React.FC<CardProps> = ({
   card,
-  faceUp = true,  // Default to face-up (FreeCell behavior, backwards compatible)
+  faceUp = true, // Default to face-up (FreeCell behavior, backwards compatible)
   cardBackTheme = 'blue',
   onClick,
   isSelected = false,
@@ -132,12 +132,35 @@ export const Card: React.FC<CardProps> = ({
       data-drop-target-card-index={dropTargetCardIndex}
       data-drop-target-card-count={dropTargetCardCount}
     >
-      <div style={{ position: 'absolute', top: `${cardHeight * 0.05}px`, left: `${cardWidth * 0.1}px`, fontSize: `${fontSize.small}px`, lineHeight: '1' }}>
-        <div>{card.value}{card.suit}</div>
+      <div
+        style={{
+          position: 'absolute',
+          top: `${cardHeight * 0.05}px`,
+          left: `${cardWidth * 0.1}px`,
+          fontSize: `${fontSize.small}px`,
+          lineHeight: '1',
+        }}
+      >
+        <div>
+          {card.value}
+          {card.suit}
+        </div>
       </div>
       <div style={{ fontSize: `${fontSize.large}px` }}>{card.suit}</div>
-      <div style={{ position: 'absolute', bottom: `${cardHeight * 0.05}px`, right: `${cardWidth * 0.1}px`, fontSize: `${fontSize.small}px`, lineHeight: '1', transform: 'rotate(180deg)' }}>
-        <div>{card.value}{card.suit}</div>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: `${cardHeight * 0.05}px`,
+          right: `${cardWidth * 0.1}px`,
+          fontSize: `${fontSize.small}px`,
+          lineHeight: '1',
+          transform: 'rotate(180deg)',
+        }}
+      >
+        <div>
+          {card.value}
+          {card.suit}
+        </div>
       </div>
     </div>
   );
