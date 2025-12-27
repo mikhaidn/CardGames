@@ -15,7 +15,7 @@ vi.mock('../../contexts/SettingsContext', () => ({
 }));
 
 describe('useSmartTap', () => {
-  const mockGetValidMoves = vi.fn<[GameLocation], GameLocation[]>();
+  const mockGetValidMoves = vi.fn<(from: GameLocation) => GameLocation[]>();
 
   beforeEach(() => {
     vi.clearAllMocks();
