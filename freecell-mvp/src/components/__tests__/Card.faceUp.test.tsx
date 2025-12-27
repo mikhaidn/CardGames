@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { Card } from '@cardgames/shared';
-import type { Card as CardType } from '@cardgames/shared';
+import type { CardType } from '@cardgames/shared';
 
 const testCard: CardType = {
   suit: '♥',
