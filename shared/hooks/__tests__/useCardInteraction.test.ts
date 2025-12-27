@@ -1,12 +1,23 @@
 /**
  * Comprehensive tests for useCardInteraction hook
- * Testing: click-to-select, drag-and-drop, touch interactions
+ * Testing: click-to-select, drag-and-drop, touch interactions, smart tap-to-move
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useCardInteraction } from '../useCardInteraction';
 import type { CardInteractionConfig, CardLocation } from '../../types/CardInteraction';
+
+// Mock SettingsContext (RFC-005 Phase 3: smart tap-to-move)
+vi.mock('../../contexts/SettingsContext', () => ({
+  useSettings: vi.fn(() => ({
+    settings: { smartTapToMove: false },
+    updateSettings: vi.fn(),
+    resetSettings: vi.fn(),
+  })),
+}));
+
+import * as SettingsContext from '../../contexts/SettingsContext';
 
 // Test location type (generic for testing)
 interface TestLocation extends CardLocation {
@@ -746,6 +757,241 @@ describe('useCardInteraction', () => {
       });
 
       expect(result.current.state.selectedCard).toEqual(location);
+    });
+  });
+
+  // Smart tap-to-move tests (RFC-005 Phase 3 Week 7)
+  describe('smart tap-to-move', () => {
+    let mockGetValidMoves: ReturnType<typeof vi.fn>;
+    let configWithSmartTap: CardInteractionConfig<TestLocation>;
+
+    beforeEach(() => {
+      mockGetValidMoves = vi.fn();
+      configWithSmartTap = {
+        validateMove: mockValidateMove,
+        executeMove: mockExecuteMove,
+        getValidMoves: mockGetValidMoves,
+      };
+
+      // Enable smart tap in settings
+      vi.mocked(SettingsContext.useSettings).mockReturnValue({
+        settings: { smartTapToMove: true } as any,
+        updateSettings: vi.fn(),
+        resetSettings: vi.fn(),
+      });
+    });
+
+    it('should auto-execute when one valid move exists', () => {
+      const from: TestLocation = { type: 'pile', index: 0 };
+      const to: TestLocation = { type: 'target', index: 0 };
+      mockGetValidMoves.mockReturnValue([to]);
+
+      const { result } = renderHook(() => useCardInteraction(configWithSmartTap));
+
+      act(() => {
+        result.current.handlers.handleCardClick(from);
+      });
+
+      expect(mockGetValidMoves).toHaveBeenCalledWith(from);
+      expect(mockExecuteMove).toHaveBeenCalledWith(from, to);
+      expect(result.current.state.selectedCard).toBeNull();
+      expect(result.current.state.highlightedCells).toEqual([]);
+    });
+
+    it('should highlight multiple valid moves', () => {
+      const from: TestLocation = { type: 'pile', index: 0 };
+      const validMoves: TestLocation[] = [
+        { type: 'target', index: 0 },
+        { type: 'target', index: 1 },
+        { type: 'pile', index: 1 },
+      ];
+      mockGetValidMoves.mockReturnValue(validMoves);
+
+      const { result } = renderHook(() => useCardInteraction(configWithSmartTap));
+
+      act(() => {
+        result.current.handlers.handleCardClick(from);
+      });
+
+      expect(mockGetValidMoves).toHaveBeenCalledWith(from);
+      expect(mockExecuteMove).not.toHaveBeenCalled();
+      expect(result.current.state.selectedCard).toEqual(from);
+      expect(result.current.state.highlightedCells).toEqual(validMoves);
+    });
+
+    it('should execute move when clicking highlighted destination', () => {
+      const from: TestLocation = { type: 'pile', index: 0 };
+      const destination1: TestLocation = { type: 'target', index: 0 };
+      const destination2: TestLocation = { type: 'target', index: 1 };
+      mockGetValidMoves.mockReturnValue([destination1, destination2]);
+
+      const { result } = renderHook(() => useCardInteraction(configWithSmartTap));
+
+      // First click - should highlight
+      act(() => {
+        result.current.handlers.handleCardClick(from);
+      });
+
+      expect(result.current.state.highlightedCells).toHaveLength(2);
+
+      // Second click on highlighted destination - should execute
+      act(() => {
+        result.current.handlers.handleCardClick(destination1);
+      });
+
+      expect(mockExecuteMove).toHaveBeenCalledWith(from, destination1);
+      expect(result.current.state.selectedCard).toBeNull();
+      expect(result.current.state.highlightedCells).toEqual([]);
+    });
+
+    it('should clear selection when no valid moves', () => {
+      mockGetValidMoves.mockReturnValue([]);
+
+      const { result } = renderHook(() => useCardInteraction(configWithSmartTap));
+
+      const location: TestLocation = { type: 'pile', index: 0 };
+
+      act(() => {
+        result.current.handlers.handleCardClick(location);
+      });
+
+      expect(mockGetValidMoves).toHaveBeenCalledWith(location);
+      expect(mockExecuteMove).not.toHaveBeenCalled();
+      expect(result.current.state.selectedCard).toBeNull();
+      expect(result.current.state.highlightedCells).toEqual([]);
+    });
+
+    it('should deselect when clicking same card again', () => {
+      const location: TestLocation = { type: 'pile', index: 0 };
+      // Need multiple valid moves to trigger highlight (not auto-execute)
+      mockGetValidMoves.mockReturnValue([
+        { type: 'target', index: 0 },
+        { type: 'target', index: 1 },
+      ]);
+
+      const { result } = renderHook(() => useCardInteraction(configWithSmartTap));
+
+      // First click - select and highlight (multiple moves)
+      act(() => {
+        result.current.handlers.handleCardClick(location);
+      });
+
+      expect(result.current.state.selectedCard).toEqual(location);
+      expect(result.current.state.highlightedCells).toHaveLength(2);
+
+      // Click same card again - should deselect
+      act(() => {
+        result.current.handlers.handleCardClick(location);
+      });
+
+      expect(result.current.state.selectedCard).toBeNull();
+      expect(result.current.state.highlightedCells).toEqual([]);
+    });
+
+    it('should clear highlights when starting drag', () => {
+      const from: TestLocation = { type: 'pile', index: 0 };
+      mockGetValidMoves.mockReturnValue([
+        { type: 'target', index: 0 },
+        { type: 'target', index: 1 },
+      ]);
+
+      const { result } = renderHook(() => useCardInteraction(configWithSmartTap));
+
+      // Click to highlight
+      act(() => {
+        result.current.handlers.handleCardClick(from);
+      });
+
+      expect(result.current.state.highlightedCells).toHaveLength(2);
+
+      // Start drag - should clear highlights
+      act(() => {
+        const mockEvent = {
+          dataTransfer: {
+            effectAllowed: '',
+            setData: vi.fn(),
+          },
+        } as unknown as React.DragEvent;
+
+        result.current.handlers.handleDragStart(from)(mockEvent);
+      });
+
+      expect(result.current.state.highlightedCells).toEqual([]);
+      expect(result.current.state.selectedCard).toBeNull();
+    });
+
+    it('should work without getValidMoves (falls back to traditional mode)', () => {
+      const configWithoutGetValidMoves = {
+        validateMove: mockValidateMove,
+        executeMove: mockExecuteMove,
+        // No getValidMoves
+      };
+
+      const { result } = renderHook(() => useCardInteraction(configWithoutGetValidMoves));
+
+      const location: TestLocation = { type: 'pile', index: 0 };
+
+      // Should work like traditional click-to-select
+      act(() => {
+        result.current.handlers.handleCardClick(location);
+      });
+
+      expect(result.current.state.selectedCard).toEqual(location);
+      expect(result.current.state.highlightedCells).toEqual([]);
+    });
+
+    it('should handle errors during auto-execute', () => {
+      const from: TestLocation = { type: 'pile', index: 0 };
+      const to: TestLocation = { type: 'target', index: 0 };
+      mockGetValidMoves.mockReturnValue([to]);
+      mockExecuteMove.mockImplementation(() => {
+        throw new Error('Move failed');
+      });
+
+      const { result } = renderHook(() => useCardInteraction(configWithSmartTap));
+
+      expect(() => {
+        act(() => {
+          result.current.handlers.handleCardClick(from);
+        });
+      }).toThrow('Move failed');
+
+      // State should be cleared even after error
+      expect(result.current.state.selectedCard).toBeNull();
+      expect(result.current.state.highlightedCells).toEqual([]);
+    });
+
+    it('should handle errors when clicking highlighted cell', () => {
+      const from: TestLocation = { type: 'pile', index: 0 };
+      const to: TestLocation = { type: 'target', index: 0 };
+      mockGetValidMoves.mockReturnValue([to]);
+      mockExecuteMove.mockImplementation(() => {
+        throw new Error('Move failed');
+      });
+
+      const { result } = renderHook(() => useCardInteraction(configWithSmartTap));
+
+      // First click - highlight
+      act(() => {
+        mockExecuteMove.mockClear();
+        mockExecuteMove.mockImplementation(() => {}); // Don't throw yet
+        result.current.handlers.handleCardClick(from);
+      });
+
+      // Second click on highlighted cell - should throw
+      mockExecuteMove.mockImplementation(() => {
+        throw new Error('Move failed');
+      });
+
+      expect(() => {
+        act(() => {
+          result.current.handlers.handleCardClick(to);
+        });
+      }).toThrow('Move failed');
+
+      // State should be cleared even after error
+      expect(result.current.state.selectedCard).toBeNull();
+      expect(result.current.state.highlightedCells).toEqual([]);
     });
   });
 });

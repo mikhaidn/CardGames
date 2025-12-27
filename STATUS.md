@@ -1,6 +1,6 @@
 # Project Status
 
-**Last Updated:** 2025-12-26
+**Last Updated:** 2025-12-27
 **Current Phase:** P5 - RFC-005 Phase 3 - Perfect UI
 **Next Milestone:** Delightful mobile experience for active users
 
@@ -10,7 +10,6 @@
 
 ### Active Work
 - [ ] **RFC-005 Phase 3: Perfect UI** (Focused on grandma-friendly polish)
-  - Smart tap-to-move (one-tap play on mobile, getValidMoves already done!)
   - Card flip animations (3D transforms for Klondike stock reveal)
   - Win celebration (confetti + smooth cascade)
   - Analytics event structure (foundation for future Plausible integration)
@@ -22,6 +21,31 @@
 ---
 
 ## ✅ Recently Completed
+
+### Week of 2025-12-27
+
+**MILESTONE: RFC-005 Phase 3 Week 7 Complete - Smart Tap-to-Move 🎉**
+
+- [x] **RFC-005 Phase 3 Week 7: Smart Tap-to-Move** ✅ COMPLETE
+  - Moved useSmartTap hook to shared library
+  - Enhanced useCardInteraction with smart tap logic and highlightedCells state
+  - Integrated getValidMoves in both FreeCell and Klondike GameBoards
+  - Added 24+ comprehensive tests (all passing, TDD)
+  - **Smart Tap Behavior:**
+    - Setting OFF by default (opt-in via Settings)
+    - 1 valid move → auto-execute immediately
+    - Multiple valid moves → highlight destinations for selection
+    - 0 valid moves → clear selection
+    - Traditional click-to-select works when disabled
+  - **Deliverables:**
+    - shared/hooks/useSmartTap.ts: Smart tap logic hook
+    - shared/hooks/useCardInteraction.ts: Enhanced with smart tap integration
+    - shared/hooks/__tests__/useSmartTap.test.ts: 13 test cases
+    - Enhanced useCardInteraction tests: 11 new smart tap test cases
+    - freecell-mvp/src/components/GameBoard.tsx: getValidMoves integration
+    - klondike-mvp/src/components/GameBoard.tsx: getValidMoves integration
+  - **Test Results:** All 177 tests passing, zero regressions
+  - **Impact:** Makes mobile play significantly easier - tap once to move when obvious!
 
 ### Week of 2025-12-26
 
@@ -222,10 +246,10 @@
 - **Uptime:** 100% (GitHub Pages)
 
 ### Code Quality
-- **Tests:** 508 tests passing across monorepo (172 + 191 + 145)
+- **Tests:** 532 tests passing across monorepo (172 + 191 + 169)
   - FreeCell: 172 tests including 12 getValidMoves tests, 95%+ coverage on core logic
   - Klondike: 191 tests including 12 getValidMoves tests and 25 card display tests
-  - Shared: 145 tests, full coverage on utilities, hooks, and components
+  - Shared: 177 tests (increased by 24 smart tap tests), full coverage on utilities, hooks, and components
 - **Linting:** All files pass ESLint
 - **TypeScript:** Strict mode, zero errors
 - **Build:** ✅ Monorepo builds succeed (shared → games)
@@ -304,13 +328,7 @@
 
 ## 📋 Next 3 Tasks
 
-1. **Smart Tap-to-Move** (1-2 days) ⬅️ NEXT
-   - One-tap card movement on mobile (getValidMoves already implemented!)
-   - Highlight valid destinations when multiple options
-   - Auto-execute when only one valid move
-   - Makes mobile play much easier for grandma
-
-2. **Card Flip Animations** (2-3 days)
+1. **Card Flip Animations** (2-3 days) ⬅️ NEXT
    - 3D CSS transforms for Klondike stock pile reveals
    - Smooth, delightful card flips (not jarring)
    - Configurable duration (300ms default)

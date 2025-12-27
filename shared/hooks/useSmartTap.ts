@@ -1,6 +1,6 @@
 /**
  * useSmartTap hook
- * RFC-005 Phase 1 Day 2: Smart tap-to-move feature
+ * RFC-005 Phase 3 Week 7: Smart tap-to-move feature
  *
  * Smart tap behavior:
  * - Traditional mode (smartTapToMove = false):

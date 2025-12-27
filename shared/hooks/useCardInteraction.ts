@@ -1,6 +1,6 @@
 /**
  * Shared card interaction hook
- * Provides click-to-select, drag-and-drop, and touch interaction logic
+ * Provides click-to-select, drag-and-drop, touch interaction, and smart tap-to-move
  * Used by FreeCell, Klondike, and future games
  */
 
@@ -11,6 +11,7 @@ import type {
   CardInteractionConfig,
   UseCardInteractionReturn,
 } from '../types/CardInteraction';
+import { useSettings } from '../contexts/SettingsContext';
 
 /**
  * Hook for managing card interactions (click, drag, touch)
@@ -39,7 +40,8 @@ import type {
 export function useCardInteraction<TLocation extends CardLocation = GameLocation>(
   config: CardInteractionConfig<TLocation>
 ): UseCardInteractionReturn<TLocation> {
-  const { validateMove, executeMove } = config;
+  const { validateMove, executeMove, getValidMoves } = config;
+  const { settings } = useSettings();
 
   // State
   const [selectedCard, setSelectedCard] = useState<TLocation | null>(null);
@@ -48,6 +50,7 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
   const [touchPosition, setTouchPosition] = useState<{ x: number; y: number } | null>(null);
   const [touchStartLocation, setTouchStartLocation] = useState<TLocation | null>(null);
   const [touchStartPosition, setTouchStartPosition] = useState<{ x: number; y: number } | null>(null);
+  const [highlightedCells, setHighlightedCells] = useState<TLocation[]>([]);
 
   /**
    * Compare two locations for equality
@@ -63,12 +66,19 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
   }, []);
 
   /**
-   * Click-to-select handler
+   * Click-to-select handler with smart tap-to-move support
    *
    * Behavior:
-   * 1. First click: Select the card
-   * 2. Click same card: Deselect
-   * 3. Click different card: Try to move, or change selection
+   * - Smart tap enabled + getValidMoves provided:
+   *   1. Click card with 1 valid move: Auto-execute
+   *   2. Click card with multiple moves: Highlight options
+   *   3. Click highlighted destination: Execute move
+   *   4. Click card with no valid moves: Provide feedback (shake animation could be added)
+   *
+   * - Traditional mode (or no getValidMoves):
+   *   1. First click: Select the card
+   *   2. Click same card: Deselect
+   *   3. Click different card: Try to move, or change selection
    */
   const handleCardClick = useCallback(
     (location: TLocation) => {
@@ -78,15 +88,70 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
       // Ignore null locations
       if (!location) return;
 
-      // If no card selected, select this one
-      if (!selectedCard) {
-        setSelectedCard(location);
-        return;
+      // Check if smart tap-to-move is enabled and available
+      const smartTapEnabled = settings.smartTapToMove && !!getValidMoves;
+
+      // If there's a selected card, check if this click is on a highlighted cell
+      if (selectedCard && highlightedCells.length > 0) {
+        const isHighlightedCell = highlightedCells.some(cell => locationsEqual(cell, location));
+
+        if (isHighlightedCell) {
+          // Clicking a highlighted destination - execute the move
+          try {
+            executeMove(selectedCard, location);
+            setSelectedCard(null);
+            setHighlightedCells([]);
+          } catch (error) {
+            setSelectedCard(null);
+            setHighlightedCells([]);
+            throw error;
+          }
+          return;
+        }
       }
 
       // If clicking the same card, deselect
-      if (locationsEqual(selectedCard, location)) {
+      if (selectedCard && locationsEqual(selectedCard, location)) {
         setSelectedCard(null);
+        setHighlightedCells([]);
+        return;
+      }
+
+      // If smart tap is enabled, use smart tap logic
+      if (smartTapEnabled) {
+        const validMoves = getValidMoves!(location);
+
+        if (validMoves.length === 0) {
+          // No valid moves - could add shake animation here
+          // For now, just clear any previous selection
+          setSelectedCard(null);
+          setHighlightedCells([]);
+          return;
+        } else if (validMoves.length === 1) {
+          // Only one valid move - auto-execute
+          try {
+            executeMove(location, validMoves[0]);
+            setSelectedCard(null);
+            setHighlightedCells([]);
+          } catch (error) {
+            setSelectedCard(null);
+            setHighlightedCells([]);
+            throw error;
+          }
+          return;
+        } else {
+          // Multiple valid moves - highlight them
+          setSelectedCard(location);
+          setHighlightedCells(validMoves);
+          return;
+        }
+      }
+
+      // Traditional click-to-select mode
+      // If no card selected, select this one
+      if (!selectedCard) {
+        setSelectedCard(location);
+        setHighlightedCells([]);
         return;
       }
 
@@ -96,9 +161,11 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
         try {
           executeMove(selectedCard, location);
           setSelectedCard(null);
+          setHighlightedCells([]);
         } catch (error) {
           // If move execution fails, clear selection and re-throw
           setSelectedCard(null);
+          setHighlightedCells([]);
           throw error;
         }
       } else {
@@ -106,11 +173,12 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
         // If clicking different type (likely a destination), keep current selection
         if (selectedCard.type === location.type) {
           setSelectedCard(location);
+          setHighlightedCells([]);
         }
         // else: keep selectedCard unchanged
       }
     },
-    [selectedCard, draggingCard, validateMove, executeMove, locationsEqual]
+    [selectedCard, draggingCard, highlightedCells, validateMove, executeMove, getValidMoves, settings.smartTapToMove, locationsEqual]
   );
 
   /**
@@ -123,6 +191,7 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
         e.dataTransfer.setData('text/plain', JSON.stringify(location));
         setDraggingCard(location);
         setSelectedCard(null); // Clear selection when drag starts
+        setHighlightedCells([]); // Clear highlights when drag starts
       };
     },
     []
@@ -214,6 +283,7 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
       setDraggingCard(touchStartLocation);
       setTouchDragging(true);
       setSelectedCard(null); // Clear selection when drag starts
+      setHighlightedCells([]); // Clear highlights when drag starts
     }
 
     // Update touch position for drag preview
@@ -300,6 +370,7 @@ export function useCardInteraction<TLocation extends CardLocation = GameLocation
       draggingCard,
       touchDragging,
       touchPosition,
+      highlightedCells,
     },
     handlers: {
       handleCardClick,

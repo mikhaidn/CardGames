@@ -45,6 +45,13 @@ export interface CardInteractionConfig<TLocation extends CardLocation> {
    * If not provided, no preview is shown.
    */
   getCardAtLocation?: (location: TLocation) => unknown;
+
+  /**
+   * Optional: Get all valid destination locations for a source location.
+   * Required for smart tap-to-move feature.
+   * If not provided, smart tap-to-move will not work.
+   */
+  getValidMoves?: (from: TLocation) => TLocation[];
 }
 
 /**
@@ -62,6 +69,9 @@ export interface CardInteractionState<TLocation extends CardLocation> {
 
   /** Current touch position for preview rendering */
   touchPosition: { x: number; y: number } | null;
+
+  /** Valid destination cells to highlight (smart tap-to-move feature) */
+  highlightedCells: TLocation[];
 }
 
 /**
