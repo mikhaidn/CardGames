@@ -13,37 +13,11 @@ This file tracks all known usability issues, bugs, and potential improvements id
 - [x] **#2** No invalid move feedback → **FIXED** ✅
 - [x] **#3** Stock recycle button unclear → **FIXED** ✅
 - [x] **#4** No face-down card count indicator → **FIXED** ✅
+- [x] **#5** Draw-3 mode not implemented → **FIXED** ✅ (2025-12-28)
 
 ---
 
 ## 🔥 Critical Priority (Implement Next)
-
-### **#5 - Draw-3 Mode Not Implemented**
-**Status:** 🚨 Critical
-**Game:** Klondike
-**Effort:** 4-6 hours
-**Impact:** HIGH - Documented feature missing, players expect it
-
-**Description:**
-Documentation mentions Draw-3 mode, but only Draw-1 is implemented. Traditional Klondike uses Draw-3 as the standard difficulty.
-
-**Tasks:**
-- [ ] Add `drawMode: 'draw1' | 'draw3'` to KlondikeGameState
-- [ ] Update `drawFromStock()` to handle both modes
-- [ ] Add setting toggle in SettingsModal
-- [ ] Save preference to localStorage
-- [ ] Add 12+ tests for Draw-3 logic
-
-**Files:**
-- `klondike-mvp/src/state/gameState.ts`
-- `klondike-mvp/src/state/gameActions.ts`
-- `shared/components/SettingsModal.tsx`
-
-**References:**
-- Documented: `docs/games/klondike.md:70`
-- Current code: `gameActions.ts:21` (only Draw-1)
-
----
 
 ### **#6 - No Help/Rules Screen**
 **Status:** 🚨 Critical
@@ -414,21 +388,20 @@ Undo history is fixed at 100 moves. Some players want unlimited.
 
 | Priority | Count | Total Effort |
 |----------|-------|--------------|
-| **Critical** | 2 | 7-10 hours |
+| **Critical** | 1 | 3-4 hours |
 | **High** | 5 | 8-10 hours |
 | **Medium** | 9 | 11-14 hours |
 | **Low** | 6 | 34-48 hours |
-| **Completed** | 4 | 3-4 hours ✅ |
+| **Completed** | 5 | 7-10 hours ✅ |
 | **TOTAL** | 26 | 63-86 hours |
 
 ---
 
 ## 🎯 Recommended Next Steps
 
-### Sprint 1 (8-12 hours)
-1. **#5** - Implement Draw-3 mode (4-6h)
-2. **#6** - Create Help/Rules modal (3-4h)
-3. **#7** - Auto-move configuration (2h)
+### Sprint 1 (5-6 hours)
+1. **#6** - Create Help/Rules modal (3-4h)
+2. **#7** - Auto-move configuration (2h)
 
 ### Sprint 2 (8-10 hours)
 4. **#9** - Add Klondike hints (2-3h)
