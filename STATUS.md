@@ -1,19 +1,21 @@
 # Project Status
 
-**Last Updated:** 2025-12-27
-**Current Phase:** P5 - RFC-005 Phase 3 - Perfect UI
-**Next Milestone:** Delightful mobile experience for active users
+**Last Updated:** 2025-12-28
+**Current Phase:** P5 - Usability Improvements (Quick Wins)
+**Next Milestone:** Remove confusion points and improve mobile experience
 
 ---
 
 ## 🎯 Current Sprint
 
 ### Active Work
-- [ ] **RFC-005 Phase 3: Perfect UI** (Focused on grandma-friendly polish)
-  - Card flip animations (3D transforms for Klondike stock reveal)
-  - Win celebration (confetti + smooth cascade)
-  - Analytics event structure (foundation for future Plausible integration)
-  - **Goal:** Smooth, delightful experience for current users
+- [ ] **Usability Quick Wins** (Based on comprehensive player analysis)
+  - Enable smart tap-to-move by default on mobile
+  - Add invalid move feedback (shake + tooltip explaining why)
+  - Improve tooltips (stock recycle, empty columns, auto-complete)
+  - Add face-down card counter badges in Klondike
+  - **Goal:** Remove top confusion points identified in usability analysis
+  - **Analysis:** See usability-analysis.md for full findings (25 issues identified)
 
 ### Blocked/Waiting
 - None
@@ -21,6 +23,20 @@
 ---
 
 ## ✅ Recently Completed
+
+### Week of 2025-12-28
+
+**PIVOT: Usability Analysis Complete - Identified 25 Improvements 🎯**
+
+- [x] **Comprehensive Usability Analysis** ✅ COMPLETE
+  - Analyzed FreeCell and Klondike from player perspective
+  - Identified 25 potentially confusing elements and missing configurations
+  - Prioritized issues: 3 Critical, 8 High, 9 Medium, 5 Low
+  - Created implementation roadmap with effort estimates
+  - **Deliverables:**
+    - usability-analysis.md: Full analysis with priority matrix
+  - **Impact:** Clear roadmap for improving player experience
+  - **Next Steps:** Implementing quick wins (4 issues, 3-4 hours total)
 
 ### Week of 2025-12-27
 

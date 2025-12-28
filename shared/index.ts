@@ -28,6 +28,7 @@ export type {
   CardInteractionState,
   CardInteractionHandlers,
   UseCardInteractionReturn,
+  InvalidMoveAttempt,
 } from './types/CardInteraction';
 // Note: Card type not exported to avoid conflict with Card component
 // Import Card type separately if needed

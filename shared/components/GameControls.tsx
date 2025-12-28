@@ -122,7 +122,8 @@ export const GameControls: React.FC<GameControlsProps> = ({
         <button
           onClick={onAutoComplete}
           style={buttonStyle()}
-          title="Automatically move all safe cards to foundations"
+          title="Automatically move all remaining cards to foundations (works when all tableau cards are face-up and stock/waste are empty)"
+          aria-label="Auto-complete game by moving all remaining cards to foundations"
         >
           ⚡ Auto-Complete
         </button>
