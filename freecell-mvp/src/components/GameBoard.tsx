@@ -18,6 +18,7 @@ import {
   FoundationArea,
   GenericTableau,
   WinCelebration,
+  VictoryModal,
   HelpModal,
 } from '@cardgames/shared';
 import { getMinButtonHeight } from '@cardgames/shared';
@@ -632,47 +633,12 @@ export const GameBoard: React.FC = () => {
       />
 
       {/* Win Modal */}
-      {showWin && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: `${padding}px`,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: 'white',
-              padding: isMobile ? '24px' : '32px',
-              borderRadius: '12px',
-              textAlign: 'center',
-              maxWidth: isMobile ? '90%' : '400px',
-            }}
-          >
-            <h2 style={{ fontSize: isMobile ? '1.5em' : '2em' }}>Congratulations!</h2>
-            <p style={{ fontSize: `${fontSize}em` }}>You won in {gameState.moves} moves!</p>
-            <p style={{ fontSize: `${fontSize}em` }}>Seed: {gameState.seed}</p>
-            <button
-              onClick={handleNewGame}
-              style={{
-                padding: buttonPadding,
-                minHeight: `${minButtonHeight}px`,
-                fontSize: `${fontSize}em`,
-                cursor: 'pointer',
-              }}
-            >
-              New Game
-            </button>
-          </div>
-        </div>
-      )}
+      <VictoryModal
+        isOpen={showWin}
+        moves={gameState.moves}
+        seed={gameState.seed}
+        onNewGame={handleNewGame}
+      />
 
       {/* Bottom Button Bar (for one-handed mode) */}
       {buttonsAtBottom && (

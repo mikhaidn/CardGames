@@ -21,6 +21,7 @@ export type {
   TableauColumnData,
 } from './components/GenericTableau';
 export { WinCelebration } from './components/WinCelebration';
+export { VictoryModal } from './components/VictoryModal';
 
 // Types
 export type { GameControlsProps } from './types/GameControls.ts';
