@@ -94,6 +94,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="victory-modal-title"
+      onClick={onNewGame}
     >
       <div
         style={{

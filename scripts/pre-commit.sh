@@ -48,12 +48,26 @@ npm run lint -ws --if-present > /dev/null 2>&1 || {
   exit 1
 }
 
-# 4. Tests (optional - comment out if too slow)
-# echo "  ✓ Testing..."
-# npm test > /dev/null 2>&1 || {
-#   echo "  ✗ Tests failed"
-#   npm test
-#   exit 1
-# }
+# 4. Tests
+echo "  ✓ Running tests..."
+npm test -- --run > /dev/null 2>&1 || {
+  echo ""
+  echo "  ✗ Tests failed"
+  echo ""
+  npm test -- --run
+  echo ""
+  exit 1
+}
+
+# 5. Build (ensures code compiles correctly)
+echo "  ✓ Building..."
+npm run build > /dev/null 2>&1 || {
+  echo ""
+  echo "  ✗ Build failed"
+  echo ""
+  npm run build
+  echo ""
+  exit 1
+}
 
 echo "✅ All checks passed! Proceeding with commit..."
