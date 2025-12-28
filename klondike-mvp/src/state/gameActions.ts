@@ -14,7 +14,11 @@ import {
  */
 
 /**
- * Draw a card from stock to waste (Draw-1 variant)
+ * Draw card(s) from stock to waste
+ * Supports both Draw-1 (easier) and Draw-3 (traditional) modes
+ *
+ * Draw-1: Draw 1 card at a time
+ * Draw-3: Draw 3 cards at a time (or fewer if less than 3 remain)
  *
  * If stock is empty, recycle waste back to stock
  */
@@ -33,10 +37,13 @@ export function drawFromStock(state: KlondikeGameState): KlondikeGameState {
     };
   }
 
-  // Draw one card from stock to waste
-  const newStock = state.stock.slice(0, -1);
-  const drawnCard = state.stock[state.stock.length - 1];
-  const newWaste = [...state.waste, drawnCard];
+  // Determine how many cards to draw based on mode
+  const cardsToDraw = state.drawMode === 'draw3' ? Math.min(3, state.stock.length) : 1;
+
+  // Draw cards from stock to waste
+  const newStock = state.stock.slice(0, -cardsToDraw);
+  const drawnCards = state.stock.slice(-cardsToDraw);
+  const newWaste = [...state.waste, ...drawnCards];
 
   return {
     ...state,
