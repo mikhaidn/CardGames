@@ -368,6 +368,23 @@ export const GameBoard: React.FC = () => {
     >
       <span>Moves: {gameState.moves}</span>
       <button
+        onClick={() => (window.location.href = '/')}
+        style={{
+          padding: buttonPadding,
+          minHeight: `${minButtonHeight}px`,
+          cursor: 'pointer',
+          backgroundColor: 'white',
+          color: 'black',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          fontSize: `${fontSize}em`,
+        }}
+        title="Return to game selection"
+        aria-label="Return to game selection"
+      >
+        🏠 Home
+      </button>
+      <button
         onClick={undo}
         disabled={!canUndo}
         style={{
