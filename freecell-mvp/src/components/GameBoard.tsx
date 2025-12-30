@@ -368,7 +368,7 @@ export const GameBoard: React.FC = () => {
     >
       <span>Moves: {gameState.moves}</span>
       <button
-        onClick={() => (window.location.href = '/')}
+        onClick={() => (window.location.href = '/CardGames/')}
         style={{
           padding: buttonPadding,
           minHeight: `${minButtonHeight}px`,

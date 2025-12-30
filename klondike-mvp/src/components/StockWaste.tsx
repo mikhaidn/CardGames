@@ -68,10 +68,11 @@ export const StockWaste: React.FC<StockWasteProps> = ({
         )}
       </div>
 
-      {/* Waste Pile */}
+      {/* Waste Pile - Shows up to 3 cards in fanned layout */}
       <div
         style={{
-          width: `${cardWidth}px`,
+          position: 'relative',
+          width: `${cardWidth * 2}px`, // Wider to accommodate fanned cards
           height: `${cardHeight}px`,
           cursor: waste.length > 0 ? 'pointer' : 'default',
         }}
@@ -79,23 +80,42 @@ export const StockWaste: React.FC<StockWasteProps> = ({
         data-drop-target-index={0}
         onDragOver={onDragOver}
         onDrop={onDrop ? onDrop() : undefined}
-        onClick={onWasteClick}
       >
         {waste.length > 0 ? (
-          <CardFlip
-            card={waste[waste.length - 1]}
-            faceUp={true}
-            cardWidth={cardWidth}
-            cardHeight={cardHeight}
-            fontSize={fontSize}
-            flipDuration={flipDuration}
-            isSelected={isWasteSelected}
-            draggable={true}
-            onDragStart={onDragStart ? onDragStart() : undefined}
-            onDragEnd={onDragEnd}
-            onTouchStart={onTouchStart ? onTouchStart() : undefined}
-            onTouchEnd={onTouchEnd}
-          />
+          <>
+            {/* Show up to 3 cards from waste pile in fanned layout */}
+            {waste.slice(-3).map((card, index, visibleCards) => {
+              const isTopCard = index === visibleCards.length - 1;
+              const fanOffset = cardWidth * 0.25; // 25% card width offset between cards
+
+              return (
+                <div
+                  key={`waste-${waste.length - 3 + index}`}
+                  style={{
+                    position: 'absolute',
+                    left: `${index * fanOffset}px`,
+                    top: 0,
+                  }}
+                  onClick={isTopCard ? onWasteClick : undefined}
+                >
+                  <CardFlip
+                    card={card}
+                    faceUp={true}
+                    cardWidth={cardWidth}
+                    cardHeight={cardHeight}
+                    fontSize={fontSize}
+                    flipDuration={flipDuration}
+                    isSelected={isTopCard && isWasteSelected}
+                    draggable={isTopCard}
+                    onDragStart={isTopCard && onDragStart ? onDragStart() : undefined}
+                    onDragEnd={isTopCard ? onDragEnd : undefined}
+                    onTouchStart={isTopCard && onTouchStart ? onTouchStart() : undefined}
+                    onTouchEnd={isTopCard ? onTouchEnd : undefined}
+                  />
+                </div>
+              );
+            })}
+          </>
         ) : (
           <EmptyCell cardWidth={cardWidth} cardHeight={cardHeight} label="" />
         )}
