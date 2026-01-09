@@ -32,7 +32,7 @@ const MAX_CARD_WIDTH = 120; // Maximum card size before looking too large
 
 // Font sizing relative to card size
 const FONT_LARGE_RATIO = 0.43; // Large font = 43% of card width
-const FONT_MEDIUM_RATIO = 0.40; // Medium font = 40% of card width
+const FONT_MEDIUM_RATIO = 0.4; // Medium font = 40% of card width
 const FONT_SMALL_RATIO = 0.23; // Small font = 23% of card width
 
 /**
@@ -83,11 +83,7 @@ export function calculateLayoutSizes(
 
   // Use the smaller constraint (width or height)
   const cardWidthFromHeight = maxCardHeightFromLayout * CARD_ASPECT_RATIO;
-  let finalCardWidth = Math.min(
-    cardWidthFromViewport,
-    maxCardWidthFromLayout,
-    cardWidthFromHeight
-  );
+  let finalCardWidth = Math.min(cardWidthFromViewport, maxCardWidthFromLayout, cardWidthFromHeight);
 
   // Apply absolute min/max constraints
   finalCardWidth = Math.max(MIN_CARD_WIDTH, Math.min(MAX_CARD_WIDTH, finalCardWidth));

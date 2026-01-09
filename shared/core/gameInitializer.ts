@@ -50,17 +50,13 @@ export function getDeckFromSource(source: InitializationSource): Card[] {
     case 'cards':
       // Manual card arrangement (for testing or specific scenarios)
       if (source.cards.length !== 52) {
-        throw new Error(
-          `Invalid card arrangement: expected 52 cards, got ${source.cards.length}`
-        );
+        throw new Error(`Invalid card arrangement: expected 52 cards, got ${source.cards.length}`);
       }
       return [...source.cards]; // Return a copy to avoid mutation
 
     case 'serialized':
       // Future: Parse serialized game state (RFC-006)
-      throw new Error(
-        'Serialized game state not yet implemented. See RFC-006 for design.'
-      );
+      throw new Error('Serialized game state not yet implemented. See RFC-006 for design.');
 
     default:
       // TypeScript exhaustiveness check
