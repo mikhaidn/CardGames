@@ -381,8 +381,18 @@ export const GameBoard: React.FC<GameBoardProps> = ({ initialState, onNewGame })
         />
 
         {/* Draw Mode Toggle - Segmented Control Style */}
-        <div style={{ display: 'flex', gap: '8px', marginTop: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: isMobile ? '0.8em' : '0.875em', color: '#666', fontWeight: '500' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '8px',
+            marginTop: '12px',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          <span
+            style={{ fontSize: isMobile ? '0.8em' : '0.875em', color: '#666', fontWeight: '500' }}
+          >
             Draw Mode:
           </span>
           <div
