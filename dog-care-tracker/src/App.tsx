@@ -58,7 +58,19 @@ function App() {
             type="date"
             className="date-picker"
             value={selectedDate}
-            onChange={(e) => handleDateChange(e.target.value)}
+            onChange={(e) => {
+              const newDate = e.target.value;
+              if (newDate) {
+                handleDateChange(newDate);
+              }
+            }}
+            onBlur={(e) => {
+              // Fallback for browsers that don't fire onChange properly
+              const newDate = e.target.value;
+              if (newDate && newDate !== selectedDate) {
+                handleDateChange(newDate);
+              }
+            }}
             aria-label="Select date"
           />
           <button

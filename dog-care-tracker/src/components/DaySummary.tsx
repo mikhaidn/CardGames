@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { DayLog } from '../types';
 
 interface DaySummaryProps {
@@ -6,6 +7,27 @@ interface DaySummaryProps {
 }
 
 export function DaySummary({ dayLog, onChange }: DaySummaryProps) {
+  const [showPhotoInput, setShowPhotoInput] = useState(!dayLog.photoUrl);
+  const [imageError, setImageError] = useState(false);
+
+  const handleChangePhoto = () => {
+    setShowPhotoInput(true);
+    setImageError(false);
+  };
+
+  const handleRemovePhoto = () => {
+    onChange({ photoUrl: '' });
+    setShowPhotoInput(true);
+    setImageError(false);
+  };
+
+  const handlePhotoUrlChange = (url: string) => {
+    onChange({ photoUrl: url });
+    if (url) {
+      setImageError(false);
+    }
+  };
+
   return (
     <div className="day-summary-card">
       <div className="day-summary-header">
@@ -29,28 +51,54 @@ export function DaySummary({ dayLog, onChange }: DaySummaryProps) {
         </div>
 
         <div className="summary-field">
-          <label htmlFor="photoUrl" className="field-label">
-            Photo Link <span className="field-hint">(optional)</span>
+          <label className="field-label">
+            Photo <span className="field-hint">(optional)</span>
           </label>
-          <input
-            type="url"
-            id="photoUrl"
-            className="photo-input"
-            placeholder="Paste photo URL from iCloud, Google Photos, etc."
-            value={dayLog.photoUrl || ''}
-            onChange={(e) => onChange({ photoUrl: e.target.value })}
-          />
-          {dayLog.photoUrl && (
-            <div className="photo-preview">
-              <img
-                src={dayLog.photoUrl}
-                alt="Day photo"
-                className="photo-preview-img"
-                onError={(e) => {
-                  // Hide broken images
-                  e.currentTarget.style.display = 'none';
-                }}
+
+          {!dayLog.photoUrl || showPhotoInput ? (
+            <>
+              <input
+                type="url"
+                id="photoUrl"
+                className="photo-input"
+                placeholder="Paste direct image URL (e.g., from iCloud)"
+                value={dayLog.photoUrl || ''}
+                onChange={(e) => handlePhotoUrlChange(e.target.value)}
               />
+              <p className="photo-help-text">
+                💡 <strong>Tip:</strong> Google Photos links won't work. Use iCloud, Imgur, or
+                direct image URLs ending in .jpg/.png
+              </p>
+            </>
+          ) : (
+            <div className="photo-display">
+              {!imageError ? (
+                <div className="photo-preview">
+                  <img
+                    src={dayLog.photoUrl}
+                    alt="Day photo"
+                    className="photo-preview-img"
+                    onError={() => {
+                      setImageError(true);
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="photo-error">
+                  <p>❌ Image failed to load</p>
+                  <p className="photo-error-hint">
+                    This URL might not be a direct image link. Try a different URL or remove it.
+                  </p>
+                </div>
+              )}
+              <div className="photo-actions">
+                <button type="button" className="btn-link" onClick={handleChangePhoto}>
+                  Change Photo
+                </button>
+                <button type="button" className="btn-link btn-danger-link" onClick={handleRemovePhoto}>
+                  Remove
+                </button>
+              </div>
             </div>
           )}
         </div>
