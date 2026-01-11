@@ -5,7 +5,8 @@
   "workspaces": [
     "freecell-mvp",
     "klondike-mvp",
-    "shared"
+    "shared",
+    "dog-care-tracker"
   ],
   "scripts": {
     "install-all": "npm install",
@@ -16,10 +17,10 @@
     "test:watch": "npm run test:watch -ws --if-present",
     "test:coverage": "npm run test:coverage -ws --if-present",
     "lint": "npm run lint -ws --if-present",
-    "lint:fix": "npm run lint -w klondike-mvp -- --fix && npm run lint -w freecell-mvp -- --fix",
+    "lint:fix": "npm run lint -w klondike-mvp -- --fix && npm run lint -w freecell-mvp -- --fix && npm run lint -w dog-care-tracker -- --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "tsc --noEmit -p klondike-mvp/tsconfig.json && tsc --noEmit -p freecell-mvp/tsconfig.json",
+    "typecheck": "tsc --noEmit -p klondike-mvp/tsconfig.json && tsc --noEmit -p freecell-mvp/tsconfig.json && tsc --noEmit -p dog-care-tracker/tsconfig.json",
     "typecheck:watch": "tsc --noEmit --watch -p klondike-mvp/tsconfig.json",
     "check": "bash scripts/check-code-quality.sh",
     "validate": "npm run format:check && npm run typecheck && npm run lint && npm test && npm run build",
@@ -30,6 +31,7 @@
     "audit:fix": "npm audit fix --workspaces",
     "dev:freecell": "npm run dev -w freecell-mvp",
     "dev:klondike": "npm run dev -w klondike-mvp",
+    "dev:dog": "npm run dev -w dog-care-tracker",
     "docs": "cat DOCS.md",
     "docs:ai": "cat AI_GUIDE.md",
     "docs:rfcs": "cat rfcs/INDEX.md",
