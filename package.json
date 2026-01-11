@@ -9,7 +9,6 @@
     "dog-care-tracker"
   ],
   "scripts": {
-    "install-all": "npm install",
     "build:shared": "npm run build -w shared",
     "build:pages": "npm run build -ws --if-present",
     "build": "npm run build:shared && npm run build:pages",

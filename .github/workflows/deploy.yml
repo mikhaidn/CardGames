@@ -53,6 +53,7 @@ jobs:
           # Copy the dist folders into subdirectories for GH Pages
           cp -r freecell-mvp/dist _site/freecell
           cp -r klondike-mvp/dist _site/klondike
+          cp -r dog-care-tracker/dist _site/dog-care-tracker
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
