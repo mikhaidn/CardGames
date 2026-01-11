@@ -6,10 +6,7 @@ import { DayLog, Period, PeriodLog, createEmptyDayLog } from '../types';
  * Persists to localStorage automatically
  */
 export function useDayLog(date: string) {
-  const [dayLog, setDayLog] = useLocalStorage<DayLog>(
-    `dog-log-${date}`,
-    createEmptyDayLog(date)
-  );
+  const [dayLog, setDayLog] = useLocalStorage<DayLog>(`dog-log-${date}`, createEmptyDayLog(date));
 
   const updatePeriod = (period: Period, updates: Partial<PeriodLog>) => {
     setDayLog((prev) => ({

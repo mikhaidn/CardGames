@@ -62,16 +62,12 @@ export function ShareButton({ dayLog }: ShareButtonProps) {
 
           <div className="share-section">
             <h3>Share Text</h3>
-            <p className="help-text">
-              Copy this formatted summary (includes URL for importing).
-            </p>
+            <p className="help-text">Copy this formatted summary (includes URL for importing).</p>
             <div className="share-box">
               <pre className="share-text">{shareText}</pre>
               <button
                 className="btn btn-secondary"
-                onClick={() =>
-                  copyToClipboard(`${shareText}\n\n🔗 ${shareUrl}`, 'text')
-                }
+                onClick={() => copyToClipboard(`${shareText}\n\n🔗 ${shareUrl}`, 'text')}
               >
                 {copied === 'text' ? '✓ Copied!' : '📋 Copy'}
               </button>

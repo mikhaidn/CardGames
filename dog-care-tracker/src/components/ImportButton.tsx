@@ -57,9 +57,7 @@ export function ImportButton({ onImport }: ImportButtonProps) {
         </div>
 
         <div className="modal-content">
-          <p className="help-text">
-            Paste a shared URL or text to import today's log data.
-          </p>
+          <p className="help-text">Paste a shared URL or text to import today's log data.</p>
 
           <textarea
             className="import-textarea"
