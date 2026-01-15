@@ -44,6 +44,7 @@ jobs:
           npm run build -w freecell-mvp
           npm run build -w klondike-mvp
           npm run build -w dog-care-tracker
+          npm run build -w pet-care
 
       - name: Create root landing page
         run: |
@@ -54,6 +55,7 @@ jobs:
           cp -r freecell-mvp/dist _site/freecell
           cp -r klondike-mvp/dist _site/klondike
           cp -r dog-care-tracker/dist _site/dog-care-tracker
+          cp -r pet-care/dist _site/pet-care
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

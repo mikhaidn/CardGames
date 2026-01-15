@@ -258,6 +258,7 @@ const cardId = 0;     // Not a numeric index
 - GitHub Pages (auto-deploy on push to `main`)
 - Root: https://mikhaidn.github.io/CardGames/
 - Dog Tracker: https://mikhaidn.github.io/CardGames/dog-care-tracker/
+- Pet Care: https://mikhaidn.github.io/CardGames/pet-care/
 - FreeCell: https://mikhaidn.github.io/CardGames/freecell/
 - Klondike: https://mikhaidn.github.io/CardGames/klondike/
 
@@ -267,6 +268,20 @@ git push origin main  # Triggers GitHub Actions
 # Wait 2-3 minutes
 # All experiences deployed
 ```
+
+### ⚠️ CRITICAL: When Adding New Apps/Experiences
+
+**You MUST update `.github/workflows/deploy.yml`** or the app won't deploy!
+
+Quick checklist:
+1. ✅ Add to deploy.yml build step: `npm run build -w new-app`
+2. ✅ Add to deploy.yml copy step: `cp -r new-app/dist _site/new-app`
+3. ✅ Set base path in vite.config.ts: `base: '/CardGames/new-app/'`
+4. ✅ Add to root package.json workspaces
+5. ✅ Add to index.html landing page
+6. ✅ Test local build: `npm run build -w new-app`
+
+**📖 Full deployment checklist:** [docs/deployment/github-pages.md](docs/deployment/github-pages.md#-adding-new-appsgames)
 
 ---
 
