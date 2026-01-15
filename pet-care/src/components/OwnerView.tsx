@@ -77,9 +77,7 @@ export function OwnerView() {
             <input
               type="text"
               value={instructions.ownerName || ''}
-              onChange={(e) =>
-                updateInstructions({ ownerName: e.target.value })
-              }
+              onChange={(e) => updateInstructions({ ownerName: e.target.value })}
               placeholder="Your name"
             />
           </label>
@@ -89,9 +87,7 @@ export function OwnerView() {
             General Notes:
             <textarea
               value={instructions.generalNotes}
-              onChange={(e) =>
-                updateInstructions({ generalNotes: e.target.value })
-              }
+              onChange={(e) => updateInstructions({ generalNotes: e.target.value })}
               placeholder="Important info about your pet (e.g., can be alone for 8-9 hours when needed...)"
               rows={3}
             />
@@ -138,9 +134,7 @@ export function OwnerView() {
                         <span className="task-period">{PERIOD_LABELS[task.period]}</span>
                       )}
                     </div>
-                    {task.description && (
-                      <p className="task-description">{task.description}</p>
-                    )}
+                    {task.description && <p className="task-description">{task.description}</p>}
                   </div>
                 )}
               </div>

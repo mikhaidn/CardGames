@@ -4,10 +4,7 @@ import { InstructionSet, Task, createEmptyInstructionSet } from '../types';
 const STORAGE_KEY = 'pet-care-instructions';
 
 export function useInstructions() {
-  const [instructions, setInstructions] = useLocalStorage<InstructionSet | null>(
-    STORAGE_KEY,
-    null
-  );
+  const [instructions, setInstructions] = useLocalStorage<InstructionSet | null>(STORAGE_KEY, null);
 
   const createInstructions = (petName: string) => {
     const newInstructions = createEmptyInstructionSet(petName);
@@ -40,7 +37,7 @@ export function useInstructions() {
 
     setInstructions({
       ...instructions,
-      tasks: instructions.tasks.map(task =>
+      tasks: instructions.tasks.map((task) =>
         task.id === taskId ? { ...task, ...updates } : task
       ),
       updated: new Date().toISOString(),
@@ -52,7 +49,7 @@ export function useInstructions() {
 
     setInstructions({
       ...instructions,
-      tasks: instructions.tasks.filter(task => task.id !== taskId),
+      tasks: instructions.tasks.filter((task) => task.id !== taskId),
       updated: new Date().toISOString(),
     });
   };

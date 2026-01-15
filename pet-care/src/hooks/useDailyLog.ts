@@ -8,13 +8,13 @@ export function useDailyLog(date: string, instructionSetId: string) {
   );
 
   const toggleTaskCompletion = (taskId: string) => {
-    const existingCompletion = log.completions.find(c => c.taskId === taskId);
+    const existingCompletion = log.completions.find((c) => c.taskId === taskId);
 
     if (existingCompletion) {
       // Toggle completion
       setLog({
         ...log,
-        completions: log.completions.map(c =>
+        completions: log.completions.map((c) =>
           c.taskId === taskId ? { ...c, completed: !c.completed } : c
         ),
       });
@@ -35,14 +35,12 @@ export function useDailyLog(date: string, instructionSetId: string) {
   };
 
   const updateTaskCompletion = (taskId: string, updates: Partial<TaskCompletion>) => {
-    const existingCompletion = log.completions.find(c => c.taskId === taskId);
+    const existingCompletion = log.completions.find((c) => c.taskId === taskId);
 
     if (existingCompletion) {
       setLog({
         ...log,
-        completions: log.completions.map(c =>
-          c.taskId === taskId ? { ...c, ...updates } : c
-        ),
+        completions: log.completions.map((c) => (c.taskId === taskId ? { ...c, ...updates } : c)),
       });
     } else {
       setLog({
@@ -67,7 +65,7 @@ export function useDailyLog(date: string, instructionSetId: string) {
   };
 
   const getTaskCompletion = (taskId: string): TaskCompletion | undefined => {
-    return log.completions.find(c => c.taskId === taskId);
+    return log.completions.find((c) => c.taskId === taskId);
   };
 
   const clearLog = () => {

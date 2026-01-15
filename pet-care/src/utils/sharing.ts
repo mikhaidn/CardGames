@@ -1,4 +1,14 @@
-import { InstructionSet, DailyLog, Task, CATEGORY_EMOJIS, PRIORITY_EMOJIS, PERIOD_LABELS } from '../types';
+import {
+  InstructionSet,
+  DailyLog,
+  Task,
+  Period,
+  TaskCategory,
+  Priority,
+  CATEGORY_EMOJIS,
+  PRIORITY_EMOJIS,
+  PERIOD_LABELS,
+} from '../types';
 
 /**
  * Convert instruction set to shareable text format
@@ -37,10 +47,7 @@ export function instructionsToText(instructions: InstructionSet): string {
 /**
  * Convert daily log to shareable text format
  */
-export function dailyLogToText(
-  log: DailyLog,
-  instructions: InstructionSet
-): string {
+export function dailyLogToText(log: DailyLog, instructions: InstructionSet): string {
   const date = new Date(log.date + 'T00:00:00');
   const dateStr = date.toLocaleDateString('en-US', {
     month: 'short',
@@ -78,7 +85,7 @@ export function dailyLogToText(
     text += `${periodLabels[period]}:\n`;
 
     tasks.forEach((task) => {
-      const completion = log.completions.find(c => c.taskId === task.id);
+      const completion = log.completions.find((c) => c.taskId === task.id);
       const checkbox = completion?.completed ? '✅' : '❌';
       const priority = PRIORITY_EMOJIS[task.priority];
       const category = CATEGORY_EMOJIS[task.category];
@@ -141,7 +148,7 @@ export function instructionsToURL(instructions: InstructionSet): string {
   }
 
   // Encode tasks as JSON
-  const tasksData = instructions.tasks.map(task => ({
+  const tasksData = instructions.tasks.map((task) => ({
     title: task.title,
     desc: task.description || '',
     period: task.period || '',
@@ -167,15 +174,22 @@ export function instructionsFromURL(searchParams: URLSearchParams): InstructionS
     const tasksJson = searchParams.get('tasks');
     if (!tasksJson) return null;
 
-    const tasksData = JSON.parse(tasksJson);
+    const tasksData = JSON.parse(tasksJson) as Array<{
+      title: string;
+      desc: string;
+      period: string;
+      cat: string;
+      pri: string;
+      rec: string;
+    }>;
 
-    const tasks: Task[] = tasksData.map((t: any) => ({
+    const tasks: Task[] = tasksData.map((t) => ({
       id: crypto.randomUUID(),
       title: t.title,
       description: t.desc,
-      period: t.period || undefined,
-      category: t.cat,
-      priority: t.pri,
+      period: (t.period as Period) || undefined,
+      category: t.cat as TaskCategory,
+      priority: t.pri as Priority,
       recurring: t.rec === '1',
     }));
 

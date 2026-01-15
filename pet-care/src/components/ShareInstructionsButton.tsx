@@ -58,11 +58,7 @@ export function ShareInstructionsButton({ instructions }: ShareInstructionsButto
           <div className="share-section">
             <h4>Shareable URL</h4>
             <p className="hint">Share this link to let others import your instructions</p>
-            <input
-              readOnly
-              value={instructionsToURL(instructions)}
-              className="share-url"
-            />
+            <input readOnly value={instructionsToURL(instructions)} className="share-url" />
             <button onClick={handleCopyURL}>Copy URL</button>
           </div>
 

@@ -39,9 +39,7 @@ function App() {
         ) : (
           <div className="empty-state">
             <p>No instructions set up yet.</p>
-            <button onClick={() => setViewMode('owner')}>
-              Create Instructions
-            </button>
+            <button onClick={() => setViewMode('owner')}>Create Instructions</button>
           </div>
         )}
       </main>

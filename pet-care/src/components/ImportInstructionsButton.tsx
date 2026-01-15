@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { InstructionSet } from '../types';
 import { instructionsFromURL } from '../utils/sharing';
 
@@ -10,15 +10,11 @@ export function ImportInstructionsButton({ onImport }: ImportInstructionsButtonP
   const [isOpen, setIsOpen] = useState(false);
   const [urlInput, setUrlInput] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [hasUrlParams, setHasUrlParams] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
-  useEffect(() => {
-    // Check if there are URL parameters
-    const params = new URLSearchParams(window.location.search);
-    if (params.has('pet') && params.has('tasks')) {
-      setHasUrlParams(true);
-    }
-  }, []);
+  // Check if there are URL parameters (computed during render, not in effect)
+  const params = new URLSearchParams(window.location.search);
+  const hasUrlParams = params.has('pet') && params.has('tasks') && !dismissed;
 
   const handleImportFromURL = () => {
     try {
@@ -35,7 +31,7 @@ export function ImportInstructionsButton({ onImport }: ImportInstructionsButtonP
       setIsOpen(false);
       setUrlInput('');
       setError(null);
-    } catch (err) {
+    } catch {
       setError('Invalid URL');
     }
   };
@@ -52,7 +48,7 @@ export function ImportInstructionsButton({ onImport }: ImportInstructionsButtonP
     onImport(instructions);
     // Clear URL parameters
     window.history.replaceState({}, '', window.location.pathname);
-    setHasUrlParams(false);
+    setDismissed(true);
     setIsOpen(false);
   };
 
@@ -69,7 +65,7 @@ export function ImportInstructionsButton({ onImport }: ImportInstructionsButtonP
       <div className="import-banner">
         <p>📥 Shared instructions detected in URL</p>
         <button onClick={handleImportFromCurrentURL}>Import Now</button>
-        <button onClick={() => setHasUrlParams(false)} className="secondary">
+        <button onClick={() => setDismissed(true)} className="secondary">
           Dismiss
         </button>
       </div>
