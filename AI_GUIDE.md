@@ -92,17 +92,27 @@ const newState = { ...gameState, moves: gameState.moves + 1 };
 gameState.moves++;
 ```
 
-### 3. **Run Validation Before Committing**
+### 3. **Run Validation Before Committing/Pushing**
 ```bash
 npm run validate   # Runs: format:check + typecheck + lint + test + build (exactly what CI runs)
 npm run format     # Auto-format code (Prettier)
 npm run lint:fix   # Auto-fix most lint issues (unused imports, spacing, etc.)
+npm run setup-hooks # One-time: Install pre-commit + pre-push hooks
 ```
 
 **Pre-commit hook automatically checks:**
 1. ✅ Format (Prettier)
-2. ✅ TypeScript errors
-3. ✅ Lint issues
+2. ✅ TypeScript errors (all workspaces)
+3. ✅ Lint issues (all workspaces)
+4. ✅ Tests
+5. ✅ Build
+
+**Pre-push hook verifies deployment readiness:**
+1. ✅ All workspaces typecheck
+2. ✅ All workspaces lint clean
+3. ✅ All tests pass
+4. ✅ **ALL workspaces build successfully** (critical for deployment!)
+5. ✅ All dist/ folders exist (deployment artifacts)
 
 If hook blocks you: `npm run format && npm run lint:fix` will fix most issues!
 

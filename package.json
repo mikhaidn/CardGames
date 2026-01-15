@@ -24,7 +24,7 @@
     "typecheck:watch": "tsc --noEmit --watch -p klondike-mvp/tsconfig.json",
     "check": "bash scripts/check-code-quality.sh",
     "validate": "npm run format:check && npm run typecheck && npm run lint && npm test && npm run build",
-    "setup-hooks": "ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo '✅ Git hooks installed!'",
+    "setup-hooks": "ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit && ln -sf ../../scripts/pre-push.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-commit && chmod +x .git/hooks/pre-push && echo '✅ Git hooks installed (pre-commit + pre-push)!'",
     "clean": "rm -rf */node_modules */dist */.turbo && npm install",
     "clean:build": "rm -rf */dist",
     "audit": "npm audit --workspaces",

@@ -9,16 +9,14 @@ export function CaretakerView() {
   const today = new Date().toISOString().split('T')[0];
   const [selectedDate, setSelectedDate] = useState(today);
 
+  const { log, toggleTaskCompletion, updateTaskCompletion, updateGeneralNotes } = useDailyLog(
+    selectedDate,
+    instructions?.id || 'placeholder'
+  );
+
   if (!instructions) {
     return <div>No instructions available</div>;
   }
-
-  const {
-    log,
-    toggleTaskCompletion,
-    updateTaskCompletion,
-    updateGeneralNotes,
-  } = useDailyLog(selectedDate, instructions.id);
 
   // Group tasks by period
   const tasksByPeriod: Record<string, Task[]> = {
@@ -34,7 +32,7 @@ export function CaretakerView() {
   });
 
   const getTaskCompletion = (taskId: string) => {
-    return log.completions.find(c => c.taskId === taskId);
+    return log.completions.find((c) => c.taskId === taskId);
   };
 
   const formatDate = (dateStr: string) => {
@@ -60,11 +58,7 @@ export function CaretakerView() {
         >
           ←
         </button>
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-        />
+        <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
         <button
           onClick={() => {
             const date = new Date(selectedDate + 'T00:00:00');
@@ -123,9 +117,7 @@ export function CaretakerView() {
                         <span className="task-title">{task.title}</span>
                       </span>
                     </label>
-                    {task.description && (
-                      <p className="task-description">{task.description}</p>
-                    )}
+                    {task.description && <p className="task-description">{task.description}</p>}
                     {isCompleted && (
                       <div className="task-notes-input">
                         <textarea
