@@ -7,7 +7,8 @@
     "klondike-mvp",
     "shared",
     "dog-care-tracker",
-    "pet-care"
+    "pet-care",
+    "light-vod-editor"
   ],
   "scripts": {
     "build:shared": "npm run build -w shared",
@@ -17,10 +18,10 @@
     "test:watch": "npm run test:watch -ws --if-present",
     "test:coverage": "npm run test:coverage -ws --if-present",
     "lint": "npm run lint -ws --if-present",
-    "lint:fix": "npm run lint -w klondike-mvp -- --fix && npm run lint -w freecell-mvp -- --fix && npm run lint -w dog-care-tracker -- --fix && npm run lint -w pet-care -- --fix",
+    "lint:fix": "npm run lint -w klondike-mvp -- --fix && npm run lint -w freecell-mvp -- --fix && npm run lint -w dog-care-tracker -- --fix && npm run lint -w pet-care -- --fix && npm run lint -w light-vod-editor -- --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "tsc --noEmit -p klondike-mvp/tsconfig.json && tsc --noEmit -p freecell-mvp/tsconfig.json && tsc --noEmit -p dog-care-tracker/tsconfig.json && tsc --noEmit -p pet-care/tsconfig.json",
+    "typecheck": "tsc --noEmit -p klondike-mvp/tsconfig.json && tsc --noEmit -p freecell-mvp/tsconfig.json && tsc --noEmit -p dog-care-tracker/tsconfig.json && tsc --noEmit -p pet-care/tsconfig.json && tsc --noEmit -p light-vod-editor/tsconfig.json",
     "typecheck:watch": "tsc --noEmit --watch -p klondike-mvp/tsconfig.json",
     "check": "bash scripts/check-code-quality.sh",
     "validate": "npm run format:check && npm run typecheck && npm run lint && npm test && npm run build",
@@ -41,7 +42,8 @@
     "docs:games": "cat docs/games/README.md",
     "rfc:list": "cd rfcs && ./scripts/list-rfcs.sh",
     "rfc:new": "cd rfcs && ./scripts/new-rfc.sh",
-    "rfc:status": "cd rfcs && ./scripts/update-status.sh"
+    "rfc:status": "cd rfcs && ./scripts/update-status.sh",
+    "dev:lightvoded": "npm run dev -w light-vod-editor"
   },
   "dependencies": {
     "react": "^18.2.0",

@@ -45,6 +45,7 @@ jobs:
           npm run build -w klondike-mvp
           npm run build -w dog-care-tracker
           npm run build -w pet-care
+          npm run build -w light-vod-editor
 
       - name: Create root landing page
         run: |
@@ -56,6 +57,7 @@ jobs:
           cp -r klondike-mvp/dist _site/klondike
           cp -r dog-care-tracker/dist _site/dog-care-tracker
           cp -r pet-care/dist _site/pet-care
+          cp -r light-vod-editor/dist _site/light-vod-editor
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
