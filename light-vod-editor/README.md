@@ -17,55 +17,42 @@ Generate FFmpeg commands to:
 
 ## 🚀 Quick Start
 
-### Option 1: Use the HTML Files Directly (Recommended for now)
-
-1. **Open** `trimmer-multi.html` in any modern browser
-2. **Load** your video file (works with any size - tested with 4-7 GB files)
-3. **Add segments** and adjust by dragging handles on the timeline
-4. **Copy** the generated FFmpeg command
-5. **Run** the command in your terminal
-
-**That's it!** Processing takes seconds, not minutes, because FFmpeg does the heavy lifting.
-
-### Option 2: Run as React App (Future)
-
 ```bash
 # From repo root
 npm install
 npm run dev:light-vod-editor
 ```
 
+Or visit the live app: https://mikhaidn.github.io/PlokminFun/light-vod-editor/
+
+1. **Load** your video file (works with any size - tested with 4-7 GB files)
+2. **Add segments** - Double-click timeline or use "Add Segment" button
+3. **Adjust segments** - Drag handles to fine-tune start/end points
+4. **Name segments** (optional) - Click to edit segment names
+5. **Copy** the generated FFmpeg command
+6. **Run** the command in your terminal
+
 ## ✨ Features
 
 ### Video Trimming & Segmentation
-- **Multiple trim segments** - Mark as many clips as you need from one video
-- **Visual timeline** - See all your segments at a glance with color-coded regions
-- **Draggable handles** - Fine-tune start/end points with real-time video scrubbing
-- **Drag entire segments** - Click and drag the middle to reposition clips
+- **Double-click timeline** - Create 10-second segments instantly
+- **Real-time video scrubbing** - Video updates while dragging segment handles
+- **Continuous timeline seeking** - Click and drag timeline to scrub smoothly
+- **Inline segment editing** - Click to edit names, start/end times, duration
+- **Custom export naming** - Name your output files (uses segment names in split mode)
+- **Bracket-style handles** - Clear visual indicators extending outward for easy grabbing
 - **Two export modes**:
   - **Merge** - Combine all segments into one video
   - **Split** - Export each segment as a separate file
 
 ### Navigation & Controls
-- **Click timeline** - Jump to any position instantly
-- **Horizontal scroll** - Scrub video with trackpad/magic mouse swipe
+- **Horizontal trackpad swipe** - Natural video scrubbing
 - **Keyboard shortcuts**:
   - `←/→` - Move 1 frame backward/forward
   - `Shift + ←/→` - Jump 5 seconds
   - `Spacebar` - Play/pause
-- **Real-time scrubbing** - Video updates as you drag handles
-
-### Markers & Labels
-- **Add labeled markers** - Name important moments (e.g., "Intro", "Boss Fight", "Outro")
-- **Timeline breadcrumbs** - Visual markers on timeline you can click to jump
-- **Marker dropdown** - Select markers by name instead of typing timestamps
-
-### Voiceover Recording
-- **Multiple audio tracks** - Record different commentary for different sections
-- **Browser-based recording** - No external software needed
-- **Timestamp or marker-based** - Position voiceovers using markers or exact times
-- **Automatic mixing** - Generated FFmpeg command mixes all tracks with proper delays
-- **Individual downloads** - Save each track separately
+- **Drag handles** - Adjust start/end with live video preview
+- **Drag segment body** - Move entire segment (previews start when moving left, end when moving right)
 
 ## Development
 
@@ -76,6 +63,9 @@ npm install
 # Start dev server
 npm run dev:light-vod-editor
 
+# Run tests
+npm test -w light-vod-editor
+
 # Build for production
 npm run build -w light-vod-editor
 
@@ -83,88 +73,61 @@ npm run build -w light-vod-editor
 npm run typecheck
 ```
 
-## 📋 Files
+## 📋 Project Structure
 
 ```
 light-vod-editor/
-├── README.md                          # This file
-├── ROADMAP.md                         # Future features and improvements
-├── trimmer-multi.html                 # Main tool (multiple segments + voiceovers + markers)
-├── trimmer.html                       # Simple version (single trim point)
-├── spike-large-file-trimmer.html     # Early prototype (reference only)
-└── src/                               # Future React implementation
+├── src/
+│   ├── components/         # React components
+│   │   ├── VideoPlayer.tsx      # Video playback with time tracking
+│   │   ├── Timeline.tsx          # Interactive timeline with draggable segments
+│   │   └── SegmentList.tsx       # Editable segment list
+│   ├── utils/              # Core utilities
+│   │   ├── ffmpeg-commands.ts    # FFmpeg command generation
+│   │   └── formatters.ts         # Time/byte formatting
+│   ├── hooks/              # React hooks
+│   │   └── useKeyboard.ts        # Keyboard shortcuts
+│   ├── __tests__/          # Test files
+│   └── styles/             # CSS (extracted from original HTML for 1:1 parity)
+└── README.md
 ```
 
 ## 🎮 Common Workflows
 
 ### 1. Split One VOD into Multiple Runs
-**Use case:** You streamed 4 Slay the Spire runs and want 4 separate videos
-
 1. Load your 2-hour VOD
-2. Click "Add New Segment" and drag handles to mark Run #1
-3. Repeat for Runs #2, #3, #4
+2. Double-click timeline to add segments for each run
+3. Name each segment (e.g., "Run1", "Run2", "Run3", "Run4")
 4. Switch to "📦 Split Into Separate Files" mode
-5. Copy all commands and run in terminal
-6. Get `vod_segment1.mp4`, `vod_segment2.mp4`, `vod_segment3.mp4`, `vod_segment4.mp4`
+5. Copy commands and run in terminal → Get `Run1.mp4`, `Run2.mp4`, etc.
 
 ### 2. Create Highlights Reel
-**Use case:** Cut boring parts, merge the exciting moments
-
 1. Load your stream VOD
-2. Mark segments for all exciting moments (kills, wins, funny moments)
+2. Double-click to mark all exciting moments (kills, wins, funny moments)
 3. Stay in "🔗 Merge All Segments" mode
-4. Copy command and run
-5. Get one highlights video with all the good stuff
-
-### 3. Add Narrated Commentary
-**Use case:** Record voiceover explaining what's happening
-
-1. Load your gameplay video
-2. Add markers: "Intro" (0:05), "Strategy Explanation" (1:30), "Outro" (5:00)
-3. Expand voiceover section, add 3 tracks
-4. Select markers from dropdown and record each commentary
-5. Download all voiceover files
-6. Copy mix command and run
-7. Get video with commentary mixed in at the right times
+4. Copy command and run → Get one highlights video
 
 ## 🛠️ Technical Details
 
+### Architecture
+- **React + TypeScript**: Type-safe components with hooks for state management
+- **Vite**: Fast dev server and optimized builds
+- **Test-driven development**: 18 tests covering FFmpeg commands, time formatting, segment math
+- **CSS extracted from original HTML**: Ensures 1:1 visual parity with prototype
+
 ### How It Works
+1. Video loads locally via `createObjectURL()` (instant playback, no upload)
+2. User creates/edits segments via timeline interaction
+3. FFmpeg commands generated with complex filter chains
+4. User runs commands → FFmpeg processes video on their machine
 
-1. **Video loads locally** - Uses `createObjectURL()` for instant playback
-2. **User marks segments** - JavaScript tracks timestamps
-3. **FFmpeg commands generated** - Complex filter chains built automatically
-4. **User runs commands** - FFmpeg processes video on their machine
-
-### Why FFmpeg Commands Instead of Browser Processing?
-
-- ✅ **Fast** - No re-encoding, uses copy codec (`-c copy`)
-- ✅ **Scalable** - Works with any file size (browser crashes on large files)
+### Why FFmpeg Commands?
+- ✅ **Fast** - No re-encoding with `-c copy` codec
+- ✅ **Scalable** - Works with any file size (tested 4-7 GB)
 - ✅ **Quality** - No quality loss
-- ✅ **Educational** - Users learn FFmpeg
 - ✅ **Flexible** - Commands can be tweaked
 
 ### FFmpeg Installation
-
 **Mac:** `brew install ffmpeg`
 **Linux:** `sudo apt install ffmpeg`
-**Windows:** Download from [ffmpeg.org](https://ffmpeg.org/download.html)
-
-## 🐛 Known Limitations
-
-- **Browser memory** - Very large files (>10 GB) may be slow to preview
-- **Voiceover format** - Records as WebM
-- **Keyframe accuracy** - Trim points may shift slightly to nearest keyframe
-- **Horizontal scroll** - Works best with trackpad
-
-## 🚦 Next Steps
-
-See [ROADMAP.md](ROADMAP.md) for planned features and improvements.
-
-## Architecture (Future React Version)
-
-- **React + TypeScript**: Type-safe component architecture
-- **Vite**: Fast dev server and optimized builds
-- **PWA**: Installable, offline-capable progressive web app
-
-**Live at**: https://mikhaidn.github.io/PlokminFun/light-vod-editor/
+**Windows:** [ffmpeg.org](https://ffmpeg.org/download.html)
