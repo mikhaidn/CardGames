@@ -568,6 +568,30 @@ node -e "
 "
 success "Updated lint:fix script"
 
+# Update GitHub Actions deployment workflow
+info "Updating GitHub Actions deployment workflow..."
+WORKFLOW_FILE=".github/workflows/deploy.yml"
+
+# Add to build step
+if ! grep -q "npm run build -w $EXPERIENCE_NAME" "$WORKFLOW_FILE"; then
+  # Find the last "npm run build -w" line and add after it
+  perl -i.bak -pe 's/(.*npm run build -w .+)/$1\n          npm run build -w '"$EXPERIENCE_NAME"'/ if /npm run build -w/ && !$done++' "$WORKFLOW_FILE"
+  rm -f "${WORKFLOW_FILE}.bak"
+  success "Added build step to workflow"
+else
+  warn "Build step already exists in workflow"
+fi
+
+# Add to copy step
+if ! grep -q "cp -r $EXPERIENCE_NAME/dist _site/$EXPERIENCE_NAME" "$WORKFLOW_FILE"; then
+  # Find the last "cp -r" line in the deploy step and add after it
+  perl -i.bak -pe 's/(.*cp -r .+\/dist _site\/.+)/$1\n          cp -r '"$EXPERIENCE_NAME"'\/dist _site\/'"$EXPERIENCE_NAME"'/ if /cp -r .+\/dist _site\// && !$done2++' "$WORKFLOW_FILE"
+  rm -f "${WORKFLOW_FILE}.bak"
+  success "Added copy step to workflow"
+else
+  warn "Copy step already exists in workflow"
+fi
+
 # Update index.html
 info "Updating landing page (index.html)..."
 # Insert new card before the closing </div> of games-grid
