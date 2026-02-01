@@ -220,7 +220,7 @@ function App() {
                 addSegment(start, end);
                 setSelectedIndex(segments.length);
               }}
-              videoRef={videoRef.current}
+              videoRef={videoRef}
             />
 
             <div style={{ textAlign: 'center', margin: '20px 0' }}>

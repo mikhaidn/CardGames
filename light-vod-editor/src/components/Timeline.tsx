@@ -9,7 +9,7 @@ interface TimelineProps {
   onSeek: (time: number) => void;
   onSegmentUpdate: (index: number, start: number, end: number) => void;
   onAddSegment: (start: number, end: number) => void;
-  videoRef: HTMLVideoElement | null;
+  videoRef: React.RefObject<HTMLVideoElement>;
 }
 
 const SEGMENT_COLORS = ['#4a9eff', '#3fb950', '#d29922', '#f85149', '#bc8cff'];
@@ -75,7 +75,8 @@ export function Timeline({ duration, currentTime, segments, selectedIndex, onSee
     if (!timeline) return;
 
     const handleWheel = (e: WheelEvent) => {
-      if (!duration || !videoRef) return;
+      const video = videoRef.current;
+      if (!duration || !video) return;
 
       // Detect horizontal scroll (shift+scroll or trackpad horizontal swipe)
       const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0;
@@ -87,7 +88,7 @@ export function Timeline({ duration, currentTime, segments, selectedIndex, onSee
         const scrollSpeed = 0.1;
         const timeChange = (-delta / 10) * scrollSpeed;
 
-        videoRef.currentTime = Math.max(0, Math.min(duration, videoRef.currentTime + timeChange));
+        video.currentTime = Math.max(0, Math.min(duration, video.currentTime + timeChange));
       }
     };
 
@@ -100,7 +101,8 @@ export function Timeline({ duration, currentTime, segments, selectedIndex, onSee
     if (!dragging && !seekingTimeline) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!timelineRef.current || !videoRef) return;
+      const video = videoRef.current;
+      if (!timelineRef.current || !video) return;
 
       const rect = timelineRef.current.getBoundingClientRect();
       const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
@@ -122,14 +124,14 @@ export function Timeline({ duration, currentTime, segments, selectedIndex, onSee
         if (time < segment.end - 0.5) {
           const newStart = Math.max(0, time);
           onSegmentUpdate(dragging.segmentIndex, newStart, segment.end);
-          videoRef.currentTime = newStart; // Real-time scrub!
+          video.currentTime = newStart; // Real-time scrub!
         }
       } else if (dragging.type === 'end') {
         // Dragging end handle
         if (time > segment.start + 0.5) {
           const newEnd = Math.min(duration, time);
           onSegmentUpdate(dragging.segmentIndex, segment.start, newEnd);
-          videoRef.currentTime = newEnd; // Real-time scrub!
+          video.currentTime = newEnd; // Real-time scrub!
         }
       } else if (dragging.type === 'segment' && dragging.startSegment) {
         // Dragging entire segment
@@ -154,9 +156,9 @@ export function Timeline({ duration, currentTime, segments, selectedIndex, onSee
 
         // Scrub to start if moving left, end if moving right
         if (deltaTime < 0) {
-          videoRef.currentTime = newStart; // Moving left -> preview start
+          video.currentTime = newStart; // Moving left -> preview start
         } else {
-          videoRef.currentTime = newEnd; // Moving right -> preview end
+          video.currentTime = newEnd; // Moving right -> preview end
         }
       }
     };
